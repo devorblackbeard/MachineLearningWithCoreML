@@ -34,6 +34,12 @@ public class ScatterPlotView : UIView{
     
     var lineDataPoints = [DataPoint]()
     
+    public var lineCount : Int{
+        get{
+            return lineDataPoints.count == 0 ? 0 : Int(lineDataPoints.count / 2)
+        }
+    }
+    
     override public init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -149,8 +155,6 @@ public class ScatterPlotView : UIView{
         for i in stride(from: 0, to: lineDataPoints.count, by: 2){
             let dp1 = lineDataPoints[i]
             let dp2 = lineDataPoints[i+1]
-            
-            print("\(dp1) \(dp2)")
             
             let x1 = dp1.x * scale.x
             let y1 = rect.height - (dp1.y * scale.y)

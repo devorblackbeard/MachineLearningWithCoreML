@@ -12,15 +12,34 @@ The original dataset can be found [here.](https://www.math.muni.cz/~kolacek/docs
 import UIKit
 import PlaygroundSupport
 
+let predictionLinePalette = [
+    UIColor(red:217, green:94, blue:89, alpha:1.0),
+    UIColor(red:218, green:193, blue:94, alpha:0.5),
+    UIColor(red:147, green:218, blue:94, alpha:0.5),
+    UIColor(red:92, green:218, blue:130, alpha:0.5),
+    UIColor(red:92, green:211, blue:218, alpha:0.5),
+    UIColor(red:87, green:114, blue:216, alpha:0.5),
+    UIColor(red:159, green:91, blue:216, alpha:0.5),
+    UIColor(red:217, green:89, blue:177, alpha:0.5)
+]
+
 // create view to render scatter plot
 let view = ScatterPlotView(frame: CGRect(x: 20, y: 20, width: 300, height: 300))
 
+// Present the view controller in the Live View window
+PlaygroundPage.current.liveView = view
+
 // add style for our predictions
-view.styles["prediction"] = DataPointStyle(size: 5, color: UIColor(red:217, green:94, blue:89).cgColor)
+view.styles["prediction"] = DataPointStyle(size: 5, color: predictionLinePalette[0].cgColor)
 
 // add a style for the best fit line
-view.styles["prediction_line"] = DataPointStyle(size: 2, color: UIColor(red:217, green:94, blue:89).cgColor)
+view.styles["prediction_line"] = DataPointStyle(size: 2, color: predictionLinePalette[0].cgColor)
 
+// add some styles for 'training' lines
+for i in 1..<predictionLinePalette.count{
+    let color = predictionLinePalette[i]
+    view.styles["prediction_line_\(i)"] = DataPointStyle(size: 2, color: color.cgColor)
+}
 
 /**
  Takes in 2 arrays and calcualtes the squared error between the two. Used by meanSquaredError.
@@ -69,14 +88,21 @@ func meanSquaredError(y:[CGFloat], y_:[CGFloat]) -> CGFloat{
     - learningRate: determines how quickly we adjust the coefficients based on the error 
     - epochs: numbers of training iterations
  */
-func train(x:[CGFloat], y:[CGFloat], b:CGFloat=0.0, w:CGFloat=0.0, learningRate:CGFloat=0.0001, epochs:Int=100) -> (b:CGFloat, w:CGFloat){
+func train(
+    x:[CGFloat],
+    y:[CGFloat],
+    b:CGFloat=0.0,
+    w:CGFloat=0.0,
+    learningRate:CGFloat=0.00001,
+    epochs:Int=100,
+    trainingCallback: ((Int, Int, CGFloat, CGFloat, CGFloat) -> Void)? = nil) -> (b:CGFloat, w:CGFloat){
     
     var B = b
     var W = w
     
     let N = CGFloat(x.count) // number of data points
     
-    for _ in 0...epochs{
+    for epoch in 0...epochs{
         var sumError : CGFloat = 0.0
         var bGradient : CGFloat = 0.0
         var wGradient : CGFloat = 0.0
@@ -98,9 +124,33 @@ func train(x:[CGFloat], y:[CGFloat], b:CGFloat=0.0, w:CGFloat=0.0, learningRate:
         B = B - (learningRate * bGradient)
         // update weight using the accumulated gradient
         W = W - (learningRate * wGradient)
+        
+        if let trainingCallback = trainingCallback{
+            trainingCallback(epoch, epochs, W, B, sumError)
+        }
     }
     
     return (b:B, w:W)
+}
+
+/**
+ function to plot line given a scatter plot view (where the line will be rendered), datapoints and model
+ */
+func plotLine(view:ScatterPlotView, dataPoints:[DataPoint], model:(b:CGFloat, w:CGFloat), styleTag:String){
+    let minX = dataPoints.map({ (dp) -> CGFloat in
+        return dp.x
+    }).min()!
+    
+    let maxX = dataPoints.map({ (dp) -> CGFloat in
+        return dp.x
+    }).max()!
+    
+    view.line(pointA: DataPoint(tag: styleTag,
+                                x: minX,
+                                y: model.b + minX * model.w),
+              pointB: DataPoint(tag: styleTag,
+                                x: maxX,
+                                y: model.b + maxX * model.w))
 }
 
 // load dataset
@@ -114,50 +164,59 @@ view.scatter(dataPoints)
 
 /*:
  By visualising the datapoints, we intuitively see signs of a correlation between the number of claims and amount of claims. To
- We will use a simple linear equation to model this relationship and use it to make predictions. 
+ We will use a simple linear equation to model this relationship and use it to make predictions i.e. find the best fit line (remember the equation for a line - y=mx+b; m and b are the coefficents that we search for that will give us a line that best fits our data).
  */
 
-// set some random variables for a bias and weight
-let b = CGFloat(arc4random()) / CGFloat(UINT32_MAX)
+// set some random variables for a weight and bias
 let w = CGFloat(arc4random()) / CGFloat(UINT32_MAX)
+let b = CGFloat(arc4random()) / CGFloat(UINT32_MAX)
 
-// search for our coefficents for linear regression (which represent our model) using gradient descent (introduced above)
+/**
+ Training callback function; we segment our training into the number of colors within predictionLinePalette and plot the current model to illustrate how gradient search moves towards the minima
+ */
+func trainingCallback(epoch:Int,
+                      epochs:Int,
+                      W:CGFloat,
+                      B:CGFloat,
+                      sumError:CGFloat){
+    
+    let segments = epochs / (predictionLinePalette.count-2)
+    
+    if epoch % segments == 0{   
+        plotLine(view: view,
+                 dataPoints: dataPoints,
+                 model:(b:B, w:W),
+                 styleTag: "prediction_line_\(view.lineCount + 1)")
+    }
+}
+
+// search for our coefficents for our linear regression model using gradient descent (introduced above)
 let model = train(x:csvData["claims"]!,
                    y:csvData["payments"]!,
-                   b:b, w:w)
+                   b:b, w:w,
+                   trainingCallback:trainingCallback)
 
+// print the equation - line of best fit aka our model
 print("model = \(model.b) + \(model.w)  * x")
 
-// create datapoints of predictions (line best fit)
+// make predictions using our model (line best fit)
 var predDataPoints = dataPoints.map({ (dp) -> DataPoint in
     let y = model.b + dp.x * model.w
     return DataPoint(tag: "prediction", x: dp.x, y: y)
 });
 
-// add our predicted data points using our model
+// visualise our predicted data points (along with the actual values)
 view.scatter(predDataPoints)
 
-// create a line using our model, from minX to maxX
-// (this is our best fit line)
-let minX = dataPoints.map({ (dp) -> CGFloat in
-    return dp.x
-}).min()!
+// plot the line of best fitfrom minX to maxX (this is our best fit line)
+plotLine(view: view,
+         dataPoints: dataPoints,
+         model:model,
+         styleTag: "prediction_line")
 
-let maxX = dataPoints.map({ (dp) -> CGFloat in
-    return dp.x
-}).max()!
+// calculate mean squared error
 
-view.line(pointA: DataPoint(tag: "prediction_line",
-                            x: minX,
-                            y: model.b + minX * model.w),
-          pointB: DataPoint(tag: "prediction_line",
-                            x: maxX,
-                            y: model.b + maxX * model.w))
-
-// Present the view controller in the Live View window
-PlaygroundPage.current.liveView = view
-
-// calculate mean squared error 
+// start by grabbing the expected values and predictions
 let y = dataPoints.map { (dp) -> CGFloat in
     return dp.y
 }
@@ -166,6 +225,5 @@ let yHat = predDataPoints.map { (dp) -> CGFloat in
     return dp.y
 }
 
-let mse = meanSquaredError(y: y, y_: yHat)
-
-print("mean squared error \(mse)")
+// finding the mse using the previously obtained arrays
+print("mean squared error \(meanSquaredError(y: y, y_: yHat))")

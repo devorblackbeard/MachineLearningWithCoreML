@@ -9,11 +9,14 @@ public struct DataPointStyle{
     
     public init(size:CGFloat=2, color:CGColor = UIColor.black.cgColor){
         self.size = size
-        self.color = color 
+        self.color = color
     }
 }
 
-public class PlotView : UIView{
+/**
+ Simple plotter
+ */
+public class ScatterPlotView : UIView{
     
     var paddingX : CGFloat = 30
     
@@ -23,11 +26,19 @@ public class PlotView : UIView{
     
     var yAxisTitle : String?
     
-    public var styles = ["default": DataPointStyle(size: 5, color: UIColor.black.cgColor)]
+    public var styles = ["default": DataPointStyle(
+        size: 5,
+        color: UIColor(red:87, green:114, blue:216).cgColor)]
     
     var scatterDataPoints = [DataPoint]()
     
     var lineDataPoints = [DataPoint]()
+    
+    public var lineCount : Int{
+        get{
+            return lineDataPoints.count == 0 ? 0 : Int(lineDataPoints.count / 2)
+        }
+    }
     
     override public init(frame: CGRect) {
         super.init(frame: frame)
@@ -79,6 +90,30 @@ public class PlotView : UIView{
                               width: rect.width - (paddingX * 2),
                               height: rect.height - (paddingY * 2))
         
+        // fill in background of plot
+        ctx.setFillColor(UIColor(red:234, green:234, blue:242).cgColor)
+        ctx.fill(plotRect)
+        
+        // draw grid
+        // set style of grid
+        UIColor.white.setStroke()
+        ctx.setLineWidth(1)
+        
+        // draw lines of grid
+        for x in stride(from: plotRect.minX, to: plotRect.maxX, by: plotRect.width/5){
+            
+            ctx.move(to: CGPoint(x:x, y:plotRect.minY))
+            ctx.addLine(to: CGPoint(x:x, y:plotRect.maxY))
+            ctx.strokePath()
+        }
+        
+        for y in stride(from: plotRect.minY, to: plotRect.maxY, by: plotRect.height/5){
+            
+            ctx.move(to: CGPoint(x:plotRect.minX, y:y))
+            ctx.addLine(to: CGPoint(x:plotRect.maxX, y:y))
+            ctx.strokePath()
+        }
+        
         // draw y-axis
         ctx.move(to: CGPoint(x:plotRect.origin.x, y:plotRect.origin.y))
         ctx.setLineWidth(2)
@@ -120,8 +155,6 @@ public class PlotView : UIView{
         for i in stride(from: 0, to: lineDataPoints.count, by: 2){
             let dp1 = lineDataPoints[i]
             let dp2 = lineDataPoints[i+1]
-            
-            print("\(dp1) \(dp2)")
             
             let x1 = dp1.x * scale.x
             let y1 = rect.height - (dp1.y * scale.y)
