@@ -8,7 +8,6 @@
 
 import UIKit
 import AVFoundation
-import CoreVideo
 
 public protocol VideoCaptureDelegate: class {
     func onFrameCaptured(videoCapture: VideoCapture, pixelBuffer:CVPixelBuffer?, timestamp:CMTime)
@@ -20,22 +19,8 @@ public protocol VideoCaptureDelegate: class {
  https://developer.apple.com/documentation/avfoundation/avcapturevideodataoutput
  */
 public class VideoCapture : NSObject{
-    private var permissionGranted = false
     
     public weak var delegate: VideoCaptureDelegate?
-    
-    /**
-     A Core Animation layer that can display video as it is being captured.
-     A subclass of CALayer that can be used to display video as it is being captured by an input device;
-     this can be done simply by adding it to layer of the targeted UIView targetView.layer.addSublayer(previewLayer)
-    */
-    public lazy var previewLayer : AVCaptureVideoPreviewLayer? = {
-        let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        previewLayer.videoGravity = AVLayerVideoGravity.resizeAspect
-        previewLayer.connection?.videoOrientation = .portrait
-        
-        return previewLayer
-    }()
     
     /**
      Frames Per Second; used to throttle capture rate
@@ -47,6 +32,7 @@ public class VideoCapture : NSObject{
      We will be using it to perform real-time cpature; for this we will need to add the appropriate output (AVCaptureVideoDataOutput)
     */
     let captureSession = AVCaptureSession()
+    
     /**
      A capture output that records video and provides access to video frames for processing.
      This will provide us with uncompressed frames, passed via the delegate method captureOutput(_:didOutput:from:).
