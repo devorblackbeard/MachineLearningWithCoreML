@@ -10,11 +10,6 @@ import AVFoundation
 import UIKit
 
 class CapturePreviewView: UIView {
-    
-    /**
-     Wrapping the AVCaptureVideoPreviewLayer layer inside a view to make it more convenient to work with
-    */
-    override class var layerClass: AnyClass {
-        return AVCaptureVideoPreviewLayer.self
-    }
+
 }
+

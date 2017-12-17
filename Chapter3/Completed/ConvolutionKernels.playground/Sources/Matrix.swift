@@ -3,7 +3,7 @@ import UIKit
 /**
  Data structure for a 2D Matrix
  */
-struct Matrix<T>{
+struct Matrix<T : Numeric>{
     public var data:Array<T>
     
     public var rows: Int
@@ -28,7 +28,7 @@ struct Matrix<T>{
     }
     
     public init(rows:Int, cols:Int) {
-        self.data = [CGFloat](repeating: 0.0, count: rows*cols)
+        self.data = Array<T>(repeating: 0, count: rows*cols)
         self.rows = rows
         self.cols = cols
     }
@@ -75,7 +75,7 @@ extension Matrix: CustomStringConvertible {
         var dsc = ""
         for row in 0..<rows {
             for col in 0..<cols {
-                let s = String(format: "%.1f", self[row,col])
+                let s = String(describing:self[row,col])
                 dsc += s + " "
             }
             dsc += "\n"
@@ -84,20 +84,20 @@ extension Matrix: CustomStringConvertible {
     }
 }
 
-func applyKernel(image:Matrix, kernel:Matrix) -> Matrix{
+func applyKernel<T>(image:Matrix<T>, kernel:Matrix<T>) -> Matrix<T>{
     var results = [[T]]()
     
     for r in 0..<image.rows{
         if r-1 < 0 || r+1 >= image.rows{
             continue
         }
-        results.append([CGFloat]())
+        results.append([T]())
         for c in 0..<image.cols{
             if c-1 < 0 || c+1 >= image.cols{
                 continue
             }
             
-            var sum : CGFloat = 0
+            var sum : T = 0
             
             for r2 in [-1, 0, 1]{
                 for c2 in [-1, 0, 1]{

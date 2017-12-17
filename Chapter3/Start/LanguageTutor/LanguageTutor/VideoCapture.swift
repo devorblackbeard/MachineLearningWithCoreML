@@ -8,7 +8,6 @@
 
 import UIKit
 import AVFoundation
-import CoreVideo 
 
 public protocol VideoCaptureDelegate: class {
     func onFrameCaptured(videoCapture: VideoCapture, pixelBuffer:CVPixelBuffer?, timestamp:CMTime)
@@ -20,12 +19,13 @@ public protocol VideoCaptureDelegate: class {
  https://developer.apple.com/documentation/avfoundation/avcapturevideodataoutput
  */
 public class VideoCapture : NSObject{
+    
     public weak var delegate: VideoCaptureDelegate?
     
     /**
      Frames Per Second; used to throttle capture rate
-    */
-    public var fps = 15
+     */
+    public var fps = 15    
     
     var lastTimestamp = CMTime()
     
@@ -34,11 +34,7 @@ public class VideoCapture : NSObject{
         
     }
     
-    public func asyncInit(completion: @escaping (Bool) -> Void){
-        
-    }
-    
-    private func initCamera() -> Bool{
+    func initCamera() -> Bool{
         return true
     }
     
@@ -46,16 +42,16 @@ public class VideoCapture : NSObject{
      Start capturing frames
      This is a blocking call which can take some time, therefore you should perform session setup off
      the main queue to avoid blocking it.
-    */
-    public func startCapturing(){
-        
+     */
+    public func asyncStartCapturing(completion: (() -> Void)? = nil){
+
     }
     
     /**
      Stop capturing frames
-    */
-    public func stopCapturing(){
-        
+     */
+    public func asyncStopCapturing(completion: (() -> Void)? = nil){
+
     }
 }
 
@@ -65,30 +61,8 @@ extension VideoCapture : AVCaptureVideoDataOutputSampleBufferDelegate{
     
     /**
      Called when a new video frame was written
-    */
-    public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        
-        guard let delegate = self.delegate else{ return }
-        
-        // Returns the earliest presentation timestamp of all the samples in a CMSampleBuffer
-        let timestamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-        
-        // Throttle capture rate based on assigned fps
-        let elapsedTime = timestamp - lastTimestamp
-        if elapsedTime >= CMTimeMake(1, Int32(fps)) {
-            // update timestamp
-            lastTimestamp = timestamp
-            // get sample buffer's CVImageBuffer
-            let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
-            // pass onto the assigned delegate
-            delegate.onFrameCaptured(videoCapture: self, pixelBuffer:imageBuffer, timestamp: timestamp)
-        }
-    }
-    
-    /**
-     Called when a frame is dropped
      */
-    public func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        // Ignore
+    public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
     }
 }
+

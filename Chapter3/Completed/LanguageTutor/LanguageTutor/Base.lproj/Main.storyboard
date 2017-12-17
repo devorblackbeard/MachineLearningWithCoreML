@@ -22,11 +22,11 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jlJ-Bg-o5M">
-                                <rect key="frame" x="0.0" y="593" width="375" height="46"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jlJ-Bg-o5M">
+                                <rect key="frame" x="0.0" y="555" width="375" height="92"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.2870558647260274" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="46" id="6xY-Me-Neu"/>
+                                    <constraint firstAttribute="height" constant="92" id="6xY-Me-Neu"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                 <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -40,7 +40,7 @@
                             <constraint firstItem="TXu-Im-ctD" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="6Cr-lr-CSY"/>
                             <constraint firstItem="TXu-Im-ctD" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="FCS-cF-POr"/>
                             <constraint firstItem="jlJ-Bg-o5M" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="QUd-dX-IF2"/>
-                            <constraint firstItem="jlJ-Bg-o5M" firstAttribute="top" secondItem="TXu-Im-ctD" secondAttribute="bottom" constant="-74" id="ldJ-h8-eA1"/>
+                            <constraint firstItem="TXu-Im-ctD" firstAttribute="bottom" secondItem="jlJ-Bg-o5M" secondAttribute="bottom" constant="20" id="ldJ-h8-eA1"/>
                             <constraint firstItem="TXu-Im-ctD" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="t81-21-PUD"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>

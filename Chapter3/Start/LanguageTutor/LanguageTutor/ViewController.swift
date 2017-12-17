@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  LanguageTutor
 //
-//  Created by Joshua Newnham on 28/11/2017.
-//  Copyright © 2017 Josh Newnham. All rights reserved.
+//  Created by Joshua Newnham on 16/12/2017.
+//  Copyright © 2017 Method. All rights reserved.
 //
 
 import UIKit
@@ -12,13 +12,13 @@ import AVFoundation
 
 class ViewController: UIViewController {
 
-    @IBOutlet var previewView:CapturePreviewView!
-    @IBOutlet var classifiedLabel:UILabel!
+    @IBOutlet weak var previewView: CapturePreviewView!
+    @IBOutlet weak var classifiedLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-                      
+        
     }
 }
 
@@ -26,7 +26,9 @@ class ViewController: UIViewController {
 
 extension ViewController : VideoCaptureDelegate{
     
-    func onFrameCaptured(videoCapture: VideoCapture, pixelBuffer:CVPixelBuffer?, timestamp:CMTime){
+    func onFrameCaptured(videoCapture: VideoCapture,
+                         pixelBuffer:CVPixelBuffer?,
+                         timestamp:CMTime){
         
     }
 }

@@ -18,15 +18,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TXu-Im-ctD" userLabel="VideoPreview" customClass="CapturePreviewView" customModule="LanguageTutor" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kwG-f8-cTH" customClass="CapturePreviewView" customModule="LanguageTutor" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jlJ-Bg-o5M">
-                                <rect key="frame" x="0.0" y="593" width="375" height="46"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.2870558647260274" colorSpace="custom" customColorSpace="sRGB"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QSe-YK-ACs">
+                                <rect key="frame" x="0.0" y="551" width="375" height="96"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="46" id="6xY-Me-Neu"/>
+                                    <constraint firstAttribute="height" constant="96" id="NZV-2e-c8c"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                 <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -35,24 +35,23 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="TXu-Im-ctD" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="0R0-g0-hBj"/>
-                            <constraint firstItem="jlJ-Bg-o5M" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="5WD-h8-3Vp"/>
-                            <constraint firstItem="TXu-Im-ctD" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="6Cr-lr-CSY"/>
-                            <constraint firstItem="TXu-Im-ctD" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="FCS-cF-POr"/>
-                            <constraint firstItem="jlJ-Bg-o5M" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="QUd-dX-IF2"/>
-                            <constraint firstItem="jlJ-Bg-o5M" firstAttribute="top" secondItem="TXu-Im-ctD" secondAttribute="bottom" constant="-74" id="ldJ-h8-eA1"/>
-                            <constraint firstItem="TXu-Im-ctD" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="t81-21-PUD"/>
+                            <constraint firstItem="kwG-f8-cTH" firstAttribute="bottom" secondItem="QSe-YK-ACs" secondAttribute="bottom" constant="20" id="1RY-jF-3Wc"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="kwG-f8-cTH" secondAttribute="trailing" id="3kv-Q8-aea"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="kwG-f8-cTH" secondAttribute="bottom" id="6xy-cw-Py8"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="QSe-YK-ACs" secondAttribute="trailing" id="7EJ-PW-eWi"/>
+                            <constraint firstItem="kwG-f8-cTH" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Eyo-j0-RBr"/>
+                            <constraint firstItem="kwG-f8-cTH" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="gWJ-xh-xKh"/>
+                            <constraint firstItem="QSe-YK-ACs" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="pca-Pw-ogx"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="classifiedLabel" destination="jlJ-Bg-o5M" id="tgf-2f-kcY"/>
-                        <outlet property="previewView" destination="TXu-Im-ctD" id="Aoy-Cu-LBR"/>
+                        <outlet property="classifiedLabel" destination="QSe-YK-ACs" id="BzI-xe-SKI"/>
+                        <outlet property="previewView" destination="kwG-f8-cTH" id="Cko-Tf-3Sh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="117.59999999999999" y="117.39130434782609"/>
         </scene>
     </scenes>
 </document>

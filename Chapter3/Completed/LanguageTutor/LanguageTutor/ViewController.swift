@@ -31,20 +31,18 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        videoCapture.delegate = self 
+        self.videoCapture.delegate = self
         
-        videoCapture.asyncInit { (success) in
-            if success{
-                // Assign the capture session instance being previewed
-                (self.previewView.layer as! AVCaptureVideoPreviewLayer).session = self.videoCapture.captureSession
-                // You use the videoGravity property to influence how content is viewed relative to the layer bounds;
-                // in this case setting it to full the screen while respecting the aspect ratio.
-                (self.previewView.layer as! AVCaptureVideoPreviewLayer).videoGravity = AVLayerVideoGravity.resizeAspectFill
-                
-                self.videoCapture.startCapturing()
-            } else{
-                fatalError("Failed to init VideoCapture")
-            }
+        if self.videoCapture.initCamera(){
+            // Assign the capture session instance being previewed
+            (self.previewView.layer as! AVCaptureVideoPreviewLayer).session = self.videoCapture.captureSession
+            // You use the videoGravity property to influence how content is viewed relative to the layer bounds;
+            // in this case setting it to full the screen while respecting the aspect ratio.
+            (self.previewView.layer as! AVCaptureVideoPreviewLayer).videoGravity = AVLayerVideoGravity.resizeAspectFill
+            
+            self.videoCapture.asyncStartCapturing()
+        } else{
+            fatalError("Failed to init VideoCapture")
         }
     }
 

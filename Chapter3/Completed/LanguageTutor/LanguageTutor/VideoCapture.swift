@@ -33,12 +33,6 @@ public class VideoCapture : NSObject{
     */
     let captureSession = AVCaptureSession()
     
-    /**
-     A capture output that records video and provides access to video frames for processing.
-     This will provide us with uncompressed frames, passed via the delegate method captureOutput(_:didOutput:from:).
-    */
-    let videoOutput = AVCaptureVideoDataOutput()
-    
     let sessionQueue = DispatchQueue(label: "session queue")
     
     var lastTimestamp = CMTime()
@@ -48,16 +42,7 @@ public class VideoCapture : NSObject{
         
     }
     
-    public func asyncInit(completion: @escaping (Bool) -> Void){
-        sessionQueue.async {
-            let success = self.initCamera()
-            DispatchQueue.main.async {
-                completion(success)
-            }
-        }
-    }
-    
-    private func initCamera() -> Bool{
+    func initCamera() -> Bool{
         // Indicate we're wanting to make configuration changes
         captureSession.beginConfiguration()
         
@@ -80,6 +65,12 @@ public class VideoCapture : NSObject{
         if captureSession.canAddInput(videoInput) {
             captureSession.addInput(videoInput)
         }
+        
+        /*
+         A capture output that records video and provides access to video frames for processing.
+         This will provide us with uncompressed frames, passed via the delegate method captureOutput(_:didOutput:from:).
+         */
+        let videoOutput = AVCaptureVideoDataOutput()
         
         // Set pixel type (32bit RGBA, Grayscale etc)
         let settings: [String : Any] = [
@@ -113,20 +104,36 @@ public class VideoCapture : NSObject{
      This is a blocking call which can take some time, therefore you should perform session setup off
      the main queue to avoid blocking it.
     */
-    public func startCapturing(){
-        if !self.captureSession.isRunning{
-            // Invoke the startRunning of the captureSession to start the flow of data from the inputs to the outputs.
-            // NB: The startRunning() method is the blocking call which can take some time, therefore should be run off the main queue
-            self.captureSession.startRunning()
+    public func asyncStartCapturing(completion: (() -> Void)? = nil){
+        sessionQueue.async {
+            if !self.captureSession.isRunning{
+                // Invoke the startRunning of the captureSession to start the flow of data from the inputs to the outputs.
+                // NB: The startRunning() method is the blocking call which can take some time, which is why it's run off the main queue
+                self.captureSession.startRunning()
+            }
+            
+            if let completion = completion{
+                DispatchQueue.main.async {
+                    completion()
+                }
+            }
         }
     }
     
     /**
      Stop capturing frames
     */
-    public func stopCapturing(){
-        if self.captureSession.isRunning{
-            self.captureSession.stopRunning()
+    public func asyncStopCapturing(completion: (() -> Void)? = nil){
+        sessionQueue.async {
+            if self.captureSession.isRunning{
+                self.captureSession.stopRunning()
+            }
+            
+            if let completion = completion{
+                DispatchQueue.main.async {
+                    completion()
+                }
+            }
         }
     }
 }
@@ -141,10 +148,10 @@ extension VideoCapture : AVCaptureVideoDataOutputSampleBufferDelegate{
     public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
         guard let delegate = self.delegate else{ return }
-        
+
         // Returns the earliest presentation timestamp of all the samples in a CMSampleBuffer
         let timestamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-        
+
         // Throttle capture rate based on assigned fps
         let elapsedTime = timestamp - lastTimestamp
         if elapsedTime >= CMTimeMake(1, Int32(fps)) {
@@ -153,7 +160,9 @@ extension VideoCapture : AVCaptureVideoDataOutputSampleBufferDelegate{
             // get sample buffer's CVImageBuffer
             let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
             // pass onto the assigned delegate
-            delegate.onFrameCaptured(videoCapture: self, pixelBuffer:imageBuffer, timestamp: timestamp)
+            delegate.onFrameCaptured(videoCapture: self,
+                                     pixelBuffer:imageBuffer,
+                                     timestamp: timestamp)
         }
     }
     
