@@ -59,15 +59,16 @@ extension ViewController : VideoCaptureDelegate{
     func onFrameCaptured(videoCapture: VideoCapture, pixelBuffer:CVPixelBuffer?, timestamp:CMTime){
         // Unwrap the parameter pixxelBuffer; exit early if nil
         guard let pixelBuffer = pixelBuffer else{ return }
-        
+
         // Prepare our image for our model (resizing)
-        guard let scaledPixelBuffer = CIImage(cvImageBuffer: pixelBuffer).toPixelBuffer(
-            context:context, size:CGSize(width: 299, height: 299), gray:false) else{ return }
+        guard let scaledPixelBuffer = CIImage(cvImageBuffer: pixelBuffer)
+            .resize(size: CGSize(width: 299, height: 299))
+            .toPixelBuffer(context: context) else{ return }
 
         // Try to make a prediction
         let prediction = try? self.model.prediction(image:scaledPixelBuffer)
-        
-        // Update label 
+
+        // Update label
         DispatchQueue.main.sync {
             classifiedLabel.text = prediction?.classLabel ?? "Unknown"
         }

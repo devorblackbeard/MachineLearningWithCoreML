@@ -17,13 +17,19 @@ extension CIImage{
         // Calculate how much we need to scale down our image
         let scale = size.width / self.extent.size.width
         
-        let resizedImage = self.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
+        let resizedImage = self.transformed(
+            by: CGAffineTransform(
+                scaleX: scale,
+                y: scale))
         
         // Center the image
         let width = resizedImage.extent.width
         let height = resizedImage.extent.height
         let yOffset = (CGFloat(height) - size.height) / 2.0
-        let rect = CGRect(x: (CGFloat(width) - size.width) / 2.0, y: yOffset, width: size.width, height: size.height)
+        let rect = CGRect(x: (CGFloat(width) - size.width) / 2.0,
+                          y: yOffset,
+                          width: size.width,
+                          height: size.height)
         return resizedImage.cropped(to: rect)
     }
     
@@ -32,42 +38,41 @@ extension CIImage{
      CVPixelBuffer is a Core Video pixel buffer (or just image buffer) that holds pixels in main memory. Applications generating frames, compressing or decompressing video, or using Core Image can all make use of Core Video pixel buffers.
      https://developer.apple.com/documentation/corevideo/cvpixelbuffer
     */
-    func toPixelBuffer(context:CIContext, size insize:CGSize? = nil, gray:Bool=true) -> CVPixelBuffer?{
-        // if no size is given to revert to original size
-        let size = insize ?? self.extent.size
-        
-        // Calculate how much we need to scale down our image
-        let scale = size.width / self.extent.size.width
-        
-        // Create a new scaled-down image using the scale we just calculated
-        let srcImage = scale == 1 ? self : self.resize(size:size)
-        
+    func toPixelBuffer(context:CIContext, gray:Bool=true) -> CVPixelBuffer?{
         // Create a dictionary requesting Core Graphics compatibility
         let attributes = [
             kCVPixelBufferCGImageCompatibilityKey:kCFBooleanTrue,
             kCVPixelBufferCGBitmapContextCompatibilityKey:kCFBooleanTrue
             ] as CFDictionary
-        
+
         // Create a pixel buffer at the size our model needs
         var nullablePixelBuffer: CVPixelBuffer? = nil
         let status = CVPixelBufferCreate(kCFAllocatorDefault,
-                                         Int(size.width),
-                                         Int(size.height),
+                                         Int(self.extent.size.width),
+                                         Int(self.extent.size.height),
                                          gray ? kCVPixelFormatType_OneComponent8 : kCVPixelFormatType_32ARGB,
                                          attributes,
                                          &nullablePixelBuffer)
-        
+
         // Evaluate staus and unwrap nullablePixelBuffer
-        guard status == kCVReturnSuccess, let pixelBuffer = nullablePixelBuffer else { return nil }
+        guard status == kCVReturnSuccess, let pixelBuffer = nullablePixelBuffer
+            else { return nil }
         
         // Render the CIImage to our CVPixelBuffer and return it
         CVPixelBufferLockBaseAddress(pixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
-        context.render(srcImage,
+
+        context.render(self,
                        to: pixelBuffer,
-                       bounds: CGRect(x: 0, y: 0, width: size.width, height: size.height),
-                       colorSpace:gray ? CGColorSpaceCreateDeviceGray() : srcImage.colorSpace)
-        CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags(rawValue: 0))                
-        
+                       bounds: CGRect(x: 0,
+                                      y: 0,
+                                      width: self.extent.size.width,
+                                      height: self.extent.size.height),
+                       colorSpace:gray ?
+                            CGColorSpaceCreateDeviceGray() :
+                            self.colorSpace)
+
+        CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
+
         return pixelBuffer
     }
 }
