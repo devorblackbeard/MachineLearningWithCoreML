@@ -100,10 +100,6 @@ extension ViewController{
         let label = observations[0].identifier // associated label
         let confidence = observations[0].confidence // confidence (in the range of 0.0-1.0)
         
-        if confidence >= 0.5{
-            
-        }
-        
         // Update label
         DispatchQueue.main.sync {
             classifiedLabel.text = confidence >= 0.5 ? label : "Unknown"
