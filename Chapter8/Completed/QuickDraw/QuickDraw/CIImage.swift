@@ -1,9 +1,9 @@
 //
-//  ExtensionUIImage.swift
-//  LanguageTutor
+//  CIImage.swift
+//  QuickDraw
 //
-//  Created by Joshua Newnham on 28/11/2017.
-//  Copyright © 2017 Josh Newnham. All rights reserved.
+//  Created by Joshua Newnham on 29/12/2017.
+//  Copyright © 2017 Method. All rights reserved.
 //
 
 import UIKit
@@ -11,8 +11,15 @@ import UIKit
 extension CIImage{
     
     /**
-     Return a resized version of this instance (centered) 
+     Return a horizintally flipped version of this instance
     */
+    func flipHorizontal() -> CIImage {        
+        return self.transformed(by: CGAffineTransform(scaleX: -1.0, y: 1.0))
+    }
+    
+    /**
+     Return a resized version of this instance (centered)
+     */
     func resize(size: CGSize) -> CIImage {
         // Calculate how much we need to scale down our image
         let scale = size.width / self.extent.size.width
@@ -34,17 +41,17 @@ extension CIImage{
     }
     
     /**
-     Property that returns a Core Video pixel buffer (CVPixelBuffer) of the image. 
+     Property that returns a Core Video pixel buffer (CVPixelBuffer) of the image.
      CVPixelBuffer is a Core Video pixel buffer (or just image buffer) that holds pixels in main memory. Applications generating frames, compressing or decompressing video, or using Core Image can all make use of Core Video pixel buffers.
      https://developer.apple.com/documentation/corevideo/cvpixelbuffer
-    */
+     */
     func toPixelBuffer(context:CIContext, gray:Bool=true) -> CVPixelBuffer?{
         // Create a dictionary requesting Core Graphics compatibility
         let attributes = [
             kCVPixelBufferCGImageCompatibilityKey:kCFBooleanTrue,
             kCVPixelBufferCGBitmapContextCompatibilityKey:kCFBooleanTrue
             ] as CFDictionary
-
+        
         // Create a pixel buffer at the size our model needs
         var nullablePixelBuffer: CVPixelBuffer? = nil
         let status = CVPixelBufferCreate(kCFAllocatorDefault,
@@ -53,7 +60,7 @@ extension CIImage{
                                          gray ? kCVPixelFormatType_OneComponent8 : kCVPixelFormatType_32ARGB,
                                          attributes,
                                          &nullablePixelBuffer)
-
+        
         // Evaluate staus and unwrap nullablePixelBuffer
         guard status == kCVReturnSuccess, let pixelBuffer = nullablePixelBuffer
             else { return nil }
@@ -68,11 +75,11 @@ extension CIImage{
                                       width: self.extent.size.width,
                                       height: self.extent.size.height),
                        colorSpace:gray ?
-                            CGColorSpaceCreateDeviceGray() :
-                            self.colorSpace)
-
+                        CGColorSpaceCreateDeviceGray() :
+                        self.colorSpace)
+        
         CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
-
+        
         return pixelBuffer
     }
 }

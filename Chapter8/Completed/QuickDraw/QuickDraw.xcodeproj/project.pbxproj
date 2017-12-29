@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8413BB7B1FF5A3FA005A4DA0 /* SketchPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8413BB7A1FF5A3FA005A4DA0 /* SketchPreviewCell.swift */; };
+		84A967EC1FF6D72400F8C8AF /* CIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A967EB1FF6D72400F8C8AF /* CIImage.swift */; };
+		84C0748D1FF43D9A00E38929 /* SketchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C0748C1FF43D9A00E38929 /* SketchViewController.swift */; };
+		84C074911FF43E3400E38929 /* BingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C074901FF43E3400E38929 /* BingService.swift */; };
 		84CD692E1FEBAB7400C5B7EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CD692D1FEBAB7400C5B7EC /* AppDelegate.swift */; };
 		84CD69301FEBAB7400C5B7EC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CD692F1FEBAB7400C5B7EC /* ViewController.swift */; };
 		84CD69331FEBAB7400C5B7EC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84CD69311FEBAB7400C5B7EC /* Main.storyboard */; };
@@ -16,6 +20,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8413BB7A1FF5A3FA005A4DA0 /* SketchPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SketchPreviewCell.swift; sourceTree = "<group>"; };
+		84A967EB1FF6D72400F8C8AF /* CIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIImage.swift; sourceTree = "<group>"; };
+		84C0748C1FF43D9A00E38929 /* SketchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SketchViewController.swift; sourceTree = "<group>"; };
+		84C074901FF43E3400E38929 /* BingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BingService.swift; sourceTree = "<group>"; };
 		84CD692A1FEBAB7400C5B7EC /* QuickDraw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuickDraw.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84CD692D1FEBAB7400C5B7EC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84CD692F1FEBAB7400C5B7EC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -63,6 +71,10 @@
 				84CD69361FEBAB7400C5B7EC /* LaunchScreen.storyboard */,
 				84CD69391FEBAB7400C5B7EC /* Info.plist */,
 				84CD693F1FEBAE4F00C5B7EC /* SketchView.swift */,
+				84C0748C1FF43D9A00E38929 /* SketchViewController.swift */,
+				84C074901FF43E3400E38929 /* BingService.swift */,
+				8413BB7A1FF5A3FA005A4DA0 /* SketchPreviewCell.swift */,
+				84A967EB1FF6D72400F8C8AF /* CIImage.swift */,
 			);
 			path = QuickDraw;
 			sourceTree = "<group>";
@@ -141,6 +153,10 @@
 			files = (
 				84CD69301FEBAB7400C5B7EC /* ViewController.swift in Sources */,
 				84CD69401FEBAE4F00C5B7EC /* SketchView.swift in Sources */,
+				8413BB7B1FF5A3FA005A4DA0 /* SketchPreviewCell.swift in Sources */,
+				84C0748D1FF43D9A00E38929 /* SketchViewController.swift in Sources */,
+				84C074911FF43E3400E38929 /* BingService.swift in Sources */,
+				84A967EC1FF6D72400F8C8AF /* CIImage.swift in Sources */,
 				84CD692E1FEBAB7400C5B7EC /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
