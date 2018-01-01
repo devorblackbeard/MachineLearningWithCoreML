@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreVideo
 
 protocol SketchViewControllerDelegate : class{
     func onSketchSelected(uiImage:UIImage?, boundingBox:CGRect?)
@@ -30,6 +31,12 @@ class SketchViewController: UIViewController {
         
     weak var delegate : SketchViewControllerDelegate?
     
+    // Used for rendering image processing results and performing image analysis. Here we use
+    // it for rendering out scaled and cropped captured frames in preparation for our model.
+    let context = CIContext()
+    
+    let model = cnnsketchclassifier()
+    
     var classification : String?
     
     var bingSearchResults = [BingServiceResult]()
@@ -41,7 +48,8 @@ class SketchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.updateClassification(label:"boat")
+        //self.updateClassification(label:"boat")
+        self.sketchView.addTarget(self, action: #selector(SketchViewController.onSketchViewEditingDidEnd), for: .editingDidEnd)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -60,6 +68,28 @@ class SketchViewController: UIViewController {
         dismiss(animated: true) {
             
         }
+    }
+}
+
+// MARK: - Editing actions from the SketchView
+
+extension SketchViewController{
+    @objc func onSketchViewEditingDidEnd(_ sender:SketchView){
+        DispatchQueue.global().async {
+            if let img = self.sketchView.exportSketch(size: CGSize(width: 128, height: 128)){
+                if let pixelBuffer = img.toPixelBuffer(context: self.context, gray: true){
+                    // Try to make a prediction
+                    let prediction = try? self.model.prediction(image: pixelBuffer)
+                    
+                    DispatchQueue.main.async {
+                        let label = prediction?.classLabel ?? "Unknown"
+                        print(label)
+                    }
+                }
+                
+            }
+        }
+        
     }
 }
 

@@ -9,13 +9,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter8/Completed/QuickDraw/QuickDraw/SketchViewController.swift"
-            timestampString = "536274332.15536"
+            filePath = "QuickDraw/SketchViewController.swift"
+            timestampString = "536535203.443361"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "169"
             endingLineNumber = "169"
-            landmarkName = "collectionView(_:didSelectItemAt:)"
+            landmarkName = "numberOfSections(in:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -25,13 +25,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter8/Completed/QuickDraw/QuickDraw/SketchViewController.swift"
-            timestampString = "536274332.155864"
+            filePath = "QuickDraw/SketchViewController.swift"
+            timestampString = "536535203.443424"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "92"
             endingLineNumber = "92"
-            landmarkName = "updateClassification(label:)"
+            landmarkName = "onSketchViewEditingDidEnd(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -41,94 +41,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter8/Completed/QuickDraw/QuickDraw/SketchViewController.swift"
-            timestampString = "536274332.156229"
+            filePath = "QuickDraw/SketchViewController.swift"
+            timestampString = "536535203.443467"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "113"
             endingLineNumber = "113"
-            landmarkName = "downloadNextImage()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter8/Completed/QuickDraw/QuickDraw/SketchViewController.swift"
-            timestampString = "536274332.156588"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "82"
-            endingLineNumber = "82"
             landmarkName = "updateClassification(label:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter8/Completed/QuickDraw/QuickDraw/SketchViewController.swift"
-            timestampString = "536274332.156962"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "80"
-            endingLineNumber = "80"
-            landmarkName = "updateClassification(label:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter8/Completed/QuickDraw/QuickDraw/SketchViewController.swift"
-            timestampString = "536274332.157316"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
-            landmarkName = "unknown"
-            landmarkType = "0">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter8/Completed/QuickDraw/QuickDraw/SketchViewController.swift"
-            timestampString = "536274332.157693"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "32"
-            endingLineNumber = "32"
-            landmarkName = "SketchViewController"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter8/Completed/QuickDraw/QuickDraw/SketchViewController.swift"
-            timestampString = "536274332.158041"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "33"
-            endingLineNumber = "33"
-            landmarkName = "SketchViewController"
-            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -138,7 +58,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QuickDraw/SketchView.swift"
-            timestampString = "536276467.621558"
+            timestampString = "536535203.443613"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "180"

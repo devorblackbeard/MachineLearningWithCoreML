@@ -261,7 +261,7 @@ extension SketchView{
         self.setNeedsDisplay()
         
         // notify target of action (target-action pattern)
-        self.sendActions(for: UIControlEvents.valueChanged)
+        self.sendActions(for: UIControlEvents.editingDidBegin)
         
         // return true to indicate we want to continue tracking
         return true
@@ -280,7 +280,7 @@ extension SketchView{
         self.setNeedsDisplay()
         
         // notify target of action (target-action pattern)
-        self.sendActions(for: UIControlEvents.editingDidBegin)
+        self.sendActions(for: UIControlEvents.editingChanged)
         
         // return true to indicate we want to continue tracking
         return true
@@ -302,7 +302,7 @@ extension SketchView{
         self.setNeedsDisplay()
         
         // notify target of action (target-action pattern)
-        self.sendActions(for: UIControlEvents.editingChanged)
+        self.sendActions(for: UIControlEvents.editingDidEnd)
     }
     
     override func cancelTracking(with event: UIEvent?) {
