@@ -27,35 +27,12 @@ class ViewController: UIViewController {
     @IBAction func onNavAdd(_ sender: Any) {
         guard let sketchVC = storyboard?.instantiateViewController(
             withIdentifier: "sketchVC") as? SketchViewController else { return }
-        
-        sketchVC.delegate = self
+                
         sketchVC.modalPresentationStyle = .overCurrentContext
         
         present(sketchVC, animated: true) {
             
         }
-    }
-}
-
-// MARK: - SketchViewControllerDelegate
-
-extension ViewController : SketchViewControllerDelegate{
-    
-    func onSketchSelected(uiImage:UIImage?, boundingBox:CGRect?){
-        guard let uiImage = uiImage else{ return }
-        
-        let imageView = UIImageView(image: uiImage)
-        
-        imageView.contentMode = .scaleAspectFill
-        
-        imageView.isUserInteractionEnabled = false
-        
-        imageView.frame = CGRect(x: 0,
-                                  y: 0,
-                                  width: boundingBox?.width ?? imageView.bounds.width,
-                                  height: boundingBox?.height ?? imageView.bounds.height)
-        
-        self.canvasView.addSubview(imageView)
     }
 }
 

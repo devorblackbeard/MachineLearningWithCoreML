@@ -21,6 +21,9 @@
 		84CD69351FEBAB7400C5B7EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84CD69341FEBAB7400C5B7EC /* Assets.xcassets */; };
 		84CD69381FEBAB7400C5B7EC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84CD69361FEBAB7400C5B7EC /* LaunchScreen.storyboard */; };
 		84CD69401FEBAE4F00C5B7EC /* SketchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CD693F1FEBAE4F00C5B7EC /* SketchView.swift */; };
+		84FEFA671FFE2304001F1EF4 /* Stroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FEFA661FFE2304001F1EF4 /* Stroke.swift */; };
+		84FEFA691FFE232F001F1EF4 /* Sketch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FEFA681FFE232F001F1EF4 /* Sketch.swift */; };
+		84FEFA6B1FFED443001F1EF4 /* QueryFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FEFA6A1FFED443001F1EF4 /* QueryFacade.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +43,9 @@
 		84CD69371FEBAB7400C5B7EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84CD69391FEBAB7400C5B7EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84CD693F1FEBAE4F00C5B7EC /* SketchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SketchView.swift; sourceTree = "<group>"; };
+		84FEFA661FFE2304001F1EF4 /* Stroke.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Stroke.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter8/Completed/QuickDraw/QuickDraw/Stroke.swift"; sourceTree = "<group>"; };
+		84FEFA681FFE232F001F1EF4 /* Sketch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sketch.swift; sourceTree = "<group>"; };
+		84FEFA6A1FFED443001F1EF4 /* QueryFacade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryFacade.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +103,9 @@
 				84C074901FF43E3400E38929 /* BingService.swift */,
 				8413BB7A1FF5A3FA005A4DA0 /* SketchPreviewCell.swift */,
 				84A967EB1FF6D72400F8C8AF /* CIImage.swift */,
+				84FEFA661FFE2304001F1EF4 /* Stroke.swift */,
+				84FEFA681FFE232F001F1EF4 /* Sketch.swift */,
+				84FEFA6A1FFED443001F1EF4 /* QueryFacade.swift */,
 			);
 			path = QuickDraw;
 			sourceTree = "<group>";
@@ -178,9 +187,12 @@
 				8412856C1FFAECCD009EC3B4 /* cnnsketchclassifier.mlmodel in Sources */,
 				84CD69401FEBAE4F00C5B7EC /* SketchView.swift in Sources */,
 				8413BB7B1FF5A3FA005A4DA0 /* SketchPreviewCell.swift in Sources */,
+				84FEFA671FFE2304001F1EF4 /* Stroke.swift in Sources */,
 				84C0748D1FF43D9A00E38929 /* SketchViewController.swift in Sources */,
 				84C074911FF43E3400E38929 /* BingService.swift in Sources */,
+				84FEFA691FFE232F001F1EF4 /* Sketch.swift in Sources */,
 				84A967EC1FF6D72400F8C8AF /* CIImage.swift in Sources */,
+				84FEFA6B1FFED443001F1EF4 /* QueryFacade.swift in Sources */,
 				84CD692E1FEBAB7400C5B7EC /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

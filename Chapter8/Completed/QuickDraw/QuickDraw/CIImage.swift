@@ -40,6 +40,23 @@ extension CIImage{
         return resizedImage.cropped(to: rect)
     }
     
+    func rescalePixels() -> CIImage?{
+        let kernelString =
+            "kernel vec4 rescale ( __sample s) {\n" +
+                "  vec4 pixel = s.rgba;\n" +
+                "  float scale = 1.0/255.0;\n" +
+                "  pixel *= scale;\n" +
+                "  return pixel;\n" +
+        "}"
+        
+        guard let kernel = CIColorKernel(source: kernelString) else{
+            return nil
+        }
+        
+        let args = [self as AnyObject]
+        return kernel.apply(extent: self.extent, arguments: args)
+    }
+    
     /**
      Property that returns a Core Video pixel buffer (CVPixelBuffer) of the image.
      CVPixelBuffer is a Core Video pixel buffer (or just image buffer) that holds pixels in main memory. Applications generating frames, compressing or decompressing video, or using Core Image can all make use of Core Video pixel buffers.

@@ -9,65 +9,50 @@
 import UIKit
 import CoreVideo
 
-protocol SketchViewControllerDelegate : class{
-    func onSketchSelected(uiImage:UIImage?, boundingBox:CGRect?)
-}
-
 class SketchViewController: UIViewController {
+    
+    enum SketchMode{
+        case sketch, move, dispose
+    }
 
     fileprivate let reuseIdentifier = "SketchPreviewCell"
     
-    fileprivate let itemsPerRow: CGFloat = 2
-    
-    fileprivate let sectionInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
+    fileprivate let sectionInsets = UIEdgeInsets(top: 2.0, left: 2.0, bottom: 2.0, right: 2.0)
     
     @IBOutlet weak var collectionView: UICollectionView!
     
+    @IBOutlet weak var toolBarLabel: UILabel!
+    
     @IBOutlet weak var sketchView: SketchView!
     
-    @IBOutlet weak var sketchLabel: UILabel!
+    @IBOutlet weak var sketchModeButton: UIButton!
     
-    @IBOutlet weak var resultsLabel: UILabel!
-        
-    weak var delegate : SketchViewControllerDelegate?
+    @IBOutlet weak var moveModeButton: UIButton!
     
-    // Used for rendering image processing results and performing image analysis. Here we use
-    // it for rendering out scaled and cropped captured frames in preparation for our model.
-    let context = CIContext()
+    @IBOutlet weak var disposeModeButton: UIButton!
     
-    let model = cnnsketchclassifier()
+    let ciContext = CIContext()
     
-    var classification : String?
+    let queryFacade = QueryFacade()
     
-    var bingSearchResults = [BingServiceResult]()
+    var queryImages = [UIImage]()
     
-    var bingSearchCIImages = [CIImage]()
-    
-    var bingSearchUIImages = [UIImage]()
+    var mode : SketchMode = .sketch{
+        didSet{
+            onSketchModeChanged()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //self.updateClassification(label:"boat")
         self.sketchView.addTarget(self, action: #selector(SketchViewController.onSketchViewEditingDidEnd), for: .editingDidEnd)
+        
+        queryFacade.delegate = self 
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        sketchLabel.alpha = 1.0
-        resultsLabel.alpha = 1.0
-        
-        UIView.animate(withDuration: 3.0) {
-            self.sketchLabel.alpha = 0.0
-            self.resultsLabel.alpha = 0.0
-        }
-    }
-    
-    @IBAction func onNavCancel(_ sender: Any) {
-        dismiss(animated: true) {
-            
-        }
+        super.viewDidAppear(animated)                        
     }
 }
 
@@ -75,90 +60,48 @@ class SketchViewController: UIViewController {
 
 extension SketchViewController{
     @objc func onSketchViewEditingDidEnd(_ sender:SketchView){
-        DispatchQueue.global().async {
-            if let img = self.sketchView.exportSketch(size: CGSize(width: 128, height: 128)){
-                if let pixelBuffer = img.toPixelBuffer(context: self.context, gray: true){
-                    // Try to make a prediction
-                    let prediction = try? self.model.prediction(image: pixelBuffer)
-                    
-                    DispatchQueue.main.async {
-                        let label = prediction?.classLabel ?? "Unknown"
-                        print(label)
-                    }
-                }
-                
-            }
-        }
-        
-    }
-}
-
-// MARK: - UICollectionViewDataSource
-
-extension SketchViewController{
-    
-    fileprivate func clearResults(){
-        bingSearchResults.removeAll()
-        bingSearchCIImages.removeAll()
-        bingSearchUIImages.removeAll()
-        
-        self.collectionView.reloadData()
-    }
-    
-    func updateClassification(label:String?){
-        // any change?
-        guard label != self.classification else{
+        guard self.sketchView.currentSketch != nil,
+            let sketch = self.sketchView.currentSketch as? StrokeSketch else{
             return
         }
         
-        clearResults()
+//        if let uiImage = UIImage(named:"test_img_airplane_1"){
+//            let ciImage = CIImage(cgImage: uiImage.cgImage!)
+//            if let predictions = queryFacade.classifySketch(image: ciImage.resize(size: CGSize(width: 256, height: 256))){
+//                for (key, value) in predictions{
+//                    print("\(key) \(value)")
+//                }
+//            }
+//
+//        }
         
-        // label is null
-        guard let label = label else{
-            self.classification = nil
-            return
-        }
-        
-        // perform a image search
-        BingService.sharedInstance.search(searchTerm: label) { (status, results) in
-            guard let results = results, status == 1 else{ return }
-            
-            for result in results{
-                self.bingSearchResults.append(result)
-            }
-            
-            // download images 
-            self.downloadNextImage()
-        }
+        // send sketch to our query facade which will
+        // perform classification on it and then
+        // proceed to search and download the related images
+        // (notifying us via the delegate method when finished)
+        queryFacade.asyncQuery(sketch: sketch)
     }
     
-    func downloadNextImage(){
-        if bingSearchResults.count == 0{
-            sortImages()
-        } else{
-            let bingResult = bingSearchResults.remove(at:0)
-            
-            BingService.sharedInstance.downloadImage(bingResult:bingResult) { (status, filename, image) in
-                guard let image = image, status == 1 else{ return }
-                
-                self.bingSearchCIImages.append(image)
-                
-                self.downloadNextImage()
-            }
-        }
-    }
-    
-    func sortImages(){
-        // TODO
-        onImagesSorted()
-    }
-    
-    func onImagesSorted(){
-        for ciImage in self.bingSearchCIImages{
-            bingSearchUIImages.append(UIImage(ciImage:ciImage))
-        }
+    fileprivate func onSketchModeChanged(){
+        // update UI
+        self.sketchModeButton.isSelected = self.mode == .sketch
+        self.moveModeButton.isSelected = self.mode == .move
+        self.disposeModeButton.isSelected = self.mode == .dispose
         
-        self.collectionView.reloadData()
+        self.sketchView.isEnabled = self.mode == .sketch
+        
+        if self.mode == SketchMode.dispose{
+            // remove any suggested images
+            self.queryImages.removeAll()
+            self.collectionView.reloadData()
+            self.toolBarLabel.isHidden = queryImages.count == 0
+            
+            // remove all sketches from sketchview
+            self.sketchView.removeAllSketches()
+            
+            // switch back to the default mode (sketch)
+            self.mode = .sketch
+        }
     }
 }
 
@@ -172,7 +115,7 @@ extension SketchViewController : UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView,
                                  numberOfItemsInSection section: Int) -> Int {
-        return bingSearchUIImages.count
+        return queryImages.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -181,7 +124,7 @@ extension SketchViewController : UICollectionViewDataSource{
             withReuseIdentifier: reuseIdentifier,
             for: indexPath) as! SketchPreviewCell
         
-        cell.imageView.image = bingSearchUIImages[indexPath.row]
+        cell.imageView.image = queryImages[indexPath.row]
         
         return cell
     }
@@ -190,15 +133,42 @@ extension SketchViewController : UICollectionViewDataSource{
 // MARK: - UICollectionViewDelegate
 
 extension SketchViewController : UICollectionViewDelegate{
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
+    func collectionView(_ collectionView: UICollectionView,
+                             didSelectItemAt indexPath: IndexPath)
     {
-        let bbox = self.sketchView.boundingBox
-        let image = self.bingSearchUIImages[indexPath.row]
-        self.delegate?.onSketchSelected(uiImage: image, boundingBox: bbox)
-        
-        dismiss(animated: true) {
-            
+        guard let sketch = self.sketchView.currentSketch else{
+            return
         }
+        
+        let image = self.queryImages[indexPath.row]
+        let bbox = sketch.boundingBox
+        
+        var origin = CGPoint(x:0, y:0)
+        var size = CGSize(width:0, height:0)
+        
+        if bbox.size.width > bbox.size.height{
+            let ratio = image.size.height / image.size.width
+            size.width = bbox.size.width
+            size.height = bbox.size.width * ratio
+        } else{
+            let ratio = image.size.width / image.size.height
+            size.width = bbox.size.height * ratio
+            size.height = bbox.size.height
+        }
+        
+        origin.x = sketch.center.x - size.width / 2
+        origin.y = sketch.center.y - size.height / 2
+        
+        // swap out stroke sketch with image
+        self.sketchView.currentSketch = ImageSketch(image:image,
+                                                    origin:origin,
+                                                    size:size,
+                                                    label:"")
+        
+        // clear suggestions
+        self.queryImages.removeAll()
+        self.toolBarLabel.isHidden = queryImages.count == 0
+        self.collectionView.reloadData()
     }
 }
 
@@ -210,22 +180,55 @@ extension SketchViewController : UICollectionViewDelegateFlowLayout{
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
-        let availableWidth = collectionView.frame.width - paddingSpace
-        let widthPerItem = availableWidth / itemsPerRow
+        let paddingSpace = sectionInsets.top + sectionInsets.bottom
+        let cellDim = collectionView.frame.height - paddingSpace
         
-        return CGSize(width: widthPerItem, height: widthPerItem)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        insetForSectionAt section: Int) -> UIEdgeInsets {
-        return sectionInsets
+        return CGSize(width: cellDim, height: cellDim)
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return sectionInsets.left
+    }
+}
+
+// MARK: - QueryDelegate
+
+extension SketchViewController : QueryDelegate{
+
+    func onQueryCompleted(status: Int, result:QueryResult?){
+        print("onQueryCompleted \(status)")
+        
+        queryImages.removeAll()
+        
+        if let result = result{
+            for cimage in result.images{
+                if let cgImage = self.ciContext.createCGImage(cimage, from:cimage.extent){
+                    queryImages.append(UIImage(cgImage:cgImage))
+                }
+            }
+        }
+        
+        toolBarLabel.isHidden = queryImages.count == 0
+        collectionView.reloadData() 
+    }
+    
+}
+
+// MARK: - Interface Builder Actions
+
+extension SketchViewController{
+    
+    @IBAction func onPenTapped(_ sender: Any) {
+        self.mode = .sketch
+    }
+    
+    @IBAction func onMoveTapped(_ sender: Any) {
+        self.mode = .move
+    }
+    
+    @IBAction func onDisposeTapped(_ sender: Any) {
+        self.mode = .dispose
     }
 }
