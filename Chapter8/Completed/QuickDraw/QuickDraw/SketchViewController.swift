@@ -23,6 +23,7 @@ class SketchViewController: UIViewController {
     
     @IBOutlet weak var toolBarLabel: UILabel!
     
+    // Bespoke UIControl for managing the drawing and rendering of the sketches
     @IBOutlet weak var sketchView: SketchView!
     
     @IBOutlet weak var sketchModeButton: UIButton!
@@ -31,11 +32,21 @@ class SketchViewController: UIViewController {
     
     @IBOutlet weak var disposeModeButton: UIButton!
     
+    // Context is used to create CGImage's from CIImage's
     let ciContext = CIContext()
     
+    // Facade encapsulating the process of managing
+    // sketch classification and search
     let queryFacade = QueryFacade()
     
+    // Current array of suggested images for substitution
     var queryImages = [UIImage]()
+    
+    // Used for 'moving' sketches
+    var panRecognizer : UIPanGestureRecognizer!
+    
+    // Sketch currently being dragged 
+    fileprivate var draggingSketch : Sketch?
     
     var mode : SketchMode = .sketch{
         didSet{
@@ -46,13 +57,21 @@ class SketchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Create and register the Pan Gesture Recognizer
+        self.panRecognizer = UIPanGestureRecognizer(
+            target: self,
+            action: #selector(SketchViewController.onPanGestureRecognizer))
+        
+        self.view.gestureRecognizers = [panRecognizer]
+        self.panRecognizer.isEnabled = self.mode == .move
+        
+        // Listen our for when the user finishes a stroke; after which we will
+        // perform classification and a image search
         self.sketchView.addTarget(self, action: #selector(SketchViewController.onSketchViewEditingDidEnd), for: .editingDidEnd)
         
+        // The QueryFacade communicates it's results via a deleate; here
+        // we assign ourselves for handling the results
         queryFacade.delegate = self 
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)                        
     }
 }
 
@@ -63,17 +82,7 @@ extension SketchViewController{
         guard self.sketchView.currentSketch != nil,
             let sketch = self.sketchView.currentSketch as? StrokeSketch else{
             return
-        }
-        
-//        if let uiImage = UIImage(named:"test_img_airplane_1"){
-//            let ciImage = CIImage(cgImage: uiImage.cgImage!)
-//            if let predictions = queryFacade.classifySketch(image: ciImage.resize(size: CGSize(width: 256, height: 256))){
-//                for (key, value) in predictions{
-//                    print("\(key) \(value)")
-//                }
-//            }
-//
-//        }
+        }                
         
         // send sketch to our query facade which will
         // perform classification on it and then
@@ -88,7 +97,11 @@ extension SketchViewController{
         self.moveModeButton.isSelected = self.mode == .move
         self.disposeModeButton.isSelected = self.mode == .dispose
         
+        // enable/disable user interaction for sketchView
         self.sketchView.isEnabled = self.mode == .sketch
+        
+        // enable/disable gesture recognizer used for dragging sketches
+        self.panRecognizer.isEnabled = self.mode == .move
         
         if self.mode == SketchMode.dispose{
             // remove any suggested images
@@ -140,7 +153,14 @@ extension SketchViewController : UICollectionViewDelegate{
             return
         }
         
+        // cancel any current and/or waiting query
+        self.queryFacade.cancel()
+        
+        // Obtain selected image
         let image = self.queryImages[indexPath.row]
+        
+        // Define the bounds; constraining on the
+        // images aspect ratio
         let bbox = sketch.boundingBox
         
         var origin = CGPoint(x:0, y:0)
@@ -159,13 +179,13 @@ extension SketchViewController : UICollectionViewDelegate{
         origin.x = sketch.center.x - size.width / 2
         origin.y = sketch.center.y - size.height / 2
         
-        // swap out stroke sketch with image
+        // Swap out stroke sketch with image
         self.sketchView.currentSketch = ImageSketch(image:image,
                                                     origin:origin,
                                                     size:size,
                                                     label:"")
         
-        // clear suggestions
+        // Clear suggestions
         self.queryImages.removeAll()
         self.toolBarLabel.isHidden = queryImages.count == 0
         self.collectionView.reloadData()
@@ -198,7 +218,9 @@ extension SketchViewController : UICollectionViewDelegateFlowLayout{
 extension SketchViewController : QueryDelegate{
 
     func onQueryCompleted(status: Int, result:QueryResult?){
-        print("onQueryCompleted \(status)")
+        guard status > 0 else{
+            return
+        }
         
         queryImages.removeAll()
         
@@ -231,4 +253,50 @@ extension SketchViewController{
     @IBAction func onDisposeTapped(_ sender: Any) {
         self.mode = .dispose
     }
+}
+
+// MARK: - UIPanGestureRecognizer
+
+extension SketchViewController{
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else{
+            return
+        }
+        
+        let touchPoint = touch.location(in: self.sketchView)
+        
+        self.draggingSketch = nil
+        
+        // Find first sketch that contain this point within it's boundingbox
+        for sketch in self.sketchView.sketches.reversed(){
+            if sketch.boundingBox.contains(touchPoint){
+                self.draggingSketch = sketch
+                break
+            }
+        }
+    }
+    
+    @objc func onPanGestureRecognizer(gestureRecognizer:UIPanGestureRecognizer){
+        guard let draggingSketch = self.draggingSketch else{ return }
+        
+        if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
+            let translation = gestureRecognizer.translation(in: self.sketchView)
+            
+            // update the sketches center based on the touch translation
+            var center = draggingSketch.center
+            center.x += translation.x
+            center.y += translation.y
+            draggingSketch.center = center
+            
+            gestureRecognizer.setTranslation(CGPoint.zero, in: self.sketchView)
+            
+            // request the sketchView to redraw itself
+            self.sketchView.setNeedsDisplay()
+            
+        } else if gestureRecognizer.state == .ended || gestureRecognizer.state == .cancelled{
+            self.draggingSketch = nil
+        }
+    }
+    
 }

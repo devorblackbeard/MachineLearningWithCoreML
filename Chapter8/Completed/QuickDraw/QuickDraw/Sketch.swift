@@ -108,14 +108,14 @@ class StrokeSketch : Sketch{
         set{
             let previousCenter = self.center
             let newCenter = newValue
-            let translation = CGPoint(x:previousCenter.x - newCenter.x,
-                                      y:previousCenter.y - newCenter.y)
+            let translation = CGPoint(x:newCenter.x - previousCenter.x,
+                                      y:newCenter.y - previousCenter.y)
             for stroke in self.strokes{
                 for i in 0..<stroke.points.count{
                     stroke.points[i] = CGPoint(x:stroke.points[i].x + translation.x,
                                                y:stroke.points[i].y + translation.y)
                 }
-            }
+            }                        
         }
     }
     

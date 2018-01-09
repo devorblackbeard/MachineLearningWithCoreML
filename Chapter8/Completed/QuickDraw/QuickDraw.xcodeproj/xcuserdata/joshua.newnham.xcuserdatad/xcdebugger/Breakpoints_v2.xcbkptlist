@@ -9,40 +9,8 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "QuickDraw/SketchViewController.swift"
-            timestampString = "537144237.455313"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "84"
-            endingLineNumber = "84"
-            landmarkName = "onSketchViewEditingDidEnd(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "QuickDraw/SketchViewController.swift"
-            timestampString = "537144237.455394"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "84"
-            endingLineNumber = "84"
-            landmarkName = "onSketchViewEditingDidEnd(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "QuickDraw/SketchView.swift"
-            timestampString = "537144237.455446"
+            timestampString = "537223915.343655"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "153"
@@ -74,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QuickDraw/Sketch.swift"
-            timestampString = "537144237.455516"
+            timestampString = "537228311.362934"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "131"
-            endingLineNumber = "131"
+            startingLineNumber = "143"
+            endingLineNumber = "143"
             landmarkName = "exportSketch(size:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -90,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QuickDraw/QueryFacade.swift"
-            timestampString = "537143818.446528"
+            timestampString = "537228311.363045"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "105"
-            endingLineNumber = "105"
+            startingLineNumber = "140"
+            endingLineNumber = "140"
             landmarkName = "queryCurrentSketch()"
             landmarkType = "7">
          </BreakpointContent>
@@ -106,13 +74,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QuickDraw/QueryFacade.swift"
-            timestampString = "537143818.446582"
+            timestampString = "537228311.363152"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "152"
-            endingLineNumber = "152"
-            landmarkName = "downloadImages(searchTerms:searchTermsCount:searchResultsCount:)"
-            landmarkType = "7">
+            startingLineNumber = "188"
+            endingLineNumber = "188"
+            landmarkName = "QueryFacade"
+            landmarkType = "21">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -122,13 +90,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QuickDraw/BingService.swift"
-            timestampString = "537107774.065469"
+            timestampString = "537223915.347517"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "57"
             endingLineNumber = "57"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "syncSearch(searchTerm:count:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -138,13 +106,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QuickDraw/BingService.swift"
-            timestampString = "537107774.065771"
+            timestampString = "537223915.348117"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "80"
             endingLineNumber = "80"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "syncSearch(searchTerm:count:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -154,13 +122,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QuickDraw/BingService.swift"
-            timestampString = "537107774.0659781"
+            timestampString = "537223915.34949"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "70"
             endingLineNumber = "70"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "syncSearch(searchTerm:count:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -170,12 +138,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QuickDraw/QueryFacade.swift"
-            timestampString = "537143818.446667"
+            timestampString = "537228311.363325"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "94"
-            endingLineNumber = "94"
-            landmarkName = "queryCurrentSketch()"
+            startingLineNumber = "129"
+            endingLineNumber = "129"
+            landmarkName = "processNextQuery()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -186,28 +154,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QuickDraw/BingService.swift"
-            timestampString = "537107774.066226"
+            timestampString = "537223915.349933"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "76"
             endingLineNumber = "76"
-            landmarkName = "unknown"
-            landmarkType = "0">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "QuickDraw/QueryFacade.swift"
-            timestampString = "537143818.4467241"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "161"
-            endingLineNumber = "161"
-            landmarkName = "downloadImages(searchTerms:searchTermsCount:searchResultsCount:)"
+            landmarkName = "syncSearch(searchTerm:count:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -218,60 +170,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QuickDraw/QueryFacade.swift"
-            timestampString = "537143818.446763"
+            timestampString = "537228311.363444"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "156"
-            endingLineNumber = "156"
-            landmarkName = "downloadImages(searchTerms:searchTermsCount:searchResultsCount:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "QuickDraw.QueryFacade.downloadImages(searchTerms: Swift.Array&lt;Swift.String&gt;, searchTermsCount: Swift.Int, searchResultsCount: Swift.Int) -&gt; Swift.Optional&lt;Swift.Array&lt;__ObjC.CIImage&gt;&gt;"
-                  moduleName = "QuickDraw"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/joshua.newnham/Dropbox/Method%20-%20Personal/Machine%20Learning%20with%20CoreML/Projects/Chapter8/Completed/QuickDraw/QuickDraw/QueryFacade.swift"
-                  timestampString = "537101830.610449"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "147"
-                  endingLineNumber = "147"
-                  offsetFromSymbolStart = "559">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (QuickDraw.BingServiceResult) -&gt; () in QuickDraw.QueryFacade.downloadImages(searchTerms: Swift.Array&lt;Swift.String&gt;, searchTermsCount: Swift.Int, searchResultsCount: Swift.Int) -&gt; Swift.Optional&lt;Swift.Array&lt;__ObjC.CIImage&gt;&gt;"
-                  moduleName = "QuickDraw"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/joshua.newnham/Dropbox/Method%20-%20Personal/Machine%20Learning%20with%20CoreML/Projects/Chapter8/Completed/QuickDraw/QuickDraw/QueryFacade.swift"
-                  timestampString = "537101830.613585"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "148"
-                  endingLineNumber = "148"
-                  offsetFromSymbolStart = "18">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "QuickDraw/QueryFacade.swift"
-            timestampString = "537143818.4468009"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "169"
-            endingLineNumber = "169"
-            landmarkName = "downloadImages(searchTerms:searchTermsCount:searchResultsCount:)"
+            startingLineNumber = "204"
+            endingLineNumber = "204"
+            landmarkName = "classifySketch(sketch:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -282,12 +186,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QuickDraw/QueryFacade.swift"
-            timestampString = "537143818.446854"
+            timestampString = "537228311.363541"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "95"
-            endingLineNumber = "95"
-            landmarkName = "queryCurrentSketch()"
+            startingLineNumber = "218"
+            endingLineNumber = "218"
+            landmarkName = "classifySketch(image:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "QuickDraw/QueryFacade.swift"
+            timestampString = "537228311.363621"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "130"
+            endingLineNumber = "130"
+            landmarkName = "processNextQuery()"
             landmarkType = "7">
             <Locations>
                <Location
@@ -330,13 +250,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QuickDraw/SketchViewController.swift"
-            timestampString = "537144237.455948"
+            timestampString = "537228311.363699"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
-            landmarkName = "onSketchViewEditingDidEnd(_:)"
-            landmarkType = "7">
+            startingLineNumber = "73"
+            endingLineNumber = "73"
+            landmarkName = "SketchViewController"
+            landmarkType = "21">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -346,12 +266,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QuickDraw/QueryFacade.swift"
-            timestampString = "537143818.44713"
+            timestampString = "537228311.36419"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "135"
-            endingLineNumber = "135"
-            landmarkName = "classifySketch(image:)"
+            startingLineNumber = "171"
+            endingLineNumber = "171"
+            landmarkName = "queryCurrentSketch()"
             landmarkType = "7">
             <Locations>
                <Location
@@ -393,24 +313,8 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "QuickDraw/SketchViewController.swift"
-            timestampString = "537144237.456014"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "88"
-            endingLineNumber = "88"
-            landmarkName = "onSketchModeChanged()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "QuickDraw/SketchView.swift"
-            timestampString = "537144237.456062"
+            timestampString = "537223915.3543971"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "62"
@@ -426,13 +330,45 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QuickDraw/SketchViewController.swift"
-            timestampString = "537144237.4561059"
+            timestampString = "537228311.364298"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "140"
-            endingLineNumber = "140"
-            landmarkName = "collectionView(_:didSelectItemAt:)"
+            startingLineNumber = "129"
+            endingLineNumber = "129"
+            landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "QuickDraw/SketchViewController.swift"
+            timestampString = "537228311.364681"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "256"
+            endingLineNumber = "256"
+            landmarkName = "touchesBegan(_:with:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "QuickDraw/Sketch.swift"
+            timestampString = "537228311.365033"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "111"
+            endingLineNumber = "111"
+            landmarkName = "center"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -10,52 +10,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="tne-QT-ifu">
-            <objects>
-                <viewController storyboardIdentifier="MainVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="BYZ-38-t0r" customClass="ViewController" customModule="QuickDraw" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <navigationBar contentMode="scaleToFill" barStyle="black" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s4f-uS-IkN">
-                                <rect key="frame" x="0.0" y="0.0" width="667" height="32"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <items>
-                                    <navigationItem id="CY7-ei-Ch2">
-                                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="taA-Yf-Dey">
-                                            <connections>
-                                                <action selector="onNavAdd:" destination="BYZ-38-t0r" id="keW-r5-ybJ"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wxx-MP-NkZ" userLabel="canvas">
-                                <rect key="frame" x="0.0" y="32" width="667" height="343"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="s4f-uS-IkN" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="5XY-bK-hMK"/>
-                            <constraint firstItem="Wxx-MP-NkZ" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="PXl-hT-KzG"/>
-                            <constraint firstItem="Wxx-MP-NkZ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="aLg-sa-LSa"/>
-                            <constraint firstItem="Wxx-MP-NkZ" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="bQC-Vv-GYF"/>
-                            <constraint firstItem="Wxx-MP-NkZ" firstAttribute="top" secondItem="s4f-uS-IkN" secondAttribute="bottom" id="clx-Wj-qI0"/>
-                            <constraint firstItem="s4f-uS-IkN" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="lSE-xD-a0u"/>
-                            <constraint firstItem="s4f-uS-IkN" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="rsD-7I-P5M"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                    </view>
-                    <connections>
-                        <outlet property="canvasView" destination="Wxx-MP-NkZ" id="zB3-i0-tZK"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="34.632683658170919" y="704.79999999999995"/>
-        </scene>
         <!--Sketch View Controller-->
         <scene sceneID="ZIL-R2-k8Z">
             <objects>

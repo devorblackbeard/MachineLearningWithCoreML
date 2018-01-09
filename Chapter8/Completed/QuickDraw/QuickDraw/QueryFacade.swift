@@ -34,8 +34,11 @@ class QueryFacade{
     var currentSketch : StrokeSketch?{
         didSet{
             self.newQueryWaiting = true
+            self.queryCanceled = false
         }
     }
+    
+    fileprivate var queryCanceled : Bool = false
     
     fileprivate var newQueryWaiting : Bool = false
     
@@ -47,8 +50,31 @@ class QueryFacade{
         }
     }
     
+    /**
+     Interrupt existing process if either a new query is waiting or the query
+     has been canceled
+     **/
+    var isInterrupted : Bool{
+        get{
+            return self.queryCanceled || self.newQueryWaiting
+        }
+    }
+    
     init() {
         
+    }
+    
+    /**
+     Call to cancel current query (being processed) and ignore
+     any waiting query
+    **/
+    func cancel(){
+        if self.isProcessingQuery || self.newQueryWaiting{
+            self.currentSketch = nil
+            self.newQueryWaiting = false
+            self.processingQuery = false
+            self.queryCanceled = true
+        }
     }
     
     func asyncQuery(sketch:StrokeSketch){
@@ -59,12 +85,21 @@ class QueryFacade{
         }
     }
     
+    /**
+     Process any waiting query
+    **/
     fileprivate func processNextQuery(){
+        self.queryCanceled = false
+        
         if self.newQueryWaiting && !self.processingQuery{
             self.queryCurrentSketch()
         }
     }
     
+    /**
+     Start processing the current sketch; including prediction and
+     performing image searches
+    **/
     fileprivate func queryCurrentSketch(){
         guard let sketch = self.currentSketch else{
             self.processingQuery = false
@@ -102,7 +137,7 @@ class QueryFacade{
             
             DispatchQueue.main.async{
                 self.processingQuery = false
-                self.delegate?.onQueryCompleted(status:1,
+                self.delegate?.onQueryCompleted(status:self.isInterrupted ? -1 : 1,
                                                 result:QueryResult(
                                                     predictions: predictions,
                                                     images: images))
@@ -117,7 +152,8 @@ class QueryFacade{
 extension QueryFacade{
     
     func classifySketch(sketch:Sketch) -> [(key:String,value:Double)]?{
-        // rasterize image, resize and then rescale pixels (multiplying them by 1.0/255.0 as per training)
+        // rasterize image, resize and then rescale pixels (multiplying
+        // them by 1.0/255.0 as per training)
         if let img = sketch.exportSketch(size: nil)?.resize(size: self.targetSize).rescalePixels(){
             return self.classifySketch(image: img)
         }
@@ -151,18 +187,31 @@ extension QueryFacade{
     func downloadImages(searchTerms:[String], searchTermsCount:Int=4, searchResultsCount:Int=2) -> [CIImage]?{
         var bingResults = [BingServiceResult]()
         
+        // synchronously query for each image
         for i in 0..<min(searchTermsCount, searchTerms.count){
             let results = BingService.sharedInstance.syncSearch(searchTerm: searchTerms[i], count:searchResultsCount)
-            results.forEach({ (bingResult) in
+            
+            for bingResult in results{
                 bingResults.append(bingResult)
-            })
+            }
+            
+            // exit early if the query has been canceled or new query is waiting
+            if self.isInterrupted{
+                return nil
+            }
         }
         
         var images = [CIImage]()
         
+        // synchronously download each image
         for bingResult in bingResults{
             if let image = BingService.sharedInstance.syncDownloadImage(bingResult: bingResult){
                 images.append(image)
+            }
+            
+            // exit early if the query has been canceled or new query is waiting
+            if self.isInterrupted{
+                return nil
             }
         }
         
