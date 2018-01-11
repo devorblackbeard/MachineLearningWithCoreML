@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import CoreML
+import Accelerate
+import simd
 
 protocol QueryDelegate : class{
     func onQueryCompleted(status: Int, result:QueryResult?)
@@ -23,7 +26,11 @@ class QueryFacade{
     // it for rendering out scaled and cropped captured frames in preparation for our model.
     let context = CIContext()
     
-    let model = cnnsketchclassifier()
+    // CoreML model responsible for classifying a given sketch
+    let sketchClassifier = cnnsketchclassifier()
+    
+    // CoreML model responsible for extracting features from a given sketch
+    let sketchFeatureExtractor = cnnsketchfeatureextractor()
     
     let queryQueue = DispatchQueue(label: "query_queue")
     
@@ -135,12 +142,21 @@ class QueryFacade{
                 return
             }
             
+            guard let sortedImage = self.sortByVisualSimilarity(images: images, sketch: sketch) else{
+                DispatchQueue.main.async{
+                    self.processingQuery = false
+                    self.delegate?.onQueryCompleted(status:-1, result:nil)
+                    self.processNextQuery()
+                }
+                return
+            }
+            
             DispatchQueue.main.async{
                 self.processingQuery = false
                 self.delegate?.onQueryCompleted(status:self.isInterrupted ? -1 : 1,
                                                 result:QueryResult(
                                                     predictions: predictions,
-                                                    images: images))
+                                                    images: sortedImage))
                 self.processNextQuery()
             }
         }
@@ -165,7 +181,7 @@ extension QueryFacade{
         // obtain the CVPixelBuffer from the image
         if let pixelBuffer = image.toPixelBuffer(context: self.context, gray: true){
             // Try to make a prediction
-            let prediction = try? self.model.prediction(image: pixelBuffer)
+            let prediction = try? self.sketchClassifier.prediction(image: pixelBuffer)
             
             if let classPredictions = prediction?.classLabelProbs{
                 let sortedClassPredictions = classPredictions.sorted(by: { (kvp1, kvp2) -> Bool in
@@ -178,6 +194,116 @@ extension QueryFacade{
         
         return nil
     }
+}
+
+// MARK: - Visual similarity search
+
+extension QueryFacade{
+    
+    func sortByVisualSimilarity(images:[CIImage], sketch:Sketch) -> [CIImage]?{
+        if let img = sketch.exportSketch(size: nil)?.resize(size: self.targetSize).rescalePixels(){
+            return self.sortByVisualSimilarity(images: images, sketchImage: img)
+        }
+        
+        return nil
+    }
+    
+    /**
+     Given a sketch image; iterate through seach of the suggested images, comparing their
+     similarity to the target image (sketch) and return a list of sorted list
+    */
+    func sortByVisualSimilarity(images:[CIImage], sketchImage:CIImage) -> [CIImage]?{
+        // Extract features from the sketch to be compared with with the other images
+        guard let sketchFeatures = self.extractFeaturesFromImage(image: sketchImage) else{
+            return nil
+        }
+        
+        // Create array of scores that we will populate with their corresponding consine similarity scores
+        var similatiryScores = Array<Double>(repeating:1.0, count:images.count)
+        
+        // Iterate through each Image, calculating and storing the similarity score
+        for i in 0..<images.count{
+            var similarityScore : Double = 1.0
+            
+            if let imageFeatures = self.extractFeaturesFromImage(image: images[i]){
+                similarityScore = self.cosineSimilarity(
+                    vecA: sketchFeatures,
+                    vecB: imageFeatures)
+            }
+            
+            similatiryScores[i] = similarityScore
+            
+            // exit early if the query has been canceled or new query is waiting
+            if self.isInterrupted{
+                return nil
+            }
+        }
+        
+        // sort images based on their similarity score
+        return images.enumerated().sorted { (elemA, elemB) -> Bool in
+            return similatiryScores[elemA.offset] < similatiryScores[elemB.offset]
+            }.map { (item) -> CIImage in
+                return item.element
+        }
+    }
+    
+    fileprivate func extractFeaturesFromImage(image:CIImage) -> MLMultiArray?{
+        // obtain the CVPixelBuffer from the image
+        guard let imagePixelBuffer = image.resize(size: self.targetSize).rescalePixels()?.toPixelBuffer(context: self.context, gray: true) else {
+            return nil
+        }
+        
+        // extract features from the image which we we compare each image with
+        guard let features = try? self.sketchFeatureExtractor.prediction(image: imagePixelBuffer) else{
+            return nil
+        }
+        
+        return features.classActivations
+    }
+    
+    /**
+     Check out the link below for more details about calculating cosine between 2 vectors
+     https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.cosine.html
+    */
+    fileprivate func cosineSimilarity(vecA: MLMultiArray, vecB: MLMultiArray) -> Double {
+        return 1.0 - self.dot(vecA:vecA, vecB:vecB) / (self.magnitude(vec: vecA) * self.magnitude(vec: vecB))
+    }
+    
+    fileprivate func dot(vecA: MLMultiArray, vecB: MLMultiArray) -> Double {
+        guard vecA.shape.count == 1 && vecB.shape.count == 1 else{
+            fatalError("Expecting vectors (tensor with 1 rank)")
+        }
+        
+        guard vecA.count == vecB.count else {
+            fatalError("Excepting count of both vectors to be equal")
+        }
+        
+//        let count = vecA.count
+//        let iptr = UnsafeMutablePointer<Float>(OpaquePointer(vecA.dataPointer))
+//        let optr = UnsafeMutablePointer<Float>(OpaquePointer(vecB.dataPointer))
+        
+        var x: Double = 0
+        
+        for i in 0..<vecA.count{
+            x += vecA[i].doubleValue * vecB[i].doubleValue
+        }
+        
+        return x
+    }
+    
+    fileprivate func magnitude(vec: MLMultiArray) -> Double {
+        guard vec.shape.count == 1 else{
+            fatalError("Expecting a vector (tensor with 1 rank)")
+        }
+        
+        let count = vec.count
+        let iptr = UnsafeMutablePointer<Double>(OpaquePointer(vec.dataPointer))
+        var output: Double = 0.0
+        vDSP_svsD(iptr, 1, &output, vDSP_Length(count))
+        
+        return sqrt(output)
+    }
+    
 }
 
 // MARK: - Bing Search
