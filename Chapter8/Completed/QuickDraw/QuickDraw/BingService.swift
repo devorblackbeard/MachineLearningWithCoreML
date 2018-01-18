@@ -44,9 +44,10 @@ class BingService{
 
 extension BingService{
     
+    /**
+     Call (synchronously) the Bing Image search API and return the results; more details about the API can be found on the official page https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-images-api-v7-reference and https://azure.microsoft.com/en-gb/services/cognitive-services/bing-image-search-api/
+     */
     func syncSearch(searchTerm:String, count:Int=4) -> [BingServiceResult]{
-        print("syncSearch \(searchTerm)")
-        
         var results = [BingServiceResult]()
         
         guard let escapedSearchTerm = searchTerm.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else{
@@ -79,67 +80,16 @@ extension BingService{
         
         return results
     }
-    
-    func asyncSearch(searchTerm:String, count:Int=4,
-                     callback: @escaping (_ status:Int, _ results:[BingServiceResult]?) -> Void) -> Void{
-        
-        guard let url = NSURL(string: "\(endpoint)?q=\(searchTerm)&imageType=Line&count=\(count)") else {
-            callback(-1, nil)
-            return
-        }
-        
-        let request = NSMutableURLRequest(url: url as URL)
-        request.setValue("application/json; charset=utf-8",
-                         forHTTPHeaderField: "Content-Type")
-        request.setValue(subscriptionKey,
-                         forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
-        request.httpMethod = "GET"
-        
-        let session = URLSession.shared
-        
-        let task = session.dataTask(with: request as URLRequest, completionHandler: {(data, response, error) -> Void in
-            
-            if let error = error{
-                print(error.localizedDescription)
-                
-                DispatchQueue.main.async {
-                    callback(-2, nil)
-                }
-            }
-            else{
-                
-                guard let data = data else{
-                    DispatchQueue.main.async {
-                        callback(-3, nil)
-                    }
-                    return
-                }
-                
-                var results = [BingServiceResult]()
-                
-                if !self.parseBingResults(data: data, results: &results){
-                    DispatchQueue.main.async {
-                        callback(-4, nil)
-                    }
-                }
-                
-                DispatchQueue.main.async {
-                    callback(1, results)
-                }
-            }
-        })
-        
-        task.resume()
-    }
 }
 
 // MARK: - Image handling methods
 
 extension BingService{
     
+    /**
+     Download (synchronously) the image referenced via the BingResultResult.url property
+    */
     func syncDownloadImage(bingResult:BingServiceResult) -> CIImage?{
-        print("syncDownloadImage \(bingResult.url)")
-        
         guard let url = URL(string: bingResult.url) else{
             return nil
         }
@@ -164,52 +114,15 @@ extension BingService{
         
         return result
     }
-    
-    func asyncDownloadImage(bingResult:BingServiceResult,
-                       callback:@escaping (_ status:Int, _ filename:String?, _ image: CIImage?)->Void){
-        
-        guard let url = URL(string: bingResult.url) else{
-            callback(-1, nil, nil)
-            return
-        }
-        
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            guard let data = data else{
-                DispatchQueue.main.async {
-                    callback(-2, nil, nil)
-                }
-                return
-            }
-            
-            if let error = error{
-                print(error.localizedDescription)
-                
-                DispatchQueue.main.async {
-                    callback(-3, nil, nil)
-                }
-            }
-            else{
-                let filename = response?.suggestedFilename ?? url.lastPathComponent
-                
-                guard let image = CIImage(data: data) else{
-                    DispatchQueue.main.async {
-                        callback(-4, nil, nil)
-                    }
-                    return
-                }
-                
-                DispatchQueue.main.async {
-                    callback(1, filename, image)
-                }
-            }
-            }.resume()
-    }
-    
 }
 
 // MARK: - Bing results parsing
 
 extension BingService{
+    
+    /**
+     Parse the Bing results returns by the image search API; here we are simply extracting the label (name) and image URL (thumbnailUrl). 
+    */
     fileprivate func parseBingResults(data:Data, results:inout [BingServiceResult]) -> Bool{
         do{
             let parsed = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)

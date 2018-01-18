@@ -7,9 +7,8 @@
 //
 
 import UIKit
-import CoreML
 import Accelerate
-import simd
+import CoreML
 
 protocol QueryDelegate : class{
     func onQueryCompleted(status: Int, result:QueryResult?)
@@ -38,7 +37,7 @@ class QueryFacade{
     
     weak var delegate : QueryDelegate?
     
-    var currentSketch : StrokeSketch?{
+    var currentSketch : Sketch?{
         didSet{
             self.newQueryWaiting = true
             self.queryCanceled = false
@@ -84,7 +83,7 @@ class QueryFacade{
         }
     }
     
-    func asyncQuery(sketch:StrokeSketch){
+    func asyncQuery(sketch:Sketch){
         self.currentSketch = sketch
         
         if !self.processingQuery{
@@ -264,6 +263,9 @@ extension QueryFacade{
     /**
      Check out the link below for more details about calculating cosine between 2 vectors
      https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.cosine.html
+     
+     Here to leverage the vDSP API (Digital Signal Processing) to perform the calculations to
+     improve performance. You can learn more about vDSP via the official vDSP Programming Guide https://developer.apple.com/library/content/documentation/Performance/Conceptual/vDSP_Programming_Guide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40005147
     */
     fileprivate func cosineSimilarity(vecA: MLMultiArray, vecB: MLMultiArray) -> Double {
         return 1.0 - self.dot(vecA:vecA, vecB:vecB) / (self.magnitude(vec: vecA) * self.magnitude(vec: vecB))
@@ -278,9 +280,12 @@ extension QueryFacade{
             fatalError("Excepting count of both vectors to be equal")
         }
         
-//        let count = vecA.count
-//        let iptr = UnsafeMutablePointer<Float>(OpaquePointer(vecA.dataPointer))
-//        let optr = UnsafeMutablePointer<Float>(OpaquePointer(vecB.dataPointer))
+        let count = vecA.count
+        let vecAPtr = UnsafeMutablePointer<Double>(OpaquePointer(vecA.dataPointer))
+        let vecBPptr = UnsafeMutablePointer<Double>(OpaquePointer(vecB.dataPointer))
+        var output: Double = 0.0
+        
+        vDSP_dotprD(vecAPtr, 1, vecBPptr, 1, &output, vDSP_Length(count))
         
         var x: Double = 0
         
@@ -297,9 +302,9 @@ extension QueryFacade{
         }
         
         let count = vec.count
-        let iptr = UnsafeMutablePointer<Double>(OpaquePointer(vec.dataPointer))
+        let vecPtr = UnsafeMutablePointer<Double>(OpaquePointer(vec.dataPointer))
         var output: Double = 0.0
-        vDSP_svsD(iptr, 1, &output, vDSP_Length(count))
+        vDSP_svsD(vecPtr, 1, &output, vDSP_Length(count))
         
         return sqrt(output)
     }

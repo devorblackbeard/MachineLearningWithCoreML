@@ -54,7 +54,7 @@ class StrokeSketch : Sketch{
             return CGPoint(x: minX, y: minY)
         }
     }
-    
+
     /**
      Return the max point (max x, max y) that contains the users stroke
      */
@@ -79,7 +79,7 @@ class StrokeSketch : Sketch{
             return CGPoint(x: maxX, y: maxY)
         }
     }
-    
+
     /** Returning the bounding box that encapsulates the users sketch **/
     var boundingBox : CGRect{
         get{
@@ -112,23 +112,24 @@ class StrokeSketch : Sketch{
                                       y:newCenter.y - previousCenter.y)
             for stroke in self.strokes{
                 for i in 0..<stroke.points.count{
-                    stroke.points[i] = CGPoint(x:stroke.points[i].x + translation.x,
-                                               y:stroke.points[i].y + translation.y)
+                    stroke.points[i] = CGPoint(
+                        x:stroke.points[i].x + translation.x,
+                        y:stroke.points[i].y + translation.y)
                 }
-            }                        
+            }
         }
     }
     
     func draw(context:CGContext){
         self.drawStrokes(context:context)
     }
-    
+
     func drawStrokes(context:CGContext){
         for stroke in self.strokes{
             self.drawStroke(context: context, stroke: stroke)
         }
     }
-    
+
     private func drawStroke(context:CGContext, stroke:Stroke){
         stroke.color.setStroke()
         context.setStrokeColor(stroke.color.cgColor)
@@ -139,8 +140,10 @@ class StrokeSketch : Sketch{
     
     func exportSketch(size:CGSize?=nil) -> CIImage?{
         let boundingBox = self.boundingBox
-        let targetSize = size ?? CGSize(width: max(boundingBox.width, boundingBox.height),
-                                        height: max(boundingBox.width, boundingBox.height))
+        let targetSize = size ?? CGSize(
+            width: max(boundingBox.width, boundingBox.height),
+            height: max(boundingBox.width, boundingBox.height))
+        
         var scale : CGFloat = 1.0
         
         if boundingBox.width > boundingBox.height{
@@ -154,26 +157,26 @@ class StrokeSketch : Sketch{
         }
         
         UIGraphicsBeginImageContextWithOptions(targetSize, true, 1.0)
-        
+
         guard let context = UIGraphicsGetCurrentContext() else{
             return nil
         }
-        
+
         UIGraphicsPushContext(context)
-        
+
         UIColor.white.setFill()
         context.fill(CGRect(x: 0, y: 0,
                             width: targetSize.width, height: targetSize.height))
-        
+
         context.scaleBy(x: scale, y: scale)
-        
+
         let scaledSize = CGSize(width: boundingBox.width * scale, height: boundingBox.height * scale)
-        
+
         context.translateBy(x: -boundingBox.origin.x + (targetSize.width - scaledSize.width)/2,
                             y: -boundingBox.origin.y + (targetSize.height - scaledSize.height)/2)
-        
+
         self.drawStrokes(context: context)
-        
+
         UIGraphicsPopContext()
         
         guard let image = UIGraphicsGetImageFromCurrentImageContext() else{
@@ -181,7 +184,7 @@ class StrokeSketch : Sketch{
             return nil
         }
         UIGraphicsEndImageContext()
-        
+
         return image.ciImage != nil ? image.ciImage : CIImage(cgImage: image.cgImage!)
     }
     

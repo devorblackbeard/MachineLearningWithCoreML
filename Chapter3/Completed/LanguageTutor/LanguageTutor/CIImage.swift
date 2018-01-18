@@ -14,8 +14,8 @@ extension CIImage{
      Return a resized version of this instance (centered) 
     */
     func resize(size: CGSize) -> CIImage {
-        // Calculate how much we need to scale down our image
-        let scale = size.width / self.extent.size.width
+        // Calculate how much we need to scale down/up our image
+        let scale = min(size.width,size.height) / min(self.extent.size.width, self.extent.size.height)
         
         let resizedImage = self.transformed(
             by: CGAffineTransform(
@@ -25,12 +25,19 @@ extension CIImage{
         // Center the image
         let width = resizedImage.extent.width
         let height = resizedImage.extent.height
+        let xOffset = (CGFloat(width) - size.width) / 2.0
         let yOffset = (CGFloat(height) - size.height) / 2.0
-        let rect = CGRect(x: (CGFloat(width) - size.width) / 2.0,
+        let rect = CGRect(x: xOffset,
                           y: yOffset,
                           width: size.width,
                           height: size.height)
-        return resizedImage.cropped(to: rect)
+        
+        return resizedImage
+            .clamped(to: rect)
+            .cropped(to: CGRect(
+                x: 0, y: 0,
+                width: size.width,
+                height: size.height))
     }
     
     /**

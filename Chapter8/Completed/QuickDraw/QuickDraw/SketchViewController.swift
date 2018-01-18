@@ -19,8 +19,11 @@ class SketchViewController: UIViewController {
     
     fileprivate let sectionInsets = UIEdgeInsets(top: 2.0, left: 2.0, bottom: 2.0, right: 2.0)
     
+    // CollectionView to hold the suggested images that the user can tap to replace their current sketch
     @IBOutlet weak var collectionView: UICollectionView!
     
+    // 'Instruction' label to indicate to the user the purpose of the CollectionView and it's contents
+    // (should be hidden when no suggestions are available)
     @IBOutlet weak var toolBarLabel: UILabel!
     
     // Bespoke UIControl for managing the drawing and rendering of the sketches
@@ -48,6 +51,8 @@ class SketchViewController: UIViewController {
     // Sketch currently being dragged 
     fileprivate var draggingSketch : Sketch?
     
+    // Property holding the current mode; when set it will call the onSketchModeChanged method to
+    // handle the change
     var mode : SketchMode = .sketch{
         didSet{
             onSketchModeChanged()
@@ -57,12 +62,14 @@ class SketchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Create and register the Pan Gesture Recognizer
+        // Create and register the Pan Gesture Recognizer (used for the mode 'move')
         self.panRecognizer = UIPanGestureRecognizer(
             target: self,
             action: #selector(SketchViewController.onPanGestureRecognizer))
         
+        // Assign the gesture to our main view
         self.view.gestureRecognizers = [panRecognizer]
+        // Enable it (the pan gesture) only if the appropriate mode
         self.panRecognizer.isEnabled = self.mode == .move
         
         // Listen our for when the user finishes a stroke; after which we will
@@ -78,43 +85,23 @@ class SketchViewController: UIViewController {
 // MARK: - Editing actions from the SketchView
 
 extension SketchViewController{
+    
+    /**
+     Target method for handling editing changes (triggered when editing has ended) via the SketchView;
+     When called; get reference to the current sketch and pass it to the QueryFacade to handle the
+     prediction and lookup.
+    */
     @objc func onSketchViewEditingDidEnd(_ sender:SketchView){
         guard self.sketchView.currentSketch != nil,
             let sketch = self.sketchView.currentSketch as? StrokeSketch else{
             return
-        }                
-        
+        }
+
         // send sketch to our query facade which will
         // perform classification on it and then
         // proceed to search and download the related images
         // (notifying us via the delegate method when finished)
         queryFacade.asyncQuery(sketch: sketch)
-    }
-    
-    fileprivate func onSketchModeChanged(){
-        // update UI
-        self.sketchModeButton.isSelected = self.mode == .sketch
-        self.moveModeButton.isSelected = self.mode == .move
-        self.disposeModeButton.isSelected = self.mode == .dispose
-        
-        // enable/disable user interaction for sketchView
-        self.sketchView.isEnabled = self.mode == .sketch
-        
-        // enable/disable gesture recognizer used for dragging sketches
-        self.panRecognizer.isEnabled = self.mode == .move
-        
-        if self.mode == SketchMode.dispose{
-            // remove any suggested images
-            self.queryImages.removeAll()
-            self.collectionView.reloadData()
-            self.toolBarLabel.isHidden = queryImages.count == 0
-            
-            // remove all sketches from sketchview
-            self.sketchView.removeAllSketches()
-            
-            // switch back to the default mode (sketch)
-            self.mode = .sketch
-        }
     }
 }
 
@@ -252,6 +239,40 @@ extension SketchViewController{
     
     @IBAction func onDisposeTapped(_ sender: Any) {
         self.mode = .dispose
+    }
+}
+
+// MARK: Property callback (Mode)
+
+extension SketchViewController{
+    
+    /**
+     Called whent he mode property has been set; responsible for updating the mode and UI
+     */
+    fileprivate func onSketchModeChanged(){
+        // update UI
+        self.sketchModeButton.isSelected = self.mode == .sketch
+        self.moveModeButton.isSelected = self.mode == .move
+        self.disposeModeButton.isSelected = self.mode == .dispose
+        
+        // enable/disable user interaction for sketchView
+        self.sketchView.isEnabled = self.mode == .sketch
+        
+        // enable/disable gesture recognizer used for dragging sketches
+        self.panRecognizer.isEnabled = self.mode == .move
+        
+        if self.mode == SketchMode.dispose{
+            // remove any suggested images
+            self.queryImages.removeAll()
+            self.collectionView.reloadData()
+            self.toolBarLabel.isHidden = queryImages.count == 0
+            
+            // remove all sketches from sketchview
+            self.sketchView.removeAllSketches()
+            
+            // switch back to the default mode (sketch)
+            self.mode = .sketch
+        }
     }
 }
 

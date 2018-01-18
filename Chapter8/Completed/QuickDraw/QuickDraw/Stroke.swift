@@ -2,9 +2,11 @@
 //  Stroke.swift
 //  QuickDraw
 //
-//  Created by Joshua Newnham on 04/01/2018.
+//  Created by Joshua Newnham on 13/01/2018.
 //  Copyright © 2018 Method. All rights reserved.
 //
+
+import UIKit
 
 import UIKit
 
@@ -36,7 +38,7 @@ class Stroke{
             return CGPoint(x: minX, y: minY)
         }
     }
-    
+
     /**
      Return the max point (max x, max y) that contains the users stroke
      */
@@ -75,7 +77,9 @@ class Stroke{
         }
     }
     
-    init(startingPoint:CGPoint, color:UIColor=UIColor.black, width:CGFloat=10.0) {
+    init(startingPoint:CGPoint,
+         color:UIColor=UIColor.black,
+         width:CGFloat=10.0) {
         self.points.append(startingPoint)
         self.color = color
         self.width = width

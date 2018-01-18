@@ -19,8 +19,14 @@ class SketchView: UIControl {
     // The width assigned to the stroke
     var strokeWidth : CGFloat = 1.0
     
+    // Array of sketches to be drawn
     var sketches = [Sketch]()
     
+    /**
+     Current sketch is the last sketch of the sketches array; therefore assigning
+     a sketch to this property will replace the last item of the sketches array
+     (or add one if the array is empty)
+    */
     var currentSketch : Sketch?{
         get{
             return self.sketches.count > 0 ? self.sketches.last : nil
@@ -48,6 +54,7 @@ class SketchView: UIControl {
         super.init(coder: aDecoder)
     }
     
+    // Remove all items from the sketches Array and request the view to be re-drawn 
     func removeAllSketches(){
         self.sketches.removeAll()
         self.setNeedsDisplay()
@@ -61,16 +68,15 @@ extension SketchView{
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else{ return }
         
-        self.clearView(context: context)
+        // clearn the view
+        self.clearColor.setFill()
+        UIRectFill(self.bounds)
         
+        // iterate over all sketches and have
+        // them draw themselves
         for sketch in self.sketches{
             sketch.draw(context: context)
         }
-    }
-    
-    private func clearView(context:CGContext){
-        self.clearColor.setFill()
-        UIRectFill(self.bounds)
     }
 }
 
@@ -81,25 +87,25 @@ extension SketchView{
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool{
         // obtain the point of touch relative to this view
         let point = touch.location(in: self)
-        
+
         if sketches.count == 0 || !(sketches.last is StrokeSketch){
             sketches.append(StrokeSketch())
         }
-        
+
         guard let sketch = self.sketches.last as? StrokeSketch else {
             return false
         }
-        
+
         sketch.addStroke(stroke:Stroke(startingPoint: point,
                                        color:self.strokeColor,
                                        width:self.strokeWidth))
-        
+
         // request the view to redraw itself
         self.setNeedsDisplay()
-        
+
         // notify target of action (target-action pattern)
         self.sendActions(for: UIControlEvents.editingDidBegin)
-        
+
         // return true to indicate we want to continue tracking
         return true
     }
@@ -111,16 +117,16 @@ extension SketchView{
         
         // obtain the point of touch relative to this view
         let point = touch.location(in: self)
-        
+
         // add point to the current stroke
         sketch.currentStroke?.points.append(point)
-        
+
         // request the view to redraw itself
         self.setNeedsDisplay()
-        
+
         // notify target of action (target-action pattern)
         self.sendActions(for: UIControlEvents.editingChanged)
-        
+
         // return true to indicate we want to continue tracking
         return true
     }
@@ -129,16 +135,16 @@ extension SketchView{
         guard let sketch = self.sketches.last as? StrokeSketch, let touch = touch else{
             return
         }
-        
+
         // obtain the point of touch relative to this view
         let point = touch.location(in: self)
-        
+
         // add point to the current stroke
         sketch.currentStroke?.points.append(point)
-        
+
         // request the view to redraw itself
         self.setNeedsDisplay()
-        
+
         // notify target of action (target-action pattern)
         self.sendActions(for: UIControlEvents.editingDidEnd)
     }
@@ -147,10 +153,10 @@ extension SketchView{
         guard let _ = self.sketches.last as? StrokeSketch else{
             return
         }
-        
+
         // request the view to redraw itself
         self.setNeedsDisplay()
-        
+
         // notify target of action (target-action pattern)
         self.sendActions(for: UIControlEvents.editingDidEnd)
     }

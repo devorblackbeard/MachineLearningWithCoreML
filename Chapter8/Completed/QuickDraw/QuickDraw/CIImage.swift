@@ -39,7 +39,12 @@ extension CIImage{
                           width: size.width,
                           height: size.height)
         
-        return resizedImage.clamped(to: rect).cropped(to: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        return resizedImage
+            .clamped(to: rect)
+            .cropped(to: CGRect(
+                x: 0, y: 0,
+                width: size.width,
+                height: size.height))
     }
     
     func rescalePixels() -> CIImage?{
