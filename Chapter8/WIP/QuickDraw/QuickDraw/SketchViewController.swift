@@ -111,7 +111,46 @@ extension SketchViewController : UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath)
     {
+        guard let sketch = self.sketchView.currentSketch else{
+            return
+        }
         
+        // cancel any current and/or waiting query
+        self.queryFacade.cancel()
+        
+        // Obtain selected image
+        let image = self.queryImages[indexPath.row]
+        
+        // Define the bounds; constraining on the
+        // images aspect ratio
+        let bbox = sketch.boundingBox
+        
+        var origin = CGPoint(x:0, y:0)
+        var size = CGSize(width:0, height:0)
+        
+        if bbox.size.width > bbox.size.height{
+            let ratio = image.size.height / image.size.width
+            size.width = bbox.size.width
+            size.height = bbox.size.width * ratio
+        } else{
+            let ratio = image.size.width / image.size.height
+            size.width = bbox.size.height * ratio
+            size.height = bbox.size.height
+        }
+        
+        origin.x = sketch.center.x - size.width / 2
+        origin.y = sketch.center.y - size.height / 2
+        
+        // Swap out stroke sketch with image
+        self.sketchView.currentSketch = ImageSketch(image:image,
+                                                    origin:origin,
+                                                    size:size,
+                                                    label:"")
+        
+        // Clear suggestions
+        self.queryImages.removeAll()
+        self.toolBarLabel.isHidden = queryImages.count == 0
+        self.collectionView.reloadData()
     }
 }
 
@@ -120,7 +159,22 @@ extension SketchViewController : UICollectionViewDelegate{
 extension SketchViewController : QueryDelegate{
     
     func onQueryCompleted(status: Int, result:QueryResult?){
+        guard status > 0 else{
+            return
+        }
         
+        queryImages.removeAll()
+        
+        if let result = result{
+            for cimage in result.images{
+                if let cgImage = self.ciContext.createCGImage(cimage, from:cimage.extent){
+                    queryImages.append(UIImage(cgImage:cgImage))
+                }
+            }
+        }
+        
+        toolBarLabel.isHidden = queryImages.count == 0
+        collectionView.reloadData()
     }
     
 }

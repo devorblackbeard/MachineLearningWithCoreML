@@ -159,7 +159,7 @@ extension QueryFacade{
      similarity to the target image (sketch) and return a list of sorted list
     */
     func sortByVisualSimilarity(images:[CIImage], sketchImage:CIImage) -> [CIImage]?{
-        return nil
+        return images
     }
 }
 

@@ -119,7 +119,8 @@ class QueryFacade{
         
         queryQueue.async {
             
-            guard let predictions = self.classifySketch(sketch: sketch) else{
+            guard let predictions = self.classifySketch(
+                sketch: sketch) else{
                 DispatchQueue.main.async{
                     self.processingQuery = false
                     self.delegate?.onQueryCompleted(status:-1, result:nil)
@@ -132,7 +133,9 @@ class QueryFacade{
                 return key
             })
             
-            guard let images = self.downloadImages(searchTerms: searchTerms, searchTermsCount: 4) else{
+            guard let images = self.downloadImages(
+                searchTerms: searchTerms,
+                searchTermsCount: 4) else{
                 DispatchQueue.main.async{
                     self.processingQuery = false
                     self.delegate?.onQueryCompleted(status:-1, result:nil)
@@ -141,7 +144,9 @@ class QueryFacade{
                 return
             }
             
-            guard let sortedImage = self.sortByVisualSimilarity(images: images, sketch: sketch) else{
+            guard let sortedImage = self.sortByVisualSimilarity(
+                images: images,
+                sketch: sketch) else{
                 DispatchQueue.main.async{
                     self.processingQuery = false
                     self.delegate?.onQueryCompleted(status:-1, result:nil)
@@ -152,10 +157,11 @@ class QueryFacade{
             
             DispatchQueue.main.async{
                 self.processingQuery = false
-                self.delegate?.onQueryCompleted(status:self.isInterrupted ? -1 : 1,
-                                                result:QueryResult(
-                                                    predictions: predictions,
-                                                    images: sortedImage))
+                self.delegate?.onQueryCompleted(
+                    status:self.isInterrupted ? -1 : 1,
+                    result:QueryResult(
+                        predictions: predictions,
+                        images: sortedImage))
                 self.processNextQuery()
             }
         }
@@ -169,13 +175,14 @@ extension QueryFacade{
     func classifySketch(sketch:Sketch) -> [(key:String,value:Double)]?{
         // rasterize image, resize and then rescale pixels (multiplying
         // them by 1.0/255.0 as per training)
-        if let img = sketch.exportSketch(size: nil)?.resize(size: self.targetSize).rescalePixels(){
+        if let img = sketch.exportSketch(size: nil)?
+            .resize(size: self.targetSize).rescalePixels(){
             return self.classifySketch(image: img)
         }
         
         return nil
     }
-    
+
     func classifySketch(image:CIImage) -> [(key:String,value:Double)]?{
         // obtain the CVPixelBuffer from the image
         if let pixelBuffer = image.toPixelBuffer(context: self.context, gray: true){
@@ -259,7 +266,7 @@ extension QueryFacade{
         
         return features.classActivations
     }
-    
+
     /**
      Check out the link below for more details about calculating cosine between 2 vectors
      https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.cosine.html
@@ -270,7 +277,7 @@ extension QueryFacade{
     fileprivate func cosineSimilarity(vecA: MLMultiArray, vecB: MLMultiArray) -> Double {
         return 1.0 - self.dot(vecA:vecA, vecB:vecB) / (self.magnitude(vec: vecA) * self.magnitude(vec: vecB))
     }
-    
+
     fileprivate func dot(vecA: MLMultiArray, vecB: MLMultiArray) -> Double {
         guard vecA.shape.count == 1 && vecB.shape.count == 1 else{
             fatalError("Expecting vectors (tensor with 1 rank)")
@@ -295,7 +302,7 @@ extension QueryFacade{
         
         return x
     }
-    
+
     fileprivate func magnitude(vec: MLMultiArray) -> Double {
         guard vec.shape.count == 1 else{
             fatalError("Expecting a vector (tensor with 1 rank)")
@@ -307,20 +314,22 @@ extension QueryFacade{
         vDSP_svsD(vecPtr, 1, &output, vDSP_Length(count))
         
         return sqrt(output)
-    }
-    
+    }    
 }
 
 // MARK: - Bing Search
 
 extension QueryFacade{
     
-    func downloadImages(searchTerms:[String], searchTermsCount:Int=4, searchResultsCount:Int=2) -> [CIImage]?{
+    func downloadImages(searchTerms:[String],
+                        searchTermsCount:Int=4,
+                        searchResultsCount:Int=2) -> [CIImage]?{
         var bingResults = [BingServiceResult]()
-        
+
         // synchronously query for each image
         for i in 0..<min(searchTermsCount, searchTerms.count){
-            let results = BingService.sharedInstance.syncSearch(searchTerm: searchTerms[i], count:searchResultsCount)
+            let results = BingService.sharedInstance.syncSearch(
+                searchTerm: searchTerms[i], count:searchResultsCount)
             
             for bingResult in results{
                 bingResults.append(bingResult)
@@ -336,7 +345,8 @@ extension QueryFacade{
         
         // synchronously download each image
         for bingResult in bingResults{
-            if let image = BingService.sharedInstance.syncDownloadImage(bingResult: bingResult){
+            if let image = BingService.sharedInstance.syncDownloadImage(
+                bingResult: bingResult){
                 images.append(image)
             }
             

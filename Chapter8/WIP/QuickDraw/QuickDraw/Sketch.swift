@@ -192,3 +192,54 @@ class StrokeSketch : Sketch{
         self.strokes.append(stroke)
     }
 }
+
+class ImageSketch : Sketch{
+    
+    var image : UIImage!
+    
+    var size : CGSize!
+    
+    var origin : CGPoint!
+    
+    var label : String!
+    
+    var boundingBox : CGRect{
+        get{
+            return CGRect(origin: self.origin, size: self.size)
+        }
+    }
+    
+    var center : CGPoint{
+        get{
+            let bbox = self.boundingBox
+            return CGPoint(x:bbox.origin.x + bbox.size.width/2,
+                           y:bbox.origin.y + bbox.size.height/2)
+        } set{
+            self.origin = CGPoint(x:newValue.x - self.size.width/2,
+                                  y:newValue.y - self.size.height/2)
+        }
+    }
+    
+    init(image:UIImage, origin:CGPoint, size:CGSize, label: String) {
+        self.image = image
+        self.size = size
+        self.label = label
+        self.origin = origin
+    }
+    
+    func draw(context:CGContext){
+        self.image.draw(in: self.boundingBox)
+    }
+    
+    func exportSketch(size:CGSize?) -> CIImage?{
+        guard let ciImage = CIImage(image: self.image) else{
+            return nil
+        }
+        
+        if self.image.size.width == self.size.width && self.image.size.height == self.size.height{
+            return ciImage
+        } else{
+            return ciImage.resize(size: self.size)
+        }
+    }
+}

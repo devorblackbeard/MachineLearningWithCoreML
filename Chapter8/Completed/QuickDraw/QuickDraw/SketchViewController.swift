@@ -139,10 +139,10 @@ extension SketchViewController : UICollectionViewDelegate{
         guard let sketch = self.sketchView.currentSketch else{
             return
         }
-        
+
         // cancel any current and/or waiting query
         self.queryFacade.cancel()
-        
+
         // Obtain selected image
         let image = self.queryImages[indexPath.row]
         
@@ -208,9 +208,9 @@ extension SketchViewController : QueryDelegate{
         guard status > 0 else{
             return
         }
-        
+
         queryImages.removeAll()
-        
+
         if let result = result{
             for cimage in result.images{
                 if let cgImage = self.ciContext.createCGImage(cimage, from:cimage.extent){
@@ -218,9 +218,9 @@ extension SketchViewController : QueryDelegate{
                 }
             }
         }
-        
+
         toolBarLabel.isHidden = queryImages.count == 0
-        collectionView.reloadData() 
+        collectionView.reloadData()
     }
     
 }
