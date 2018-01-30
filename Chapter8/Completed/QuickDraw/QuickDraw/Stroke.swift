@@ -8,8 +8,6 @@
 
 import UIKit
 
-import UIKit
-
 class Stroke{
     // Points that make up the stroke
     var points : [CGPoint] = [CGPoint]()
