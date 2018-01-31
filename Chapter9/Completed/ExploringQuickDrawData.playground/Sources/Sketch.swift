@@ -7,7 +7,7 @@
 
 import UIKit
 
-public protocol Sketch : class{
+public protocol Sketch : class, NSCopying{
     
     var boundingBox : CGRect{ get }
     
@@ -18,9 +18,13 @@ public protocol Sketch : class{
     func draw(context:CGContext)
     
     func exportSketch(size:CGSize?) -> CIImage?
+    
+    func copy(with zone: NSZone?) -> Any
 }
 
 public class StrokeSketch : Sketch{
+    
+    public var label : String?
     
     public var strokes = [Stroke]()
     
@@ -32,8 +36,6 @@ public class StrokeSketch : Sketch{
         }
     }
     
-    public var label : String?
-    
     /**
      Return the min point (min x, min y) that contains the users stroke
      */
@@ -44,7 +46,8 @@ public class StrokeSketch : Sketch{
             }
             
             let minPoints = strokes.map { (stroke) -> CGPoint in
-                return stroke.minPoint
+                return CGPoint(x:stroke.minPoint.x * self.scale,
+                               y:stroke.minPoint.y * self.scale)
             }
             
             let minX : CGFloat = minPoints.map { (cp) -> CGFloat in
@@ -69,7 +72,8 @@ public class StrokeSketch : Sketch{
             }
             
             let maxPoints = strokes.map { (stroke) -> CGPoint in
-                return stroke.maxPoint
+                return CGPoint(x:stroke.maxPoint.x * self.scale,
+                               y:stroke.maxPoint.y * self.scale)
             }
             
             let maxX : CGFloat = maxPoints.map { (cp) -> CGFloat in
@@ -90,7 +94,8 @@ public class StrokeSketch : Sketch{
             let minPoint = self.minPoint
             let maxPoint = self.maxPoint
             
-            let size = CGSize(width: maxPoint.x - minPoint.x, height: maxPoint.y - minPoint.y)
+            let size = CGSize(width: maxPoint.x - minPoint.x,
+                              height: maxPoint.y - minPoint.y)
             
             // add some arbitrary padding
             let paddingSize = CGSize(width: 5,
@@ -205,4 +210,17 @@ public class StrokeSketch : Sketch{
     public func addStroke(stroke:Stroke){
         self.strokes.append(stroke)
     }
+    
+    public func copy(with zone: NSZone? = nil) -> Any{
+        let copy = StrokeSketch()
+        copy.scale = self.scale
+        copy.label = self.label
+        
+        for stroke in self.strokes{
+            copy.addStroke(stroke:stroke.copy() as! Stroke)
+        }
+        
+        return copy
+    }
+    
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-public class Stroke{
+public class Stroke : NSObject, NSCopying{
     // Points that make up the stroke
     public var points : [CGPoint] = [CGPoint]()
     // Color of this stroke
@@ -76,9 +76,21 @@ public class Stroke{
     
     public init(startingPoint:CGPoint,
          color:UIColor=UIColor.black,
-         width:CGFloat=10.0) {
+         width:CGFloat=2.0) {
         self.points.append(startingPoint)
         self.color = color
         self.width = width
+    }
+    
+    public func copy(with zone: NSZone? = nil) -> Any{
+        let copy = Stroke(startingPoint:self.points.first!,
+                          color:self.color,
+                          width:self.width)
+
+        for i in 1..<self.points.count{
+            copy.points.append(self.points[i])
+        }
+
+        return copy
     }
 }
