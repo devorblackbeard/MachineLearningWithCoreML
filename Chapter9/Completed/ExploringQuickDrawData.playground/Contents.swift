@@ -178,6 +178,7 @@ if let json = rawJSON{
     
     if let sketch = StrokeSketch.createFromJSON(json: json[2] as? [String:Any]){
         drawSketch(sketch: sketch)
+        drawSketch(sketch: sketch.simplify())
     }
 }
 
@@ -191,7 +192,6 @@ if let json = simplifiedJSON{
     }
     
     if let sketch = StrokeSketch.createFromJSON(json: json[2] as? [String:Any]){
-        sketch.simplify()
         drawSketch(sketch: sketch)
     }
 }
@@ -218,17 +218,145 @@ public extension StrokeSketch{
      - Resample all strokes with a 1 pixel spacing.
      - Simplify all strokes using the [https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm]: Ramer–Douglas–Peucker algorithm with an epsilon value of 2.0.
     */
-    public func simplify(){
-        let minPoint = self.minPoint
-        let maxPoint = self.maxPoint
+    public func simplify() -> StrokeSketch{
+        var copy = self.copy() as! StrokeSketch
+        copy.scale = 1.0
+        
+        let minPoint = copy.minPoint
+        let maxPoint = copy.maxPoint
         let diffPoint = CGPoint(x: maxPoint.x-minPoint.x, y:maxPoint.y-minPoint.y)
         
+        var width : CGFloat = 255.0
+        var height : CGFloat = 255.0
+        
+        // adjust aspect ratio
+        if diffPoint.x > diffPoint.y{
+            height *= diffPoint.y/diffPoint.x
+        } else{
+            width *= diffPoint.y/diffPoint.x
+        }
+        
         // for each point, subtract the min and divide by the max
-        for i in 0..<self.strokes.count{
-            self.strokes[i].points = self.strokes[i].points.map({ (pt) -> CGPoint in
-                return CGPoint(x:(pt.x - minPoint.x)/diffPoint.x,
-                               y:(pt.y - minPoint.y)/diffPoint.y)
+        for i in 0..<copy.strokes.count{
+            copy.strokes[i].points = copy.strokes[i].points.map({ (pt) -> CGPoint in
+                // Normalise point and then scale based on adjusted dimension above
+                // (also casting to an Int then back to a CGFloat to get 1 pixel precision)
+                let x : CGFloat = CGFloat(Int(((pt.x - minPoint.x)/diffPoint.x) * width))
+                let y : CGFloat = CGFloat(Int (((pt.y - minPoint.y)/diffPoint.y) * height))
+                
+                return CGPoint(x:x, y:y)
             })
         }
+        
+        // perform line simplification
+        copy.strokes = copy.strokes.map({ (stroke) -> Stroke in
+            return stroke.simplify()
+        })
+        
+        return copy
+    }
+}
+
+/*:
+ Line simplification using Ramer–Douglas–Peucker algorithm;
+ https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm
+ https://commons.wikimedia.org/wiki/File%3ADouglas-Peucker_animated.gif
+ */
+
+public extension Stroke{
+    
+    /**
+     Perform line simplification using Ramer-Douglas-Peucker algorithm
+    */
+    public func simplify(epsilon:CGFloat=2.0) -> Stroke{
+        
+        var simplified: [CGPoint] = [self.points.first!]
+        
+        self.simplifyDPStep(points: self.points,
+                            first: 0, last: self.points.count-1,
+                            tolerance: epsilon * epsilon,
+                            simplified: &simplified)
+        
+        simplified.append(self.points.last!)
+        
+        var copy = self.copy() as! Stroke
+        copy.points = simplified
+        
+        return copy
+    }
+    
+    func simplifyDPStep(points:[CGPoint], first:Int, last:Int,
+                        tolerance:CGFloat, simplified: inout [CGPoint]){
+        
+        var maxSqDistance = tolerance
+        var index = 0
+        
+        for i in first + 1..<last{
+            let sqDist = CGPoint.getSquareSegmentDistance(
+                p0: points[i], p1: points[first], p2: points[last])
+            
+            if sqDist > maxSqDistance {
+                maxSqDistance = sqDist
+                index = i
+            }
+        }
+        
+        if maxSqDistance > tolerance{
+            if index - first > 1 {
+                simplifyDPStep(points: points,
+                               first: first,
+                               last: index,
+                               tolerance: tolerance,
+                               simplified: &simplified)
+            }
+            
+            simplified.append(points[index])
+            
+            if last - index > 1{
+                simplifyDPStep(points: points,
+                               first: index,
+                               last: last,
+                               tolerance: tolerance,
+                               simplified: &simplified)
+            }
+        }
+    }
+    
+}
+
+public extension CGPoint{
+    
+    public static func getSquareDistance(p0:CGPoint, p1:CGPoint) -> CGFloat{
+        let dx = p1.x - p0.x
+        let dy = p1.y - p0.y
+
+        return dx * dx + dy * dy
+    }
+    
+    public static func getSquareSegmentDistance(p0:CGPoint, p1:CGPoint, p2:CGPoint) -> CGFloat{
+        var x0 = p0.x, y0 = p0.y
+        var x1 = p1.x, y1 = p1.y
+        var x2 = p2.x, y2 = p2.y
+        var dx = x2 - x1
+        var dy = y2 - y1
+        
+        if dx != 0.0 && dy != 0.0{
+            let numerator = (x0 - x1) * dx + (y0 - y1) * dy
+            let denom = dx * dx + dy * dy
+            let t =  numerator / denom
+            
+            if t > 1.0{
+                x1 = x2
+                y1 = y2
+            } else{
+                x1 += dx * t
+                y1 += dy * t
+            }
+        }
+        
+        dx = x0 - x1
+        dy = y0 - y1
+        
+        return dx * dx + dy * dy
     }
 }
