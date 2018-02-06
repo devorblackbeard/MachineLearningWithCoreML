@@ -3,6 +3,7 @@
  */
 import UIKit
 import PlaygroundSupport
+import CoreML
 
 /*:
  The format of a raw sample is:
@@ -358,5 +359,55 @@ public extension CGPoint{
         dy = y0 - y1
         
         return dx * dx + dy * dy
+    }
+}
+
+/*:
+ Let's now handle the final piece of pre-processing, as used in training, which requires the following steps:
+ - Introduce another dimension to indicate if a point is the end of not
+ - Size normalization i.e. such that the minimum stroke point is 0 (on both axis) and maximum point is 1.0.
+ - Compute deltas; the model was trained on deltas rather than absolutes positions
+ */
+
+/*
+ 
+ def pad_stroke_sequence(x, max_len=MAX_SEQ_LEN):
+    padded_x = np.zeros((x.shape[0], max_len, 3), dtype=np.float32)
+    for i in range(x.shape[0]):
+        X = x[i]
+        if X.shape[0] > max_len:
+            X = X[:max_len, :]
+    elif X.shape[0] < max_len:
+        padding = np.array([[0,0,0]] * (max_len-X.shape[0]), dtype=np.float32)
+        X = np.vstack((padding, X))
+ 
+    padded_x[i] = X
+ 
+    return padded_x
+ 
+ */
+extension StrokeSketch{
+    
+    public static func preprocess(sketch:StrokeSketch) -> MLMultiArray?{
+        let maxSeqLen = NSNumber(value:75)
+        
+        let simplifiedSketch = sketch.simplify()
+       
+        guard var array = try? MLMultiArray(shape: [
+            NSNumber(value:simplifiedSketch.strokes.count),
+            maxSeqLen,
+            NSNumber(value:3)], dataType: .double) else{
+                return nil
+        }
+        
+        for i in 0..<simplifiedSketch.strokes.count-1{
+            let stroke = simplifiedSketch.strokes[i]
+            let strokePoints = simplifiedSketch.strokes.map({ (point) -> CGPoint in
+                return CGPoint.zero
+            })
+            //let x =
+        }
+        
+        return array
     }
 }
