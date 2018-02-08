@@ -53,25 +53,8 @@ extension StrokeSketch{
         
         let sketch = StrokeSketch()
         
-        var countrycode : String?
-        var key_id : String?
-        var recognized : Bool?
-        var word : String?
-        
-        if let tmp = json["countrycode"] as? String{
-            countrycode = tmp
-        }
-        
-        if let tmp = json["key_id"] as? String{
-            key_id = tmp
-        }
-        
-        if let tmp = json["recognized"] as? Bool{
-            recognized = tmp
-        }
-        
         if let tmp = json["word"] as? String{
-            word = tmp
+            sketch.label = tmp
         }
         
         if let points = json["drawing"] as? Array<Array<Array<Float>>>{
@@ -100,33 +83,39 @@ extension StrokeSketch{
 }
 
 /*:
- Next we will load an extract of the raw airplane dataset and simplified
- airplane dataset
+ Next we will load an extract (50 samples) of a few of the categories we have trained our model on;
+ initially we will be focusing on small_raw_airplane.json and small_simplified_airplane.json
+ then validating against the other datasets
  */
 
-var rawJSON : [Any]?
-var simplifiedJSON : [Any]?
+var dataFiles = [
+    "small_raw_airplane",
+    "small_raw_alarm_clock",
+    "small_raw_angel",
+    "small_raw_apple",
+    "small_raw_bee",
+    "small_raw_sailboat",
+    "small_raw_train",
+    "small_raw_truck",
+    "small_simplified_airplane"
+]
 
-do{
-    if let fileUrl = Bundle.main.url(
-        forResource: "data/small_raw_airplane",
-        withExtension: "json"){
-        
-        if let data = try? Data(contentsOf: fileUrl){
-            rawJSON = try JSONSerialization.jsonObject(with: data, options: []) as? [Any]
+var loadedJSON = [String:[Any]]()
+
+for dataFile in dataFiles{
+    do{
+        if let fileUrl = Bundle.main.url(
+            forResource: "data/\(dataFile)",
+            withExtension: "json"){
+            
+            if let data = try? Data(contentsOf: fileUrl){
+                let json = try JSONSerialization.jsonObject(with: data, options: []) as? [Any]
+                loadedJSON[dataFile] = json
+            }
         }
+    } catch{
+        fatalError(error as! String)
     }
-    
-    if let fileUrl = Bundle.main.url(
-        forResource: "data/small_simplified_airplane",
-        withExtension: "json"){
-        
-        if let data = try? Data(contentsOf: fileUrl){
-            simplifiedJSON = try JSONSerialization.jsonObject(with: data, options: []) as? [Any]
-        }
-    }
-} catch{
-    fatalError(error as! String)
 }
 
 /*:
@@ -168,32 +157,25 @@ func drawSketch(sketch:Sketch) -> SketchView{
  raw dataset and then the simplified
  */
 
-if let json = rawJSON{
-    if let sketch = StrokeSketch.createFromJSON(json: json[0] as? [String:Any]){
-        drawSketch(sketch: sketch)
+if let rJson = loadedJSON["small_raw_airplane"],
+    let sJson = loadedJSON["small_simplified_airplane"]{
+    
+    if let rSketch = StrokeSketch.createFromJSON(json: rJson[0] as? [String:Any]),
+        let sSketch = StrokeSketch.createFromJSON(json: sJson[0] as? [String:Any]){
+        drawSketch(sketch: rSketch)
+        drawSketch(sketch: sSketch)
     }
     
-    if let sketch = StrokeSketch.createFromJSON(json: json[1] as? [String:Any]){
-        drawSketch(sketch: sketch)
+    if let rSketch = StrokeSketch.createFromJSON(json: rJson[1] as? [String:Any]),
+        let sSketch = StrokeSketch.createFromJSON(json: sJson[1] as? [String:Any]){
+        drawSketch(sketch: rSketch)
+        drawSketch(sketch: sSketch)
     }
     
-    if let sketch = StrokeSketch.createFromJSON(json: json[2] as? [String:Any]){
-        drawSketch(sketch: sketch)
-        drawSketch(sketch: sketch.simplify())
-    }
-}
-
-if let json = simplifiedJSON{
-    if let sketch = StrokeSketch.createFromJSON(json: json[0] as? [String:Any]){
-        drawSketch(sketch: sketch)
-    }
-    
-    if let sketch = StrokeSketch.createFromJSON(json: json[1] as? [String:Any]){
-        drawSketch(sketch: sketch)
-    }
-    
-    if let sketch = StrokeSketch.createFromJSON(json: json[2] as? [String:Any]){
-        drawSketch(sketch: sketch)
+    if let rSketch = StrokeSketch.createFromJSON(json: rJson[2] as? [String:Any]),
+        let sSketch = StrokeSketch.createFromJSON(json: sJson[2] as? [String:Any]){
+        drawSketch(sketch: rSketch)
+        drawSketch(sketch: sSketch)
     }
 }
 
@@ -220,21 +202,21 @@ public extension StrokeSketch{
      - Simplify all strokes using the [https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm]: Ramer–Douglas–Peucker algorithm with an epsilon value of 2.0.
     */
     public func simplify() -> StrokeSketch{
-        var copy = self.copy() as! StrokeSketch
+        let copy = self.copy() as! StrokeSketch
         copy.scale = 1.0
         
         let minPoint = copy.minPoint
         let maxPoint = copy.maxPoint
-        let diffPoint = CGPoint(x: maxPoint.x-minPoint.x, y:maxPoint.y-minPoint.y)
+        let scale = CGPoint(x: maxPoint.x-minPoint.x, y:maxPoint.y-minPoint.y)
         
         var width : CGFloat = 255.0
         var height : CGFloat = 255.0
         
         // adjust aspect ratio
-        if diffPoint.x > diffPoint.y{
-            height *= diffPoint.y/diffPoint.x
+        if scale.x > scale.y{
+            height *= scale.y/scale.x
         } else{
-            width *= diffPoint.y/diffPoint.x
+            width *= scale.y/scale.x
         }
         
         // for each point, subtract the min and divide by the max
@@ -242,8 +224,8 @@ public extension StrokeSketch{
             copy.strokes[i].points = copy.strokes[i].points.map({ (pt) -> CGPoint in
                 // Normalise point and then scale based on adjusted dimension above
                 // (also casting to an Int then back to a CGFloat to get 1 pixel precision)
-                let x : CGFloat = CGFloat(Int(((pt.x - minPoint.x)/diffPoint.x) * width))
-                let y : CGFloat = CGFloat(Int (((pt.y - minPoint.y)/diffPoint.y) * height))
+                let x : CGFloat = CGFloat(Int(((pt.x - minPoint.x)/scale.x) * width))
+                let y : CGFloat = CGFloat(Int(((pt.y - minPoint.y)/scale.y) * height))
                 
                 return CGPoint(x:x, y:y)
             })
@@ -269,7 +251,7 @@ public extension Stroke{
     /**
      Perform line simplification using Ramer-Douglas-Peucker algorithm
     */
-    public func simplify(epsilon:CGFloat=2.0) -> Stroke{
+    public func simplify(epsilon:CGFloat=3.0) -> Stroke{
         
         var simplified: [CGPoint] = [self.points.first!]
         
@@ -280,7 +262,7 @@ public extension Stroke{
         
         simplified.append(self.points.last!)
         
-        var copy = self.copy() as! Stroke
+        let copy = self.copy() as! Stroke
         copy.points = simplified
         
         return copy
@@ -335,9 +317,9 @@ public extension CGPoint{
     }
     
     public static func getSquareSegmentDistance(p0:CGPoint, p1:CGPoint, p2:CGPoint) -> CGFloat{
-        var x0 = p0.x, y0 = p0.y
+        let x0 = p0.x, y0 = p0.y
         var x1 = p1.x, y1 = p1.y
-        var x2 = p2.x, y2 = p2.y
+        let x2 = p2.x, y2 = p2.y
         var dx = x2 - x1
         var dy = y2 - y1
         
@@ -363,51 +345,143 @@ public extension CGPoint{
 }
 
 /*:
+ Let's have another peek - this time comparing our simplification to that of the simplified dataset
+ */
+
+if let rJson = loadedJSON["small_raw_airplane"],
+    let sJson = loadedJSON["small_simplified_airplane"]{
+    if let rSketch = StrokeSketch.createFromJSON(json: rJson[0] as? [String:Any]),
+        let sSketch = StrokeSketch.createFromJSON(json: sJson[0] as? [String:Any]){
+        drawSketch(sketch: rSketch)
+        drawSketch(sketch: sSketch)
+        drawSketch(sketch: rSketch.simplify())
+    }
+    
+    if let rSketch = StrokeSketch.createFromJSON(json: rJson[1] as? [String:Any]),
+        let sSketch = StrokeSketch.createFromJSON(json: sJson[1] as? [String:Any]){
+        drawSketch(sketch: rSketch)
+        drawSketch(sketch: sSketch)
+        drawSketch(sketch: rSketch.simplify())
+    }
+    
+    if let rSketch = StrokeSketch.createFromJSON(json: rJson[2] as? [String:Any]),
+        let sSketch = StrokeSketch.createFromJSON(json: sJson[2] as? [String:Any]){
+        drawSketch(sketch: rSketch)
+        drawSketch(sketch: sSketch)
+        drawSketch(sketch: rSketch.simplify())
+    }
+}
+
+/*:
  Let's now handle the final piece of pre-processing, as used in training, which requires the following steps:
  - Introduce another dimension to indicate if a point is the end of not
  - Size normalization i.e. such that the minimum stroke point is 0 (on both axis) and maximum point is 1.0.
  - Compute deltas; the model was trained on deltas rather than absolutes positions
  */
 
-/*
- 
- def pad_stroke_sequence(x, max_len=MAX_SEQ_LEN):
-    padded_x = np.zeros((x.shape[0], max_len, 3), dtype=np.float32)
-    for i in range(x.shape[0]):
-        X = x[i]
-        if X.shape[0] > max_len:
-            X = X[:max_len, :]
-    elif X.shape[0] < max_len:
-        padding = np.array([[0,0,0]] * (max_len-X.shape[0]), dtype=np.float32)
-        X = np.vstack((padding, X))
- 
-    padded_x[i] = X
- 
-    return padded_x
- 
- */
 extension StrokeSketch{
     
-    public static func preprocess(sketch:StrokeSketch) -> MLMultiArray?{
-        let maxSeqLen = NSNumber(value:75)
-        
+    public static func preprocess(_ sketch:StrokeSketch) -> MLMultiArray?{
+        let arrayLen = NSNumber(value:75 * 3) // flattened (75,3) tensor
+
         let simplifiedSketch = sketch.simplify()
-       
-        guard var array = try? MLMultiArray(shape: [
-            NSNumber(value:simplifiedSketch.strokes.count),
-            maxSeqLen,
-            NSNumber(value:3)], dataType: .double) else{
-                return nil
+        
+        // Create our MLMultiArray to store the results
+        guard let array = try? MLMultiArray(shape: [arrayLen],
+                                            dataType: .double)
+            else{ return nil }
+        
+        
+        // Flatten all points into a single array and:
+        // a. Normalise
+        // b. Append our EOS (End Of Stroke) flag
+        let minPoint = simplifiedSketch.minPoint
+        let maxPoint = simplifiedSketch.maxPoint
+        let scale = CGPoint(x: maxPoint.x-minPoint.x, y:maxPoint.y-minPoint.y)
+        
+        var counter : Int = 0
+        
+        var data = Array<Double>()
+        for i in 0..<simplifiedSketch.strokes.count{
+            for j in 0..<simplifiedSketch.strokes[i].points.count{
+                let point = simplifiedSketch.strokes[i].points[j]
+                let x = (point.x-minPoint.x)/scale.x
+                let y = (point.y-minPoint.y)/scale.y
+                let z = j == simplifiedSketch.strokes[i].points.count-1 ? 1 : 0
+                
+                data.append(Double(x))
+                data.append(Double(y))
+                data.append(Double(z))
+                
+                counter = counter + 1
+            }
         }
         
-        for i in 0..<simplifiedSketch.strokes.count-1{
-            let stroke = simplifiedSketch.strokes[i]
-            let strokePoints = simplifiedSketch.strokes.map({ (point) -> CGPoint in
-                return CGPoint.zero
-            })
-            //let x =
+        // compute the deltas (nb; each sample has a stride of 3)
+        let dataStride : Int = 3
+        for i in stride(from: dataStride, to:data.count, by: dataStride){
+            data[i - dataStride] = data[i] - data[i - dataStride] // delta x
+            data[i - (dataStride-1)] = data[i+1] - data[i - (dataStride-1)] // delta y
+            data[i - (dataStride-2)] = data[i+2] // EOS
+        }
+        
+        // remove the last sample
+        data.removeLast(3)
+        
+        // Pad (to the end) and copy our flattened array to the array
+        var dataIdx : Int = 0
+        let startAddingIdx = max(array.count-data.count, 0)
+        
+        for i in 0..<array.count{
+            if i >= startAddingIdx{
+                array[i] = NSNumber(value:data[dataIdx])
+                dataIdx = dataIdx + 1
+            } else{
+                array[i] = NSNumber(value:0)
+            }
         }
         
         return array
     }
 }
+
+
+// Let's now test our model out
+let model = quickdraw()
+
+if let json = loadedJSON["small_raw_airplane"]{
+    if let sketch = StrokeSketch.createFromJSON(json: json[0] as? [String:Any]){
+        if let x = StrokeSketch.preprocess(sketch){
+            if let predictions = try? model.prediction(input:quickdrawInput(strokeSeq:x)){
+                print("Class label \(predictions.classLabel)")
+                print("Class label probability/confidence \(predictions.classLabelProbs["airplane"] ?? 0)")
+            }
+        }
+    }
+}
+
+// Let's now test with the other cateogies; we will create a function to handle making
+// a prediction given a file and index
+
+func makePrediction(key:String, index:Int) -> String{
+    if let json = loadedJSON[key]{
+        if let sketch = StrokeSketch.createFromJSON(json: json[index] as? [String:Any]){
+            if let x = StrokeSketch.preprocess(sketch){
+                if let predictions = try? model.prediction(input:quickdrawInput(strokeSeq:x)){
+                    return "\(predictions.classLabel) \(predictions.classLabelProbs[predictions.classLabel] ?? 0)"
+                }
+            }
+        }
+    }
+    
+    return "None"
+}
+
+print(makePrediction(key: "small_raw_airplane", index: 0))
+print(makePrediction(key: "small_raw_alarm_clock", index: 1))
+print(makePrediction(key: "small_raw_bee", index: 2))
+print(makePrediction(key: "small_raw_sailboat", index: 3))
+print(makePrediction(key: "small_raw_train", index: 4))
+print(makePrediction(key: "small_raw_truck", index: 5))
+print(makePrediction(key: "small_simplified_airplane", index: 6))
+

@@ -12,7 +12,7 @@
 		84DCB8F1202915A200612D25 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84DCB8EF202915A200612D25 /* Main.storyboard */; };
 		84DCB8F3202915A200612D25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84DCB8F2202915A200612D25 /* Assets.xcassets */; };
 		84DCB8F6202915A200612D25 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84DCB8F4202915A200612D25 /* LaunchScreen.storyboard */; };
-		84DCB9042029A35500612D25 /* quickdraw.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 84DCB9032029A35500612D25 /* quickdraw.mlmodel */; };
+		84DCB906202A66EC00612D25 /* quickdraw.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 84DCB905202A66EC00612D25 /* quickdraw.mlmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,7 +23,7 @@
 		84DCB8F2202915A200612D25 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		84DCB8F5202915A200612D25 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84DCB8F7202915A200612D25 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		84DCB9032029A35500612D25 /* quickdraw.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = quickdraw.mlmodel; path = ../../../Training/output/quickdraw.mlmodel; sourceTree = "<group>"; };
+		84DCB905202A66EC00612D25 /* quickdraw.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = quickdraw.mlmodel; path = ../../../Training/output/quickdraw.mlmodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,7 +56,7 @@
 		84DCB8EA202915A200612D25 /* QuickDrawRNN */ = {
 			isa = PBXGroup;
 			children = (
-				84DCB9032029A35500612D25 /* quickdraw.mlmodel */,
+				84DCB905202A66EC00612D25 /* quickdraw.mlmodel */,
 				84DCB8EB202915A200612D25 /* AppDelegate.swift */,
 				84DCB8ED202915A200612D25 /* ViewController.swift */,
 				84DCB8EF202915A200612D25 /* Main.storyboard */,
@@ -141,7 +141,7 @@
 			files = (
 				84DCB8EE202915A200612D25 /* ViewController.swift in Sources */,
 				84DCB8EC202915A200612D25 /* AppDelegate.swift in Sources */,
-				84DCB9042029A35500612D25 /* quickdraw.mlmodel in Sources */,
+				84DCB906202A66EC00612D25 /* quickdraw.mlmodel in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
