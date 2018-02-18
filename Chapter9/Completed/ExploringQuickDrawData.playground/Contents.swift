@@ -1,9 +1,13 @@
 /*:
- We will be using a small subset of the [ndjson]: https://github.com/maxogden/ndjson files for the airplane raw and simplified. The main dif
+ ### Completed: Preprocessing for QuickDraw Data
  */
 import UIKit
 import PlaygroundSupport
 import CoreML
+
+/*:
+ We will be using a small subset of the [ndjson](https://github.com/maxogden/ndjson) files for the airplane raw and simplified. The main dif
+ */
 
 /*:
  The format of a raw sample is:
@@ -36,7 +40,7 @@ import CoreML
  - Align the drawing to the top-left corner, to have minimum values of 0.
  - Uniformly scale the drawing, to have a maximum value of 255.
  - Resample all strokes with a 1 pixel spacing.
- - Simplify all strokes using the [https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm]: Ramer–Douglas–Peucker algorithm with an epsilon value of 2.0.
+ - Simplify all strokes using the [Ramer–Douglas–Peucker algorithm](https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm) with an epsilon value of 2.0.
 - Remove time
  */
 
@@ -83,9 +87,40 @@ extension StrokeSketch{
 }
 
 /*:
- Next we will load an extract (50 samples) of a few of the categories we have trained our model on;
- initially we will be focusing on small_raw_airplane.json and small_simplified_airplane.json
- then validating against the other datasets
+ Next we want to create a function to render a given sketch - the task
+ of this function is mainly concerned with rescaling and centering the sketch to the view.
+ This function will instantiate an instance of SketchView which includes the re-scaled and re-centered sketch (of which we can preview)
+ */
+func drawSketch(sketch:Sketch) -> SketchView{
+    let viewDimensions : CGFloat = 600
+    // get bounding box
+    let bbox = sketch.boundingBox
+    
+    // scale to fit into view
+    if max(bbox.size.width,bbox.size.height) > viewDimensions{
+        sketch.scale = viewDimensions / max(bbox.size.width,bbox.size.height)
+    }
+    
+    // Center sketch in view (we take into account that the bounds have been scaled
+    // therefore must inverse this by 'scaling up' i.e. 1.0 - sketch.scale;
+    // the reason for this is that the points are transformed relative to their current
+    // position (using the 'bounds' which is affected by the scale we set above)
+    sketch.center = CGPoint(x:(viewDimensions - bbox.size.width * (1.0-sketch.scale)) / 2.0,
+                            y:(viewDimensions - bbox.size.height * (1.0-sketch.scale)) / 2.0)
+    
+    // Instantiate the SketchView
+    let sketchView = SketchView(frame: CGRect(
+        x: 0, y: 0, width: viewDimensions, height: viewDimensions))
+    
+    // Now add our sketch to the sketches and nudge the view to update itself
+    sketchView.sketches.append(sketch)
+    sketchView.setNeedsDisplay()
+    
+    return sketchView
+}
+
+/*:
+ Next we will load our category extracts (50 samples) that we have trained our model on; initially we will be focusing on small_raw_airplane.json and small_simplified_airplane.json before validating against the other categories.
  */
 
 var dataFiles = [
@@ -119,40 +154,6 @@ for dataFile in dataFiles{
 }
 
 /*:
- Next we want to create a function responsible for rendering a given sketch - the task
- of this function is mainly concerned with rescaling and centering the sketch to the view.
- This function will instantiate an instance of SketchView which includes the re-scaled
- and re-centered sketch (of which we can preview)
- */
-func drawSketch(sketch:Sketch) -> SketchView{
-    let viewDimensions : CGFloat = 600
-    // get bounding box
-    let bbox = sketch.boundingBox
-    
-    // scale to fit into view
-    if max(bbox.size.width,bbox.size.height) > viewDimensions{
-        sketch.scale = viewDimensions / max(bbox.size.width,bbox.size.height)
-    }
-    
-    // Center sketch in view (we take into account that the bounds have been scaled
-    // therefore must inverse this by 'scaling up' i.e. 1.0 - sketch.scale;
-    // the reason for this is that the points are transformed relative to their current
-    // position (using the 'bounds' which is affected by the scale we set above)
-    sketch.center = CGPoint(x:(viewDimensions - bbox.size.width * (1.0-sketch.scale)) / 2.0,
-                            y:(viewDimensions - bbox.size.height * (1.0-sketch.scale)) / 2.0)
-    
-    // Instantiate the SketchView
-    let sketchView = SketchView(frame: CGRect(
-        x: 0, y: 0, width: viewDimensions, height: viewDimensions))
-    
-    // Now add our sketch to the sketches and nudge the view to update itself
-    sketchView.sketches.append(sketch)
-    sketchView.setNeedsDisplay()
-    
-    return sketchView
-}
-
-/*:
  Let's peek at some of the sketches we have; we will first preview the sketches from the
  raw dataset and then the simplified
  */
@@ -180,9 +181,8 @@ if let rJson = loadedJSON["small_raw_airplane"],
 }
 
 /*:
- The model has been based on the tutorial https://www.tensorflow.org/tutorials/recurrent_quickdraw which speculates (and dictates) how the data needs to be prepared.
- The first is that the training samples were taken from the simplified dataset; therefore
- we must apply the same pre-processing steps on the user input as was performed on the raw training data (as listed above).
+ The model has been based on the tensorflow tutorial [Recurrent Neural Networks for Drawing Classification](https://www.tensorflow.org/tutorials/recurrent_quickdraw) which speculates (and dictates) how the data needs to be prepared.
+ The first is that the training samples were taken from the simplified dataset; therefore we must apply the same pre-processing steps on the user input as was performed on the raw training data (as listed above).
  Secondly; the tutorial (and therefore model) introduced a further step before feeding the data into the model; this included:
  - Introduce another dimension to indicate if a point is the end of not
  - Size normalization i.e. such that the minimum stroke point is 0 (on both axis) and maximum point is 1.0.
@@ -199,19 +199,19 @@ public extension StrokeSketch{
      - Align the drawing to the top-left corner, to have minimum values of 0.
      - Uniformly scale the drawing, to have a maximum value of 255.
      - Resample all strokes with a 1 pixel spacing.
-     - Simplify all strokes using the [https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm]: Ramer–Douglas–Peucker algorithm with an epsilon value of 2.0.
+     - Simplify all strokes using the [Ramer–Douglas–Peucker algorithm](https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm) with an epsilon value of 2.0.
     */
     public func simplify() -> StrokeSketch{
         let copy = self.copy() as! StrokeSketch
         copy.scale = 1.0
-        
+
         let minPoint = copy.minPoint
         let maxPoint = copy.maxPoint
         let scale = CGPoint(x: maxPoint.x-minPoint.x, y:maxPoint.y-minPoint.y)
-        
+
         var width : CGFloat = 255.0
         var height : CGFloat = 255.0
-        
+
         // adjust aspect ratio
         if scale.x > scale.y{
             height *= scale.y/scale.x
@@ -235,7 +235,7 @@ public extension StrokeSketch{
         copy.strokes = copy.strokes.map({ (stroke) -> Stroke in
             return stroke.simplify()
         })
-        
+
         return copy
     }
 }
@@ -245,7 +245,6 @@ public extension StrokeSketch{
  https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm
  https://commons.wikimedia.org/wiki/File%3ADouglas-Peucker_animated.gif
  */
-
 public extension Stroke{
     
     /**
@@ -276,7 +275,9 @@ public extension Stroke{
         
         for i in first + 1..<last{
             let sqDist = CGPoint.getSquareSegmentDistance(
-                p0: points[i], p1: points[first], p2: points[last])
+                p0: points[i],
+                p1: points[first],
+                p2: points[last])
             
             if sqDist > maxSqDistance {
                 maxSqDistance = sqDist
@@ -304,17 +305,9 @@ public extension Stroke{
             }
         }
     }
-    
 }
 
 public extension CGPoint{
-    
-    public static func getSquareDistance(p0:CGPoint, p1:CGPoint) -> CGFloat{
-        let dx = p1.x - p0.x
-        let dy = p1.y - p0.y
-
-        return dx * dx + dy * dy
-    }
     
     public static func getSquareSegmentDistance(p0:CGPoint, p1:CGPoint, p2:CGPoint) -> CGFloat{
         let x0 = p0.x, y0 = p0.y
@@ -399,8 +392,6 @@ extension StrokeSketch{
         let maxPoint = simplifiedSketch.maxPoint
         let scale = CGPoint(x: maxPoint.x-minPoint.x, y:maxPoint.y-minPoint.y)
         
-        var counter : Int = 0
-        
         var data = Array<Double>()
         for i in 0..<simplifiedSketch.strokes.count{
             for j in 0..<simplifiedSketch.strokes[i].points.count{
@@ -412,8 +403,6 @@ extension StrokeSketch{
                 data.append(Double(x))
                 data.append(Double(y))
                 data.append(Double(z))
-                
-                counter = counter + 1
             }
         }
         
@@ -465,7 +454,8 @@ if let json = loadedJSON["small_raw_airplane"]{
 
 func makePrediction(key:String, index:Int) -> String{
     if let json = loadedJSON[key]{
-        if let sketch = StrokeSketch.createFromJSON(json: json[index] as? [String:Any]){
+        if let sketch = StrokeSketch.createFromJSON(
+            json: json[index] as? [String:Any]){
             if let x = StrokeSketch.preprocess(sketch){
                 if let predictions = try? model.prediction(input:quickdrawInput(strokeSeq:x)){
                     return "\(predictions.classLabel) \(predictions.classLabelProbs[predictions.classLabel] ?? 0)"
@@ -485,3 +475,28 @@ print(makePrediction(key: "small_raw_train", index: 4))
 print(makePrediction(key: "small_raw_truck", index: 5))
 print(makePrediction(key: "small_simplified_airplane", index: 6))
 
+/*:
+ Last test; let's see how prediction performs during the progression of a drawing
+ */
+
+if let json = loadedJSON["small_raw_bee"]{
+    if let sketch = StrokeSketch.createFromJSON(json: json[2] as? [String:Any]){
+        let strokeCount = sketch.strokes.count
+        print("\(sketch.label ?? "" ) sketch has \(strokeCount) strokes")
+        
+        // let's build up the sketch and perform prediction after each additional
+        // stroke
+        for i in (0..<strokeCount-1).reversed(){
+            let copyOfSketch = sketch.copy() as! StrokeSketch
+            copyOfSketch.strokes.removeLast(i)
+            if let x = StrokeSketch.preprocess(copyOfSketch){
+                if let predictions = try? model.prediction(input:quickdrawInput(strokeSeq:x)){
+                    let label = predictions.classLabel
+                    let probability = String(format: "%.2f", predictions.classLabelProbs[predictions.classLabel] ?? 0)
+                    
+                    print("Guessing \(label) with probability of \(probability) using \(copyOfSketch.strokes.count) strokes")
+                }
+            }
+        }
+    }
+}

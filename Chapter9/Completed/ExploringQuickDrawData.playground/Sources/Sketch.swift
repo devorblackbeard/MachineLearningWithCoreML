@@ -222,5 +222,4 @@ public class StrokeSketch : Sketch{
         
         return copy
     }
-    
 }

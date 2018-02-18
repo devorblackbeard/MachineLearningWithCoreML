@@ -1,9 +1,9 @@
 //
 //  AppDelegate.swift
-//  QuickDrawRNN
+//  QuickDraw
 //
-//  Created by Joshua Newnham on 05/02/2018.
-//  Copyright © 2018 PacktPub. All rights reserved.
+//  Created by Joshua Newnham on 21/12/2017.
+//  Copyright © 2017 Method. All rights reserved.
 //
 
 import UIKit

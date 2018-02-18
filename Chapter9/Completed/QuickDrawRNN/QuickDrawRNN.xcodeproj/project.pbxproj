@@ -7,15 +7,38 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		845EDCDB203A31CD00B27EF6 /* quickdraw.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 845EDCDA203A31CD00B27EF6 /* quickdraw.mlmodel */; };
+		848DA01C203A1C9D00A4590A /* SketchPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DA014203A1C9C00A4590A /* SketchPreviewCell.swift */; };
+		848DA01D203A1C9D00A4590A /* SketchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DA015203A1C9C00A4590A /* SketchView.swift */; };
+		848DA01E203A1C9D00A4590A /* BingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DA016203A1C9C00A4590A /* BingService.swift */; };
+		848DA01F203A1C9D00A4590A /* Stroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DA017203A1C9C00A4590A /* Stroke.swift */; };
+		848DA020203A1C9D00A4590A /* Sketch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DA018203A1C9C00A4590A /* Sketch.swift */; };
+		848DA021203A1C9D00A4590A /* SketchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DA019203A1C9C00A4590A /* SketchViewController.swift */; };
+		848DA022203A1C9D00A4590A /* CIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DA01A203A1C9D00A4590A /* CIImage.swift */; };
+		848DA023203A1C9D00A4590A /* QueryFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DA01B203A1C9D00A4590A /* QueryFacade.swift */; };
+		848DA025203A258500A4590A /* CGPointRNNExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DA024203A258500A4590A /* CGPointRNNExtension.swift */; };
+		848DA027203A25C000A4590A /* StrokeRNNExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DA026203A25C000A4590A /* StrokeRNNExtension.swift */; };
+		848DA029203A271000A4590A /* StrokeSketchExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DA028203A271000A4590A /* StrokeSketchExtension.swift */; };
 		84DCB8EC202915A200612D25 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DCB8EB202915A200612D25 /* AppDelegate.swift */; };
 		84DCB8EE202915A200612D25 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DCB8ED202915A200612D25 /* ViewController.swift */; };
 		84DCB8F1202915A200612D25 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84DCB8EF202915A200612D25 /* Main.storyboard */; };
 		84DCB8F3202915A200612D25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84DCB8F2202915A200612D25 /* Assets.xcassets */; };
 		84DCB8F6202915A200612D25 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84DCB8F4202915A200612D25 /* LaunchScreen.storyboard */; };
-		84DCB906202A66EC00612D25 /* quickdraw.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 84DCB905202A66EC00612D25 /* quickdraw.mlmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		845EDCDA203A31CD00B27EF6 /* quickdraw.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = quickdraw.mlmodel; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/CoreMLModels/Chapter9/quickdraw.mlmodel"; sourceTree = "<group>"; };
+		848DA014203A1C9C00A4590A /* SketchPreviewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SketchPreviewCell.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter9/Completed/QuickDrawRNN/QuickDrawRNN/SketchPreviewCell.swift"; sourceTree = "<group>"; };
+		848DA015203A1C9C00A4590A /* SketchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SketchView.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter9/Completed/QuickDrawRNN/QuickDrawRNN/SketchView.swift"; sourceTree = "<group>"; };
+		848DA016203A1C9C00A4590A /* BingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BingService.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter9/Completed/QuickDrawRNN/QuickDrawRNN/BingService.swift"; sourceTree = "<group>"; };
+		848DA017203A1C9C00A4590A /* Stroke.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Stroke.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter9/Completed/QuickDrawRNN/QuickDrawRNN/Stroke.swift"; sourceTree = "<group>"; };
+		848DA018203A1C9C00A4590A /* Sketch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Sketch.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter9/Completed/QuickDrawRNN/QuickDrawRNN/Sketch.swift"; sourceTree = "<group>"; };
+		848DA019203A1C9C00A4590A /* SketchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SketchViewController.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter9/Completed/QuickDrawRNN/QuickDrawRNN/SketchViewController.swift"; sourceTree = "<group>"; };
+		848DA01A203A1C9D00A4590A /* CIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CIImage.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter9/Completed/QuickDrawRNN/QuickDrawRNN/CIImage.swift"; sourceTree = "<group>"; };
+		848DA01B203A1C9D00A4590A /* QueryFacade.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = QueryFacade.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter9/Completed/QuickDrawRNN/QuickDrawRNN/QueryFacade.swift"; sourceTree = "<group>"; };
+		848DA024203A258500A4590A /* CGPointRNNExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPointRNNExtension.swift; sourceTree = "<group>"; };
+		848DA026203A25C000A4590A /* StrokeRNNExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrokeRNNExtension.swift; sourceTree = "<group>"; };
+		848DA028203A271000A4590A /* StrokeSketchExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrokeSketchExtension.swift; sourceTree = "<group>"; };
 		84DCB8E8202915A200612D25 /* QuickDrawRNN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuickDrawRNN.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84DCB8EB202915A200612D25 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84DCB8ED202915A200612D25 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -23,7 +46,6 @@
 		84DCB8F2202915A200612D25 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		84DCB8F5202915A200612D25 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84DCB8F7202915A200612D25 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		84DCB905202A66EC00612D25 /* quickdraw.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = quickdraw.mlmodel; path = ../../../Training/output/quickdraw.mlmodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,13 +78,24 @@
 		84DCB8EA202915A200612D25 /* QuickDrawRNN */ = {
 			isa = PBXGroup;
 			children = (
-				84DCB905202A66EC00612D25 /* quickdraw.mlmodel */,
+				845EDCDA203A31CD00B27EF6 /* quickdraw.mlmodel */,
+				848DA016203A1C9C00A4590A /* BingService.swift */,
+				848DA01A203A1C9D00A4590A /* CIImage.swift */,
+				848DA01B203A1C9D00A4590A /* QueryFacade.swift */,
+				848DA018203A1C9C00A4590A /* Sketch.swift */,
+				848DA014203A1C9C00A4590A /* SketchPreviewCell.swift */,
+				848DA015203A1C9C00A4590A /* SketchView.swift */,
+				848DA019203A1C9C00A4590A /* SketchViewController.swift */,
+				848DA017203A1C9C00A4590A /* Stroke.swift */,
 				84DCB8EB202915A200612D25 /* AppDelegate.swift */,
 				84DCB8ED202915A200612D25 /* ViewController.swift */,
 				84DCB8EF202915A200612D25 /* Main.storyboard */,
 				84DCB8F2202915A200612D25 /* Assets.xcassets */,
 				84DCB8F4202915A200612D25 /* LaunchScreen.storyboard */,
 				84DCB8F7202915A200612D25 /* Info.plist */,
+				848DA024203A258500A4590A /* CGPointRNNExtension.swift */,
+				848DA026203A25C000A4590A /* StrokeRNNExtension.swift */,
+				848DA028203A271000A4590A /* StrokeSketchExtension.swift */,
 			);
 			path = QuickDrawRNN;
 			sourceTree = "<group>";
@@ -139,9 +172,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				848DA01D203A1C9D00A4590A /* SketchView.swift in Sources */,
+				848DA021203A1C9D00A4590A /* SketchViewController.swift in Sources */,
+				848DA020203A1C9D00A4590A /* Sketch.swift in Sources */,
 				84DCB8EE202915A200612D25 /* ViewController.swift in Sources */,
 				84DCB8EC202915A200612D25 /* AppDelegate.swift in Sources */,
-				84DCB906202A66EC00612D25 /* quickdraw.mlmodel in Sources */,
+				848DA022203A1C9D00A4590A /* CIImage.swift in Sources */,
+				848DA01C203A1C9D00A4590A /* SketchPreviewCell.swift in Sources */,
+				848DA027203A25C000A4590A /* StrokeRNNExtension.swift in Sources */,
+				848DA029203A271000A4590A /* StrokeSketchExtension.swift in Sources */,
+				848DA01E203A1C9D00A4590A /* BingService.swift in Sources */,
+				848DA023203A1C9D00A4590A /* QueryFacade.swift in Sources */,
+				848DA01F203A1C9D00A4590A /* Stroke.swift in Sources */,
+				845EDCDB203A31CD00B27EF6 /* quickdraw.mlmodel in Sources */,
+				848DA025203A258500A4590A /* CGPointRNNExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
