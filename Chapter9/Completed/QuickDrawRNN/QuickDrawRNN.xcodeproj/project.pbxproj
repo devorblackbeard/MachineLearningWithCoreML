@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		845EDCDB203A31CD00B27EF6 /* quickdraw.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 845EDCDA203A31CD00B27EF6 /* quickdraw.mlmodel */; };
+		845EDCDD203AC07800B27EF6 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845EDCDC203AC07800B27EF6 /* DateExtension.swift */; };
 		848DA01C203A1C9D00A4590A /* SketchPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DA014203A1C9C00A4590A /* SketchPreviewCell.swift */; };
 		848DA01D203A1C9D00A4590A /* SketchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DA015203A1C9C00A4590A /* SketchView.swift */; };
 		848DA01E203A1C9D00A4590A /* BingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DA016203A1C9C00A4590A /* BingService.swift */; };
@@ -28,6 +29,7 @@
 
 /* Begin PBXFileReference section */
 		845EDCDA203A31CD00B27EF6 /* quickdraw.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = quickdraw.mlmodel; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/CoreMLModels/Chapter9/quickdraw.mlmodel"; sourceTree = "<group>"; };
+		845EDCDC203AC07800B27EF6 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DateExtension.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter9/Completed/QuickDrawRNN/QuickDrawRNN/DateExtension.swift"; sourceTree = "<group>"; };
 		848DA014203A1C9C00A4590A /* SketchPreviewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SketchPreviewCell.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter9/Completed/QuickDrawRNN/QuickDrawRNN/SketchPreviewCell.swift"; sourceTree = "<group>"; };
 		848DA015203A1C9C00A4590A /* SketchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SketchView.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter9/Completed/QuickDrawRNN/QuickDrawRNN/SketchView.swift"; sourceTree = "<group>"; };
 		848DA016203A1C9C00A4590A /* BingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BingService.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter9/Completed/QuickDrawRNN/QuickDrawRNN/BingService.swift"; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 				848DA024203A258500A4590A /* CGPointRNNExtension.swift */,
 				848DA026203A25C000A4590A /* StrokeRNNExtension.swift */,
 				848DA028203A271000A4590A /* StrokeSketchExtension.swift */,
+				845EDCDC203AC07800B27EF6 /* DateExtension.swift */,
 			);
 			path = QuickDrawRNN;
 			sourceTree = "<group>";
@@ -173,6 +176,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				848DA01D203A1C9D00A4590A /* SketchView.swift in Sources */,
+				845EDCDD203AC07800B27EF6 /* DateExtension.swift in Sources */,
 				848DA021203A1C9D00A4590A /* SketchViewController.swift in Sources */,
 				848DA020203A1C9D00A4590A /* Sketch.swift in Sources */,
 				84DCB8EE202915A200612D25 /* ViewController.swift in Sources */,

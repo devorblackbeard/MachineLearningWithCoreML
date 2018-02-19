@@ -61,36 +61,7 @@ class QueryFacade{
     }
     
     init() {
-        downloadModel()
-    }
-    
-    private func downloadModel(){
-        guard let let modelUrl = URL(string:"https://github.com/joshnewnham/MachineLearningWithCoreML/blob/master/CoreMLModels/Chapter8/cnnsketchclassifier.mlmodel") {
-            fatalError("Invalid Model Url")
-        }
-        
-        guard let compiledUrl = try? MLModel.compileModel(at: modelUrl) else{
-            fatalError("Invalid Model Url")
-        }
-        
-        queryQueue.async {
-            // find the app support directory
-            let fileManager = FileManager.default
-            let appSupportDirectory = try! fileManager.url(for: .applicationSupportDirectory,
-                                                           in: .userDomainMask, appropriateFor: compiledUrl, create: true)
-            // create a permanent URL in the app support directory
-            let permanentUrl = appSupportDirectory.appendingPathComponent(compiledUrl.lastPathComponent)
-            do {
-                // if the file exists, replace it. Otherwise, copy the file to the destination.
-                if fileManager.fileExists(atPath: permanentUrl.absoluteString) {
-                    _ = try fileManager.replaceItemAt(permanentUrl, withItemAt: compiledUrl)
-                } else {
-                    try fileManager.copyItem(at: compiledUrl, to: permanentUrl)
-                }
-            } catch {
-                print("Error during copy: \(error.localizedDescription)")
-            }
-        }
+        syncModel()
     }
     
     /**
@@ -177,6 +148,129 @@ class QueryFacade{
                 self.processNextQuery()
             }
         }
+    }
+}
+
+// MARK: - Model loading
+
+extension QueryFacade{
+    
+    /**
+     Key used to store the timestamp of when the model was updated in the UserPrefs
+     */
+    private var SyncTimestampKey : String{
+        get{
+            return "model_sync_timestamp"
+        }
+    }
+    
+    private var ModelUrlKey : String{
+        get{
+            return "model_url"
+        }
+    }
+    
+    /**
+     Test if we need to download the model; this is the case if we haven't yet downloaded the model or
+     the model is considered 'stale'
+    */
+    private var isModelStale : Bool{
+        get{
+            // Number of days we want to refresh our model
+            let daysToUpdate : Int = 10
+    
+            // Get the last time this model was updated (0 if it hasn't been)
+            let lastUpdated = Date(timestamp:UserDefaults.standard.integer(forKey: SyncTimestampKey))
+    
+            // Get the number of elasped days between today and the last time the model was updated
+            guard let numberOfDaysSinceUpdate = NSCalendar.current.dateComponents([.day], from: lastUpdated, to: Date()).day else{
+            fatalError("Failed to calculated elapsed days since the model was updated")
+            }
+    
+            // Test if we need to update the model
+            return numberOfDaysSinceUpdate >= daysToUpdate
+        }
+    }
+    
+    private func syncModel(){
+        queryQueue.async {
+            
+            // Test if our model is stale (if so; then proceed to download it and replace our existing model
+            if self.isModelStale{
+                guard let tempModelUrl = self.downloadModel() else{
+                    return
+                }
+                
+                guard let compiledUrl = try? MLModel.compileModel(at: tempModelUrl) else{
+                    fatalError("Failed to compile model")
+                }
+                
+                let appSupportDirectory = try! FileManager.default.url(for: .applicationSupportDirectory,
+                                                               in: .userDomainMask,
+                                                               appropriateFor: compiledUrl,
+                                                               create: true)
+                
+                // Create a permanent URL in the app support directory
+                let permanentUrl = appSupportDirectory.appendingPathComponent(compiledUrl.lastPathComponent)
+                do {
+                    // If the file exists, replace it. Otherwise, copy the file to the destination.
+                    if FileManager.default.fileExists(atPath: permanentUrl.absoluteString) {
+                        _ = try FileManager.default.replaceItemAt(permanentUrl,
+                                                                  withItemAt: compiledUrl)
+                    } else {
+                        try FileManager.default.copyItem(at: compiledUrl,
+                                                         to: permanentUrl)
+                    }
+                } catch {
+                    fatalError("Error during copy: \(error.localizedDescription)")
+                }
+                
+                // Save timestamp
+                UserDefaults.standard.set(Date.timestamp, forKey: self.SyncTimestampKey)
+                // Save Url
+                UserDefaults.standard.set(permanentUrl.absoluteString, forKey:self.ModelUrlKey)
+            }
+            
+            guard let modelUrl = URL(string:UserDefaults.standard.string(forKey: self.ModelUrlKey) ?? "") else{
+                fatalError("Invalid model Url")
+            }
+            
+            self.model = try? MLModel(contentsOf: modelUrl)
+        }        
+    }
+    
+    /**
+     Syncronous method used to download the model; if successful then will reutrn the URL of the
+     temporary file
+    */
+    private func downloadModel() -> URL?{
+        guard let modelUrl = URL(
+            string:"https://github.com/joshnewnham/MachineLearningWithCoreML/raw/master/CoreMLModels/Chapter9/quickdraw.mlmodel") else{
+                fatalError("Invalid URL")
+        }
+        
+        var tempUrl : URL?
+        
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig)
+        
+        let request = URLRequest(url:modelUrl)
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        let task = session.downloadTask(with: request) { (tempLocalUrl, response, error) in
+            if let tempLocalUrl = tempLocalUrl, error == nil {
+                tempUrl = tempLocalUrl
+            } else {
+                fatalError("Error downloading model \(String(describing: error?.localizedDescription))")
+            }
+            
+            semaphore.signal()
+        }
+        task.resume()
+        _ = semaphore.wait(timeout: .distantFuture)
+        
+        return tempUrl
     }
 }
 
