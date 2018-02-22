@@ -23,7 +23,8 @@ extension StrokeSketch{
         
         let minPoint = copy.minPoint
         let maxPoint = copy.maxPoint
-        let scale = CGPoint(x: maxPoint.x-minPoint.x, y:maxPoint.y-minPoint.y)
+        let scale = CGPoint(x: maxPoint.x-minPoint.x,
+                            y:maxPoint.y-minPoint.y)
         
         var width : CGFloat = 255.0
         var height : CGFloat = 255.0
@@ -37,11 +38,16 @@ extension StrokeSketch{
         
         // for each point, subtract the min and divide by the max
         for i in 0..<copy.strokes.count{
-            copy.strokes[i].points = copy.strokes[i].points.map({ (pt) -> CGPoint in
+            copy.strokes[i].points = copy.strokes[i].points.map({
+                (pt) -> CGPoint in
                 // Normalise point and then scale based on adjusted dimension above
                 // (also casting to an Int then back to a CGFloat to get 1 pixel precision)
-                let x : CGFloat = CGFloat(Int(((pt.x - minPoint.x)/scale.x) * width))
-                let y : CGFloat = CGFloat(Int(((pt.y - minPoint.y)/scale.y) * height))
+                let x : CGFloat = CGFloat(
+                    Int(((pt.x - minPoint.x)/scale.x) * width)
+                )
+                let y : CGFloat = CGFloat(
+                    Int(((pt.y - minPoint.y)/scale.y) * height)
+                )
                 
                 return CGPoint(x:x, y:y)
             })
@@ -64,7 +70,8 @@ extension StrokeSketch{
  */
 extension StrokeSketch{
     
-    public static func preprocess(_ sketch:StrokeSketch) -> MLMultiArray?{
+    public static func preprocess(_ sketch:StrokeSketch)
+        -> MLMultiArray?{
         let arrayLen = NSNumber(value:75 * 3) // flattened (75,3) tensor
         
         let simplifiedSketch = sketch.simplify()
@@ -80,7 +87,8 @@ extension StrokeSketch{
         // b. Append our EOS (End Of Stroke) flag
         let minPoint = simplifiedSketch.minPoint
         let maxPoint = simplifiedSketch.maxPoint
-        let scale = CGPoint(x: maxPoint.x-minPoint.x, y:maxPoint.y-minPoint.y)
+        let scale = CGPoint(x: maxPoint.x-minPoint.x,
+                            y:maxPoint.y-minPoint.y)
         
         var data = Array<Double>()
         for i in 0..<simplifiedSketch.strokes.count{
@@ -88,7 +96,8 @@ extension StrokeSketch{
                 let point = simplifiedSketch.strokes[i].points[j]
                 let x = (point.x-minPoint.x)/scale.x
                 let y = (point.y-minPoint.y)/scale.y
-                let z = j == simplifiedSketch.strokes[i].points.count-1 ? 1 : 0
+                let z = j == simplifiedSketch.strokes[i].points.count-1 ?
+                    1 : 0
                 
                 data.append(Double(x))
                 data.append(Double(y))

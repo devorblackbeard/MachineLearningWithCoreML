@@ -27,7 +27,7 @@ class BingService{
     static let sharedInstance: BingService = BingService()
     
     // Replace the subscriptionKey string value with your valid subscription key.
-    let subscriptionKey = "6d4144f607cb4e82ace8ebc7a2a5b357"
+    let subscriptionKey = "<ENTER YOUR SUBSCRIPTION KEY>"
     
     // Verify the endpoint URI.  At this writing, only one endpoint is used for Bing
     // search APIs.  In the future, regional endpoints may be available.  If you

@@ -163,30 +163,37 @@ extension QueryFacade{
             return "model_sync_timestamp"
         }
     }
-    
+
     private var ModelUrlKey : String{
         get{
             return "model_url"
         }
     }
-    
+
     /**
      Test if we need to download the model; this is the case if we haven't yet downloaded the model or
      the model is considered 'stale'
     */
     private var isModelStale : Bool{
         get{
+            // Check if file exists
+            if let modelUrl = UserDefaults.standard.string(forKey: self.ModelUrlKey){
+                if !FileManager.default.fileExists(atPath: modelUrl){
+                    return true
+                }
+            }
+            
             // Number of days we want to refresh our model
             let daysToUpdate : Int = 10
-    
+
             // Get the last time this model was updated (0 if it hasn't been)
             let lastUpdated = Date(timestamp:UserDefaults.standard.integer(forKey: SyncTimestampKey))
-    
+
             // Get the number of elasped days between today and the last time the model was updated
             guard let numberOfDaysSinceUpdate = NSCalendar.current.dateComponents([.day], from: lastUpdated, to: Date()).day else{
-            fatalError("Failed to calculated elapsed days since the model was updated")
+                fatalError("Failed to calculated elapsed days since the model was updated")
             }
-    
+
             // Test if we need to update the model
             return numberOfDaysSinceUpdate >= daysToUpdate
         }
@@ -200,43 +207,53 @@ extension QueryFacade{
                 guard let tempModelUrl = self.downloadModel() else{
                     return
                 }
-                
-                guard let compiledUrl = try? MLModel.compileModel(at: tempModelUrl) else{
+
+                guard let compiledUrl = try? MLModel.compileModel(
+                    at: tempModelUrl) else{
                     fatalError("Failed to compile model")
                 }
                 
-                let appSupportDirectory = try! FileManager.default.url(for: .applicationSupportDirectory,
-                                                               in: .userDomainMask,
-                                                               appropriateFor: compiledUrl,
-                                                               create: true)
-                
+                let appSupportDirectory = try! FileManager.default.url(
+                    for: .applicationSupportDirectory,
+                    in: .userDomainMask,
+                    appropriateFor: compiledUrl,
+                    create: true)
+
                 // Create a permanent URL in the app support directory
-                let permanentUrl = appSupportDirectory.appendingPathComponent(compiledUrl.lastPathComponent)
+                let permanentUrl = appSupportDirectory.appendingPathComponent(
+                    compiledUrl.lastPathComponent)
                 do {
                     // If the file exists, replace it. Otherwise, copy the file to the destination.
-                    if FileManager.default.fileExists(atPath: permanentUrl.absoluteString) {
-                        _ = try FileManager.default.replaceItemAt(permanentUrl,
-                                                                  withItemAt: compiledUrl)
+                    if FileManager.default.fileExists(
+                        atPath: permanentUrl.absoluteString) {
+                        _ = try FileManager.default.replaceItemAt(
+                            permanentUrl,
+                            withItemAt: compiledUrl)
                     } else {
-                        try FileManager.default.copyItem(at: compiledUrl,
-                                                         to: permanentUrl)
+                        try FileManager.default.copyItem(
+                            at: compiledUrl,
+                            to: permanentUrl)
                     }
                 } catch {
                     fatalError("Error during copy: \(error.localizedDescription)")
                 }
-                
+
                 // Save timestamp
-                UserDefaults.standard.set(Date.timestamp, forKey: self.SyncTimestampKey)
+                UserDefaults.standard.set(Date.timestamp,
+                                          forKey: self.SyncTimestampKey)
                 // Save Url
-                UserDefaults.standard.set(permanentUrl.absoluteString, forKey:self.ModelUrlKey)
+                UserDefaults.standard.set(permanentUrl.absoluteString,
+                                          forKey:self.ModelUrlKey)
             }
             
-            guard let modelUrl = URL(string:UserDefaults.standard.string(forKey: self.ModelUrlKey) ?? "") else{
+            guard let modelUrl = URL(
+                string:UserDefaults.standard.string(forKey: self.ModelUrlKey) ?? "")
+                else{
                 fatalError("Invalid model Url")
             }
             
             self.model = try? MLModel(contentsOf: modelUrl)
-        }        
+        }
     }
     
     /**
@@ -245,7 +262,7 @@ extension QueryFacade{
     */
     private func downloadModel() -> URL?{
         guard let modelUrl = URL(
-            string:"https://github.com/joshnewnham/MachineLearningWithCoreML/raw/master/CoreMLModels/Chapter9/quickdraw.mlmodel") else{
+            string:"https://github.com/joshnewnham/MachineLearningWithCoreML/blob/master/CoreMLModels/Chapter9/quickdraw.mlmodel?raw=true") else{
                 fatalError("Invalid URL")
         }
         
@@ -305,11 +322,14 @@ class ModelInput : MLFeatureProvider {
 extension QueryFacade{
     
     func classifySketch(sketch:Sketch) -> [(key:String,value:Double)]?{
-        if let strokeSketch = sketch as? StrokeSketch, let x = StrokeSketch.preprocess(strokeSketch){
+        if let strokeSketch = sketch as? StrokeSketch, let
+            x = StrokeSketch.preprocess(strokeSketch){
             
             if let modelOutput = try! model?.prediction(from:ModelInput(strokeSeq:x)){
-                if let classPredictions = modelOutput.featureValue(for: "classLabelProbs")?.dictionaryValue as? [String:Double]{
-                    let sortedClassPredictions = classPredictions.sorted(by: { (kvp1, kvp2) -> Bool in
+                if let classPredictions = modelOutput.featureValue(
+                    for: "classLabelProbs")?.dictionaryValue as? [String:Double]{
+                    let sortedClassPredictions = classPredictions.sorted(
+                        by: { (kvp1, kvp2) -> Bool in
                         kvp1.value > kvp2.value
                     })
                     
@@ -317,7 +337,7 @@ extension QueryFacade{
                 }
             }
         }
-        
+
         return nil
     }
 }

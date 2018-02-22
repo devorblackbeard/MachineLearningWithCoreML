@@ -35,8 +35,11 @@ extension Stroke{
         return copy
     }
     
-    func simplifyDPStep(points:[CGPoint], first:Int, last:Int,
-                        tolerance:CGFloat, simplified: inout [CGPoint]){
+    func simplifyDPStep(points:[CGPoint],
+                        first:Int,
+                        last:Int,
+                        tolerance:CGFloat,
+                        simplified: inout [CGPoint]){
         
         var maxSqDistance = tolerance
         var index = 0
