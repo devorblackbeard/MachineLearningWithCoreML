@@ -2,8 +2,11 @@
 
 import UIKit
 import Vision
-import AVFoundation
-import CoreVideo
+import CoreML
+import PlaygroundSupport
+
+// Required to run tasks in the background
+PlaygroundPage.current.needsIndefiniteExecution = true
 
 /** Load test images **/
 // Arrays to hold the images and extracted features
@@ -15,7 +18,15 @@ for i in 1...3{
     images.append(image)
 }
 
-let faceIdx = 0 // image index of our images array
+if let happyImage = UIImage(named:"images/happy.png"){
+    images.append(happyImage)
+}
+
+if let angryImage = UIImage(named:"images/angry.png"){
+    images.append(angryImage)
+}
+
+let faceIdx = 4 // image index of our images array
 let imageView = UIImageView(image: images[faceIdx])
 imageView.contentMode = .scaleAspectFit
 
@@ -322,12 +333,59 @@ if let faceDetectionResults = faceDetection.results as? [VNFaceObservation]{
                                           width: min(w + paddingWidth*2, imageSize.width),
                                           height: min(h + paddingTop + paddingBottom, imageSize.height))
             
-            // Uncomment, and comment the cropping block below, if you
-            // want a visualisation of the face
-            //imageView.drawRect(rect: croppingRect)
+            // visualisation of the face
+            imageView.drawRect(rect: croppingRect)
             
-            if let croppedCGImage = imageView.image?.cgImage?.cropping(to: croppingRect){
+            // Crop out the face
+            if let croppedCGImage = images[faceIdx].cgImage?.cropping(to: croppingRect){
                 imageView.image = UIImage(cgImage:croppedCGImage)
+            }
+            
+            // Let's now grayscale the image
+            let model = try VNCoreMLModel(for: ExpressionRecognitionModel().model)
+            
+            let request = VNCoreMLRequest(
+                model: model,
+                completionHandler: { (request, error) in
+                    /*
+                     A request can be given a hander which is called once
+                     the inference has been performed; the resutls is of type VNRequest
+                     and includes a results variable including ... the results of the
+                     inference - if no error has occured.
+                     
+                     The results, in our case, are observations (array of VNClassificationObservation); this datatype is returned by VNCoreMLRequests that are using a model performing
+                     classification (like our expression recognition model).
+                     */
+                    guard let observations = request.results as? [VNClassificationObservation] else{ return }
+                    
+                    /*
+                     Each observation consists of a label and confidence level;
+                     observations are sorted by confidence - let's have a look.
+                    */
+                    for observation in observations{
+                        print("\(observation.identifier) \(observation.confidence)")
+                    }
+                    
+                    DispatchQueue.main.sync{
+                        print("Classification finished")
+                    }
+            })
+            request.imageCropAndScaleOption = .centerCrop
+            
+            DispatchQueue.global(qos: .background).async {
+                if let pixelBuffer = images[faceIdx].toPixelBuffer(){
+                    let imageOrientation = images[faceIdx].imageOrientation
+                    
+                    let handler = VNImageRequestHandler(
+                        cvPixelBuffer: pixelBuffer,
+                        orientation: CGImagePropertyOrientation(imageOrientation),
+                        options: [:])
+                    
+                    try? handler.perform([request])
+                    
+                } else{
+                    fatalError("Unable to get the pixel buffer from the image")
+                }
             }
         }
     }

@@ -92,9 +92,7 @@ extension ViewController : VideoCaptureDelegate{
 
 extension ViewController{
     
-    func onVisionRequestComplete(request: VNRequest, error: Error?) {
-        guard let observations = request.results as? [VNClassificationObservation] else{ return }
-        
+    func onVisionRequestComplete(request: VNRequest, error: Error?) {        
         // The observations appear to be sorted by confidence already, so we
         // take the top 5 and map them to an array of (String, Double) tuples.
         let label = observations[0].identifier // associated label
