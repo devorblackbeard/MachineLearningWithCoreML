@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" systemVersion="17A277" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -9,16 +14,47 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="FacialEmotionDetection" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DDb-tR-CS0" customClass="CapturePreviewView" customModule="FacialEmotionDetection" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lX2-yw-5qx" customClass="EmotionVisualizerView">
+                                        <rect key="frame" x="0.0" y="418" width="375" height="249"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="lX2-yw-5qx" secondAttribute="height" multiplier="125:83" id="9sZ-GA-hEe"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="lX2-yw-5qx" firstAttribute="leading" secondItem="DDb-tR-CS0" secondAttribute="leading" id="P1v-QB-UrL"/>
+                                    <constraint firstAttribute="trailing" secondItem="lX2-yw-5qx" secondAttribute="trailing" id="Qeg-5U-yqJ"/>
+                                    <constraint firstAttribute="bottom" secondItem="lX2-yw-5qx" secondAttribute="bottom" id="sOA-L6-MHJ"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="DDb-tR-CS0" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="2SB-Ok-SZe"/>
+                            <constraint firstItem="DDb-tR-CS0" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="FNq-ne-sxE"/>
+                            <constraint firstItem="DDb-tR-CS0" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="UqK-mg-zT1"/>
+                            <constraint firstItem="DDb-tR-CS0" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="euE-AF-ubS"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <connections>
+                        <outlet property="previewView" destination="DDb-tR-CS0" id="YuQ-Hy-2mk"/>
+                        <outlet property="visualizerView" destination="lX2-yw-5qx" id="bLC-3O-Pyp"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="117.59999999999999" y="118.29085457271366"/>
         </scene>
     </scenes>
 </document>

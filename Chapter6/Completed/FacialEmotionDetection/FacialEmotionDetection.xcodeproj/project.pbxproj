@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8436638E204B4A7C007815A7 /* CaptureVideoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8436638D204B4A7C007815A7 /* CaptureVideoPreviewView.swift */; };
+		84366390204B4AF8007815A7 /* VideoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8436638F204B4AF8007815A7 /* VideoCapture.swift */; };
+		84366392204B4B50007815A7 /* EmotionVisualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84366391204B4B50007815A7 /* EmotionVisualizerView.swift */; };
+		84366394204B514B007815A7 /* ImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84366393204B514B007815A7 /* ImageProcessor.swift */; };
 		84F792E72044B54900DB4402 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F792E62044B54900DB4402 /* AppDelegate.swift */; };
 		84F792E92044B54900DB4402 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F792E82044B54900DB4402 /* ViewController.swift */; };
 		84F792EC2044B54900DB4402 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84F792EA2044B54900DB4402 /* Main.storyboard */; };
@@ -16,6 +20,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8436638D204B4A7C007815A7 /* CaptureVideoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CaptureVideoPreviewView.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter6/Completed/FacialEmotionDetection/FacialEmotionDetection/CaptureVideoPreviewView.swift"; sourceTree = "<group>"; };
+		8436638F204B4AF8007815A7 /* VideoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCapture.swift; sourceTree = "<group>"; };
+		84366391204B4B50007815A7 /* EmotionVisualizerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionVisualizerView.swift; sourceTree = "<group>"; };
+		84366393204B514B007815A7 /* ImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessor.swift; sourceTree = "<group>"; };
 		84F792E32044B54900DB4402 /* FacialEmotionDetection.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FacialEmotionDetection.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84F792E62044B54900DB4402 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84F792E82044B54900DB4402 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -63,6 +71,10 @@
 				84F792ED2044B54900DB4402 /* Assets.xcassets */,
 				84F792EF2044B54900DB4402 /* LaunchScreen.storyboard */,
 				84F792F22044B54900DB4402 /* Info.plist */,
+				8436638D204B4A7C007815A7 /* CaptureVideoPreviewView.swift */,
+				8436638F204B4AF8007815A7 /* VideoCapture.swift */,
+				84366391204B4B50007815A7 /* EmotionVisualizerView.swift */,
+				84366393204B514B007815A7 /* ImageProcessor.swift */,
 			);
 			path = FacialEmotionDetection;
 			sourceTree = "<group>";
@@ -139,7 +151,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84366392204B4B50007815A7 /* EmotionVisualizerView.swift in Sources */,
+				8436638E204B4A7C007815A7 /* CaptureVideoPreviewView.swift in Sources */,
+				84366390204B4AF8007815A7 /* VideoCapture.swift in Sources */,
 				84F792E92044B54900DB4402 /* ViewController.swift in Sources */,
+				84366394204B514B007815A7 /* ImageProcessor.swift in Sources */,
 				84F792E72044B54900DB4402 /* AppDelegate.swift in Sources */,
 				84F792F92044B57500DB4402 /* ExpressionRecognitionModel.mlmodel in Sources */,
 			);
