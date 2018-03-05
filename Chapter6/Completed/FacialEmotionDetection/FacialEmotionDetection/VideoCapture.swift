@@ -102,7 +102,7 @@ public class VideoCapture : NSObject{
         
         // Set pixel type (32bit RGBA, Grayscale etc)
         let settings: [String : Any] = [
-            kCVPixelBufferPixelFormatTypeKey as String: NSNumber(value: kCVPixelFormatType_OneComponent8)
+            kCVPixelBufferPixelFormatTypeKey as String: NSNumber(value: kCVPixelFormatType_32BGRA)
         ]
         videoOutput.videoSettings = settings
         

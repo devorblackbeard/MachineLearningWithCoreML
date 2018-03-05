@@ -37,18 +37,23 @@ class ImageProcessor{
         
     }
     
-    public func getFaces(pixelBuffer:CVPixelBuffer, imageOrientation:CGImagePropertyOrientation){
+    public func getFaces(pixelBuffer:CVPixelBuffer){
         DispatchQueue.global(qos: .background).async {
             
             // Perform face detection
             try? self.faceDetectionRequest.perform(
                 [self.faceDetection],
-                on: pixelBuffer,
-                orientation: imageOrientation)
+                on: pixelBuffer)
             
             let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
             let width = ciImage.extent.width
             let height = ciImage.extent.height
+            
+            // Grayscale filter
+            guard let grayscaleFilter = CIFilter(name: "CIColorControls") else{
+                fatalError("Unable to init CIFilter 'CIColorControls'")
+            }
+            grayscaleFilter.setValue(0, forKey: kCIInputSaturationKey)
             
             var faces = [CIImage]()
             
@@ -58,8 +63,10 @@ class ImageProcessor{
              Face or facial-feature information detected by an image analysis request.
              */
             if let faceDetectionResults = self.faceDetection.results as? [VNFaceObservation]{
+                print("faceDetectionResults")
                 for face in faceDetectionResults{
                     let bbox = face.boundingBox
+                    print(bbox)
                     
                     let imageSize = CGSize(width:width,
                                            height:height)
@@ -91,14 +98,24 @@ class ImageProcessor{
                                                   width: w,
                                                   height: h)
                     
-                    faces.append(ciImage.cropped(to: invertedFaceRect))
+                    let croppedImage = ciImage.cropped(to: invertedFaceRect)
+                    
+                    grayscaleFilter.setValue(croppedImage, forKey: kCIInputImageKey)
+                    
+                    if let grayscaleCroppedImage = grayscaleFilter.value(forKey: kCIOutputImageKey) as? CIImage {
+                        faces.append(grayscaleCroppedImage)
+                    } else{
+                        print("Failed to apply filter on cropped image")
+                    }
                 }
                 
                 DispatchQueue.main.async {
+                    print("Found \(faces.count) faces")
                     self.delegate?.onImageProcessorCompleted(status: 1, faces: faces)
                 }
             } else{
                 DispatchQueue.main.async {
+                    print("Found no faces")
                     self.delegate?.onImageProcessorCompleted(status: -1, faces: nil)
                 }
             }

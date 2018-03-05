@@ -21,20 +21,13 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DDb-tR-CS0" customClass="CapturePreviewView" customModule="FacialEmotionDetection" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lX2-yw-5qx" customClass="EmotionVisualizerView">
-                                        <rect key="frame" x="0.0" y="418" width="375" height="249"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="lX2-yw-5qx" secondAttribute="height" multiplier="125:83" id="9sZ-GA-hEe"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xqd-HN-rzP" customClass="EmotionVisualizerView" customModule="FacialEmotionDetection" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="379" width="375" height="288"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="lX2-yw-5qx" firstAttribute="leading" secondItem="DDb-tR-CS0" secondAttribute="leading" id="P1v-QB-UrL"/>
-                                    <constraint firstAttribute="trailing" secondItem="lX2-yw-5qx" secondAttribute="trailing" id="Qeg-5U-yqJ"/>
-                                    <constraint firstAttribute="bottom" secondItem="lX2-yw-5qx" secondAttribute="bottom" id="sOA-L6-MHJ"/>
+                                    <constraint firstAttribute="width" secondItem="Xqd-HN-rzP" secondAttribute="height" multiplier="125:96" id="rnX-bs-MdM"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -42,14 +35,17 @@
                         <constraints>
                             <constraint firstItem="DDb-tR-CS0" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="2SB-Ok-SZe"/>
                             <constraint firstItem="DDb-tR-CS0" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="FNq-ne-sxE"/>
+                            <constraint firstItem="Xqd-HN-rzP" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="GMB-Yh-D0a"/>
+                            <constraint firstItem="Xqd-HN-rzP" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="HaL-6L-EuL"/>
                             <constraint firstItem="DDb-tR-CS0" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="UqK-mg-zT1"/>
+                            <constraint firstItem="Xqd-HN-rzP" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="bEF-kp-CGQ"/>
                             <constraint firstItem="DDb-tR-CS0" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="euE-AF-ubS"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="previewView" destination="DDb-tR-CS0" id="YuQ-Hy-2mk"/>
-                        <outlet property="visualizerView" destination="lX2-yw-5qx" id="bLC-3O-Pyp"/>
+                        <outlet property="viewVisualizer" destination="Xqd-HN-rzP" id="448-Hw-Wg7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
