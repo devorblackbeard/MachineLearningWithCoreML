@@ -37,17 +37,22 @@ class ImageProcessor{
         
     }
     
-    public func getFaces(pixelBuffer:CVPixelBuffer){
-        DispatchQueue.global(qos: .background).async {
+    public func getFaces(pixelBuffer:CVPixelBuffer,
+                         orientation:CGImagePropertyOrientation){
+        DispatchQueue.global(qos: .background).sync {
             
             // Perform face detection
             try? self.faceDetectionRequest.perform(
                 [self.faceDetection],
-                on: pixelBuffer)
+                on: pixelBuffer,
+                orientation: orientation)
+//            try? self.faceDetectionRequest.perform(
+//                [self.faceDetection],
+//                on: pixelBuffer)
             
             let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
             let width = ciImage.extent.width
-            let height = ciImage.extent.height
+            let height = ciImage.extent.height                        
             
             // Grayscale filter
             guard let grayscaleFilter = CIFilter(name: "CIColorControls") else{
@@ -66,7 +71,6 @@ class ImageProcessor{
                 print("faceDetectionResults")
                 for face in faceDetectionResults{
                     let bbox = face.boundingBox
-                    print(bbox)
                     
                     let imageSize = CGSize(width:width,
                                            height:height)
@@ -87,6 +91,8 @@ class ImageProcessor{
                                           width: w,
                                           height: h)
                     
+                    
+                    
                     /*
                      It’s worth remembering that Vision the framework
                      is using a flipped coordinate system, which means we
@@ -94,14 +100,14 @@ class ImageProcessor{
                      */
                     let invertedY = imageSize.height - (faceRect.origin.y + faceRect.height)
                     let invertedFaceRect = CGRect(x: x,
-                                                  y: invertedY,
+                                                  y: y,
                                                   width: w,
                                                   height: h)
                     
-                    let croppedImage = ciImage.cropped(to: invertedFaceRect)
+                    let croppedImage = ciImage.cropped(to: faceRect)
                     
                     grayscaleFilter.setValue(croppedImage, forKey: kCIInputImageKey)
-                    
+
                     if let grayscaleCroppedImage = grayscaleFilter.value(forKey: kCIOutputImageKey) as? CIImage {
                         faces.append(grayscaleCroppedImage)
                     } else{

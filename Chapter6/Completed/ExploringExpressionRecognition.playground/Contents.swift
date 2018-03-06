@@ -94,6 +94,14 @@ if let faceDetectionResults = faceDetection.results as? [VNFaceObservation]{
                                           width: w,
                                           height: h)
             
+            /*
+             // An alternative to inverting the face rectangle would be to use an
+             // AfflineTransform; such as follows
+             var transform = CGAffineTransform(scaleX: 1, y: -1)
+             transform = transform.translatedBy(x: 0, y: -imageSize.height)
+             let invertedFaceRect = faceRect.apply(transform) 
+            */
+            
             imageView.drawRect(rect: invertedFaceRect)
         }
     }
@@ -328,6 +336,7 @@ if let faceDetectionResults = faceDetection.results as? [VNFaceObservation]{
             let paddingWidth = faceRect.width * 0.15
             
             let invertedY = imageSize.height - (faceRect.origin.y + faceRect.height)
+            
             let croppingRect = CGRect(x: max(x - paddingWidth, 0),
                                           y: max(invertedY - paddingTop, 0),
                                           width: min(w + paddingWidth*2, imageSize.width),
