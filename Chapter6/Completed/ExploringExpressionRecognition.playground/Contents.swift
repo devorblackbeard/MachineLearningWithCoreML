@@ -99,7 +99,7 @@ if let faceDetectionResults = faceDetection.results as? [VNFaceObservation]{
              // AfflineTransform; such as follows
              var transform = CGAffineTransform(scaleX: 1, y: -1)
              transform = transform.translatedBy(x: 0, y: -imageSize.height)
-             let invertedFaceRect = faceRect.apply(transform) 
+             let invertedFaceRect = faceRect.apply(transform)
             */
             
             imageView.drawRect(rect: invertedFaceRect)

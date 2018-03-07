@@ -37,22 +37,17 @@ class ImageProcessor{
         
     }
     
-    public func getFaces(pixelBuffer:CVPixelBuffer,
-                         orientation:CGImagePropertyOrientation){
+    public func getFaces(pixelBuffer:CVPixelBuffer){
         DispatchQueue.global(qos: .background).sync {
+            
+            let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+            let width = ciImage.extent.width
+            let height = ciImage.extent.height
             
             // Perform face detection
             try? self.faceDetectionRequest.perform(
                 [self.faceDetection],
-                on: pixelBuffer,
-                orientation: orientation)
-//            try? self.faceDetectionRequest.perform(
-//                [self.faceDetection],
-//                on: pixelBuffer)
-            
-            let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-            let width = ciImage.extent.width
-            let height = ciImage.extent.height                        
+                on: ciImage)
             
             // Grayscale filter
             guard let grayscaleFilter = CIFilter(name: "CIColorControls") else{
@@ -91,27 +86,14 @@ class ImageProcessor{
                                           width: w,
                                           height: h)
                     
-                    
-                    
-                    /*
-                     It’s worth remembering that Vision the framework
-                     is using a flipped coordinate system, which means we
-                     need to invert y
-                     */
-                    let invertedY = imageSize.height - (faceRect.origin.y + faceRect.height)
-                    let invertedFaceRect = CGRect(x: x,
-                                                  y: y,
-                                                  width: w,
-                                                  height: h)
-                    
-                    let croppedImage = ciImage.cropped(to: faceRect)
-                    
-                    grayscaleFilter.setValue(croppedImage, forKey: kCIInputImageKey)
-
-                    if let grayscaleCroppedImage = grayscaleFilter.value(forKey: kCIOutputImageKey) as? CIImage {
-                        faces.append(grayscaleCroppedImage)
-                    } else{
-                        print("Failed to apply filter on cropped image")
+                    if let croppedImage = ciImage.crop(rect: faceRect){                        
+                        grayscaleFilter.setValue(croppedImage, forKey: kCIInputImageKey)
+                        
+                        if let grayscaleCroppedImage = grayscaleFilter.value(forKey: kCIOutputImageKey) as? CIImage {
+                            faces.append(grayscaleCroppedImage)
+                        } else{
+                            print("Failed to apply filter on cropped image")
+                        }
                     }
                 }
                 
@@ -127,6 +109,49 @@ class ImageProcessor{
             }
         }
     }
+}
+
+extension CIImage{
+    
+    func crop(rect:CGRect) -> CIImage?{
+        let context = CIContext()
+        guard let img = context.createCGImage(self, from: rect) else{
+            return nil
+        }
+        return CIImage(cgImage: img)
+    }
+    
+    func drawRect(rect:CGRect, lineWidth:CGFloat=2, color:UIColor=UIColor.red, vFlip:Bool=false) -> CIImage{
+        // Create a context of the starting image size and set it as the current one
+        UIGraphicsBeginImageContext(self.extent.size)
+        
+        // Get the current context
+        guard let context = UIGraphicsGetCurrentContext() else{
+            return self
+        }
+        
+        if vFlip{
+            context.translateBy(x: 0, y: self.extent.size.height)
+            context.scaleBy(x: 1.0, y: -1.0)
+        }
+        
+        // Draw the starting image in the current context as background
+        UIImage(ciImage: self).draw(at: CGPoint.zero)
+        
+        // Setup Stroke
+        context.setStrokeColor(color.cgColor)
+        context.setLineWidth(lineWidth)
+        // Draw rectangle
+        context.addRect(rect)
+        context.drawPath(using: .stroke)
+        
+        // Create image from context and end the image context
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return CIImage(cgImage: newImage!.cgImage!)
+    }
+    
 }
 
 

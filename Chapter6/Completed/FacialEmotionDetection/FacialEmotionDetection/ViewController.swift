@@ -109,15 +109,9 @@ extension ViewController : VideoCaptureDelegate{
             return
         }
         
-        guard let exifOrientation = CGImagePropertyOrientation(
-            rawValue: exifOrientationFromDeviceOrientation()) else {
-                return
-        }
-        
         // extract faces
         self.imageProcessor.getFaces(
-            pixelBuffer: pixelBuffer,
-            orientation:exifOrientation)
+            pixelBuffer: pixelBuffer)
     }
 }
 
@@ -171,36 +165,6 @@ extension ViewController : ImageProcessorDelegate{
                 try? handler.perform([self.request])
             }
         }
-    }
-}
-
-// MARK: - ViewController extensions
-
-extension ViewController{
-    func exifOrientationFromDeviceOrientation() -> UInt32 {
-        enum DeviceOrientation: UInt32 {
-            case top0ColLeft = 1
-            case top0ColRight = 2
-            case bottom0ColRight = 3
-            case bottom0ColLeft = 4
-            case left0ColTop = 5
-            case right0ColTop = 6
-            case right0ColBottom = 7
-            case left0ColBottom = 8
-        }
-        var exifOrientation: DeviceOrientation
-        
-        switch UIDevice.current.orientation {
-        case .portraitUpsideDown:
-            exifOrientation = .left0ColBottom
-        case .landscapeLeft:
-            exifOrientation = videoCapture.cameraPostion == .front ? .bottom0ColRight : .top0ColLeft
-        case .landscapeRight:
-            exifOrientation = videoCapture.cameraPostion == .front ? .top0ColLeft : .bottom0ColRight
-        default:
-            exifOrientation = .right0ColTop
-        }
-        return exifOrientation.rawValue
     }
 }
 
