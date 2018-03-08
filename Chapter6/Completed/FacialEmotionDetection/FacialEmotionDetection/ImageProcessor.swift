@@ -63,7 +63,6 @@ class ImageProcessor{
              Face or facial-feature information detected by an image analysis request.
              */
             if let faceDetectionResults = self.faceDetection.results as? [VNFaceObservation]{
-                print("faceDetectionResults")
                 for face in faceDetectionResults{
                     let bbox = face.boundingBox
                     
@@ -81,10 +80,19 @@ class ImageProcessor{
                     let x = bbox.origin.x * imageSize.width
                     let y = bbox.origin.y * imageSize.height
                     
-                    let faceRect = CGRect(x: x,
-                                          y: y,
-                                          width: w,
-                                          height: h)
+                    /*
+                     Along with inverting the face bounds we want to pad it out
+                     (to include the top of the head and some surplus padding around
+                     the face/head).
+                     */
+                    let paddingTop = h * 0.6
+                    let paddingBottom = h * 0.15
+                    let paddingWidth = w * 0.15
+                    
+                    let faceRect = CGRect(x: max(x - paddingWidth, 0),
+                                          y: max(0, y - paddingTop),
+                                          width: min(w + (paddingWidth * 2), imageSize.width),
+                                          height: min(h + (paddingTop + paddingBottom), imageSize.height))
                     
                     if let croppedImage = ciImage.crop(rect: faceRect){                        
                         grayscaleFilter.setValue(croppedImage, forKey: kCIInputImageKey)
@@ -98,7 +106,6 @@ class ImageProcessor{
                 }
                 
                 DispatchQueue.main.async {
-                    print("Found \(faces.count) faces")
                     self.delegate?.onImageProcessorCompleted(status: 1, faces: faces)
                 }
             } else{
@@ -120,38 +127,6 @@ extension CIImage{
         }
         return CIImage(cgImage: img)
     }
-    
-    func drawRect(rect:CGRect, lineWidth:CGFloat=2, color:UIColor=UIColor.red, vFlip:Bool=false) -> CIImage{
-        // Create a context of the starting image size and set it as the current one
-        UIGraphicsBeginImageContext(self.extent.size)
-        
-        // Get the current context
-        guard let context = UIGraphicsGetCurrentContext() else{
-            return self
-        }
-        
-        if vFlip{
-            context.translateBy(x: 0, y: self.extent.size.height)
-            context.scaleBy(x: 1.0, y: -1.0)
-        }
-        
-        // Draw the starting image in the current context as background
-        UIImage(ciImage: self).draw(at: CGPoint.zero)
-        
-        // Setup Stroke
-        context.setStrokeColor(color.cgColor)
-        context.setLineWidth(lineWidth)
-        // Draw rectangle
-        context.addRect(rect)
-        context.drawPath(using: .stroke)
-        
-        // Create image from context and end the image context
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return CIImage(cgImage: newImage!.cgImage!)
-    }
-    
 }
 
 

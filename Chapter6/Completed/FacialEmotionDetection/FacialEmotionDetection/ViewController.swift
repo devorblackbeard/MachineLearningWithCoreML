@@ -22,6 +22,11 @@ class ViewController: UIViewController {
     */    
     @IBOutlet weak var viewVisualizer: EmotionVisualizerView!
     
+    /*
+     Label notifying the user no face was detected (prompting them to face the camera towards their, or someone elses, face.
+    */
+    @IBOutlet weak var statusLabel: UILabel!
+    
     /**
      Utility class that encapsulates setting up and tearing down the video capture; we'll start recording
      and assign the ViewController as a delegate to receive captured images from the video stream.
@@ -39,8 +44,6 @@ class ViewController: UIViewController {
     var request: VNCoreMLRequest!
     
     let model = ExpressionRecognitionModel()
-    
-    var tmpImageView : UIImageView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,21 +69,6 @@ class ViewController: UIViewController {
         }
         
         imageProcessor.delegate = self
-        
-        previewView.isHidden = true
-        
-        tmpImageView = UIImageView(frame: UIScreen.main.bounds)
-        tmpImageView?.contentMode = .scaleAspectFit
-        self.view.addSubview(tmpImageView!)
-        tmpImageView?.translatesAutoresizingMaskIntoConstraints = false
-        tmpImageView?.trailingAnchor.constraint(
-            equalTo: view.layoutMarginsGuide.trailingAnchor).isActive = true
-        tmpImageView?.leadingAnchor.constraint(
-            equalTo: view.layoutMarginsGuide.leadingAnchor).isActive = true
-        tmpImageView?.leftAnchor.constraint(
-            equalTo: view.layoutMarginsGuide.leftAnchor).isActive = true
-        tmpImageView?.rightAnchor.constraint(
-            equalTo: view.layoutMarginsGuide.rightAnchor).isActive = true
     }
     
     /**
@@ -153,9 +141,14 @@ extension ViewController{
 extension ViewController : ImageProcessorDelegate{
     
     func onImageProcessorCompleted(status: Int, faces:[CIImage]?){
-        guard let faces = faces, faces.count > 0 else{ return }
+        guard let faces = faces else{ return }
         
-        self.tmpImageView?.image = UIImage(ciImage: faces[0])
+        guard faces.count > 0 else{
+            // show status label
+            return
+        }
+        
+        // hide status label
         
         DispatchQueue.global(qos: .background).async {
             for face in faces{
