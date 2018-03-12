@@ -8,10 +8,9 @@
 
 import UIKit
 import Vision
-import Accelerate
 
 protocol ImageProcessorDelegate : class{
-    func onImageProcessorCompleted(status: Int, faces:[CIImage]?)
+    func onImageProcessorCompleted(status: Int, faces:[MLMultiArray]?)
 }
 
 class ImageProcessor{
@@ -55,7 +54,7 @@ class ImageProcessor{
             }
             grayscaleFilter.setValue(0, forKey: kCIInputSaturationKey)
             
-            var faces = [CIImage]()
+            var facesData = [MLMultiArray]()
             
             /*
              VNFaceObservation:
@@ -85,7 +84,7 @@ class ImageProcessor{
                      (to include the top of the head and some surplus padding around
                      the face/head).
                      */
-                    let paddingTop = h * 0.6
+                    let paddingTop = h * 0.55
                     let paddingBottom = h * 0.15
                     let paddingWidth = w * 0.15
                     
@@ -94,19 +93,24 @@ class ImageProcessor{
                                           width: min(w + (paddingWidth * 2), imageSize.width),
                                           height: min(h + (paddingTop + paddingBottom), imageSize.height))
                     
-                    if let croppedImage = ciImage.crop(rect: faceRect){                        
-                        grayscaleFilter.setValue(croppedImage, forKey: kCIInputImageKey)
-                        
-                        if let grayscaleCroppedImage = grayscaleFilter.value(forKey: kCIOutputImageKey) as? CIImage {
-                            faces.append(grayscaleCroppedImage)
-                        } else{
-                            print("Failed to apply filter on cropped image")
+                    // 1. Crop, 2. Resize, 3. Obtain and rescale the pixel data
+                    if let pixelData = ciImage.crop(rect: faceRect)?
+                        .resize(size: CGSize(width:48, height:48))
+                        .getGrayscalePixelData()?.map({ (pixel) -> Double in
+                            return Double(pixel)/255.0 // rescale
+                        }){
+                        // Create a MLMultiArray (for our model) and copy across the pixel data
+                        if let array = try? MLMultiArray(shape: [1, 48, 48], dataType: .double) {
+                            for (index, element) in pixelData.enumerated() {
+                                array[index] = NSNumber(value: element)
+                            }
+                            facesData.append(array)
                         }
                     }
                 }
                 
                 DispatchQueue.main.async {
-                    self.delegate?.onImageProcessorCompleted(status: 1, faces: faces)
+                    self.delegate?.onImageProcessorCompleted(status: 1, faces: facesData)
                 }
             } else{
                 DispatchQueue.main.async {
@@ -117,16 +121,4 @@ class ImageProcessor{
         }
     }
 }
-
-extension CIImage{
-    
-    func crop(rect:CGRect) -> CIImage?{
-        let context = CIContext()
-        guard let img = context.createCGImage(self, from: rect) else{
-            return nil
-        }
-        return CIImage(cgImage: img)
-    }
-}
-
 

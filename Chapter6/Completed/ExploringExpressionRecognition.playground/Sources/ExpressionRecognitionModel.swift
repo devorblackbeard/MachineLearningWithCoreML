@@ -1,5 +1,5 @@
 //
-// ExpressionRecognitionModel.swift
+// ExpressionRecognitionModelRaw.swift
 //
 // This file was automatically generated and should not be edited.
 //
@@ -9,10 +9,10 @@ import CoreML
 
 /// Model Prediction Input Type
 @available(macOS 10.13, iOS 11.0, tvOS 11.0, watchOS 4.0, *)
-public class ExpressionRecognitionModelInput : MLFeatureProvider {
+public class ExpressionRecognitionModelRawInput : MLFeatureProvider {
     
-    /// Input image; grayscale 48x48 of a face as grayscale (kCVPixelFormatType_OneComponent8) image buffer, 48 pixels wide by 48 pixels high
-    var image: CVPixelBuffer
+    /// Input image; grayscale 48x48 of a face as 1 x 48 x 48 3-dimensional array of doubles
+    public var image: MLMultiArray
     
     public var featureNames: Set<String> {
         get {
@@ -22,12 +22,12 @@ public class ExpressionRecognitionModelInput : MLFeatureProvider {
     
     public func featureValue(for featureName: String) -> MLFeatureValue? {
         if (featureName == "image") {
-            return MLFeatureValue(pixelBuffer: image)
+            return MLFeatureValue(multiArray: image)
         }
         return nil
     }
     
-    public init(image: CVPixelBuffer) {
+    public init(image: MLMultiArray) {
         self.image = image
     }
 }
@@ -35,7 +35,7 @@ public class ExpressionRecognitionModelInput : MLFeatureProvider {
 
 /// Model Prediction Output Type
 @available(macOS 10.13, iOS 11.0, tvOS 11.0, watchOS 4.0, *)
-public class ExpressionRecognitionModelOutput : MLFeatureProvider {
+public class ExpressionRecognitionModelRawOutput : MLFeatureProvider {
     
     /// Probability of each expression as dictionary of strings to doubles
     public let classLabelProbs: [String : Double]
@@ -68,7 +68,7 @@ public class ExpressionRecognitionModelOutput : MLFeatureProvider {
 
 /// Class for model loading and prediction
 @available(macOS 10.13, iOS 11.0, tvOS 11.0, watchOS 4.0, *)
-public class ExpressionRecognitionModel {
+public class ExpressionRecognitionModelRaw {
     public var model: MLModel
     
     /**
@@ -83,33 +83,33 @@ public class ExpressionRecognitionModel {
     
     /// Construct a model that automatically loads the model from the app's bundle
     public convenience init() {
-        let bundle = Bundle(for: ExpressionRecognitionModel.self)
-        let assetPath = bundle.url(forResource: "ExpressionRecognitionModel", withExtension:"mlmodelc")
+        let bundle = Bundle(for: ExpressionRecognitionModelRaw.self)
+        let assetPath = bundle.url(forResource: "ExpressionRecognitionModelRaw", withExtension:"mlmodelc")
         try! self.init(contentsOf: assetPath!)
     }
     
     /**
      Make a prediction using the structured interface
      - parameters:
-     - input: the input to the prediction as ExpressionRecognitionModelInput
+     - input: the input to the prediction as ExpressionRecognitionModelRawInput
      - throws: an NSError object that describes the problem
-     - returns: the result of the prediction as ExpressionRecognitionModelOutput
+     - returns: the result of the prediction as ExpressionRecognitionModelRawOutput
      */
-    public func prediction(input: ExpressionRecognitionModelInput) throws -> ExpressionRecognitionModelOutput {
+    public func prediction(input: ExpressionRecognitionModelRawInput) throws -> ExpressionRecognitionModelRawOutput {
         let outFeatures = try model.prediction(from: input)
-        let result = ExpressionRecognitionModelOutput(classLabelProbs: outFeatures.featureValue(for: "classLabelProbs")!.dictionaryValue as! [String : Double], classLabel: outFeatures.featureValue(for: "classLabel")!.stringValue)
+        let result = ExpressionRecognitionModelRawOutput(classLabelProbs: outFeatures.featureValue(for: "classLabelProbs")!.dictionaryValue as! [String : Double], classLabel: outFeatures.featureValue(for: "classLabel")!.stringValue)
         return result
     }
     
     /**
      Make a prediction using the convenience interface
      - parameters:
-     - image: Input image; grayscale 48x48 of a face as grayscale (kCVPixelFormatType_OneComponent8) image buffer, 48 pixels wide by 48 pixels high
+     - image: Input image; grayscale 48x48 of a face as 1 x 48 x 48 3-dimensional array of doubles
      - throws: an NSError object that describes the problem
-     - returns: the result of the prediction as ExpressionRecognitionModelOutput
+     - returns: the result of the prediction as ExpressionRecognitionModelRawOutput
      */
-    public func prediction(image: CVPixelBuffer) throws -> ExpressionRecognitionModelOutput {
-        let input_ = ExpressionRecognitionModelInput(image: image)
+    public func prediction(image: MLMultiArray) throws -> ExpressionRecognitionModelRawOutput {
+        let input_ = ExpressionRecognitionModelRawInput(image: image)
         return try self.prediction(input: input_)
     }
 }

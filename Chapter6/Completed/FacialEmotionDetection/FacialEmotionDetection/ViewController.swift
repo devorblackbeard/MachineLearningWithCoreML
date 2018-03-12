@@ -38,12 +38,7 @@ class ViewController: UIViewController {
     */
     let imageProcessor : ImageProcessor = ImageProcessor()
     
-    /**
-     An image analysis request that uses a Core ML model to process images; the processing is determined by the associated MLModel.
-     */
-    var request: VNCoreMLRequest!
-    
-    let model = ExpressionRecognitionModel()
+    let model = ExpressionRecognitionModelRaw()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,31 +53,13 @@ class ViewController: UIViewController {
                 // in this case setting it to full the screen while respecting the aspect ratio.
                 (self.previewView.layer as! AVCaptureVideoPreviewLayer).videoGravity = AVLayerVideoGravity.resizeAspectFill
                 
-                if self.initVision(){
-                    self.videoCapture.startCapturing()
-                } else{
-                    fatalError("Unable to init Vision")
-                }
+                self.videoCapture.startCapturing()
             } else{
                 fatalError("Failed to init VideoCapture")
             }
         }
         
         imageProcessor.delegate = self
-    }
-    
-    /**
-     Initilise the MLModel's Vision Reuqest; return true is successful otherwise false.
-     */
-    private func initVision() -> Bool{
-        // Try and create a container for our CoreML model which will be used with Vision requests
-        guard let visionModel = try? VNCoreMLModel(for:model.model) else{ return false }
-        
-        // Create the CoreML request
-        self.request = VNCoreMLRequest(model: visionModel, completionHandler:onVisionRequestComplete)
-        self.request.imageCropAndScaleOption = .centerCrop
-        
-        return true
     }
 }
 
@@ -130,9 +107,14 @@ extension ViewController{
             return result
         }
         
-        DispatchQueue.main.sync {
-            viewVisualizer.update(labelConference: emotions)
+        print("-------")
+        for (k,v) in emotions{
+            print("\(k) \(v)")
         }
+        
+//        DispatchQueue.main.sync {
+//            viewVisualizer.update(labelConference: emotions)
+//        }
     }
 }
 
@@ -140,22 +122,26 @@ extension ViewController{
 
 extension ViewController : ImageProcessorDelegate{
     
-    func onImageProcessorCompleted(status: Int, faces:[CIImage]?){
+    func onImageProcessorCompleted(status: Int, faces:[MLMultiArray]?){
         guard let faces = faces else{ return }
         
+        self.statusLabel.isHidden = faces.count > 0
+        
         guard faces.count > 0 else{
-            // show status label
             return
         }
         
-        // hide status label
         
         DispatchQueue.global(qos: .background).async {
-            for face in faces{
-                // Create the Handler which will be responsible for the processing of this image.
-                let handler = VNImageRequestHandler(
-                    ciImage: face)
-                try? handler.perform([self.request])
+            for faceData in faces{
+                
+                let prediction = try? self.model.prediction(image: faceData)
+                
+                if let classPredictions = prediction?.classLabelProbs{
+                    DispatchQueue.main.sync {
+                        self.viewVisualizer.update(labelConference: classPredictions)
+                    }
+                }
             }
         }
     }

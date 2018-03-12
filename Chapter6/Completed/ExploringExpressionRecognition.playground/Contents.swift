@@ -26,7 +26,11 @@ if let angryImage = UIImage(named:"images/angry.png"){
     images.append(angryImage)
 }
 
-let faceIdx = 4 // image index of our images array
+if let emotientImage = UIImage(named:"images/emotient.jpg"){
+    images.append(emotientImage)
+}
+
+let faceIdx = 5 // image index of our images array
 let imageView = UIImageView(image: images[faceIdx])
 imageView.contentMode = .scaleAspectFit
 
@@ -307,6 +311,8 @@ if let faceLandmarkDetectionResults = faceLandmarks.results as? [VNFaceObservati
 
 // Restore the image of our ImageView
 imageView.image = images[faceIdx]
+// Instantiate our model
+let model = ExpressionRecognitionModelRaw()
 
 if let faceDetectionResults = faceDetection.results as? [VNFaceObservation]{
     for face in faceDetectionResults{
@@ -331,69 +337,75 @@ if let faceDetectionResults = faceDetection.results as? [VNFaceObservation]{
              (to include the top of the head and some surplus padding around
              the face/head).
              */
-            let paddingTop = faceRect.height * 0.57
-            let paddingBottom = faceRect.height * 0.15
-            let paddingWidth = faceRect.width * 0.15
+            let paddingHeight = faceRect.height * 0.15
+            let paddingWidth = faceRect.width * 0.1
             
             let invertedY = imageSize.height - (faceRect.origin.y + faceRect.height)
             
             let croppingRect = CGRect(x: max(x - paddingWidth, 0),
-                                          y: max(invertedY - paddingTop, 0),
+                                          y: max(invertedY - paddingHeight, 0),
                                           width: min(w + paddingWidth*2, imageSize.width),
-                                          height: min(h + paddingTop + paddingBottom, imageSize.height))
+                                          height: min(h + (paddingHeight * 2), imageSize.height))
             
             // visualisation of the face
             imageView.drawRect(rect: croppingRect)
             
+            
+            // Create a CIImage from the referenced CGImage
+            let ciImage = CIImage(cgImage:images[faceIdx].cgImage!)
+            
             // Crop out the face
-            if let croppedCGImage = images[faceIdx].cgImage?.cropping(to: croppingRect){
-                imageView.image = UIImage(cgImage:croppedCGImage)
+            // NB here we don't need to invert the cropping rect (Core Graphics)
+            let cropRect = CGRect(x: max(x - paddingWidth, 0),
+                                      y: max(y - paddingHeight, 0),
+                                      width: min(w + paddingWidth*2, imageSize.width),
+                                      height: min(h + (paddingHeight*2), imageSize.height))
+            guard let croppedCIImage = ciImage.crop(rect: cropRect) else{
+                fatalError("Failed to cropped image")
             }
             
-            // Let's now grayscale the image
-            let model = try VNCoreMLModel(for: ExpressionRecognitionModel().model)
+            // Create a UIImage so we can inspect it in the Playground
+            let croppedImage = UIImage(ciImage: croppedCIImage)
             
-            let request = VNCoreMLRequest(
-                model: model,
-                completionHandler: { (request, error) in
-                    /*
-                     A request can be given a hander which is called once
-                     the inference has been performed; the resutls is of type VNRequest
-                     and includes a results variable including ... the results of the
-                     inference - if no error has occured.
-                     
-                     The results, in our case, are observations (array of VNClassificationObservation); this datatype is returned by VNCoreMLRequests that are using a model performing
-                     classification (like our expression recognition model).
-                     */
-                    guard let observations = request.results as? [VNClassificationObservation] else{ return }
-                    
-                    /*
-                     Each observation consists of a label and confidence level;
-                     observations are sorted by confidence - let's have a look.
-                    */
-                    for observation in observations{
-                        print("\(observation.identifier) \(observation.confidence)")
-                    }
-                    
-                    DispatchQueue.main.sync{
-                        print("Classification finished")
-                    }
+            // Resize
+            let resizedCroppedCIImage = croppedCIImage.resize(
+                size: CGSize(width:48, height:48))
+            
+            // Create a UIImage so we can inspect it in the Playground
+            let resizedCroppedImage = UIImage(ciImage: resizedCroppedCIImage)
+            
+            // Let's now grayscaled byte data for the image
+            guard let resizedCroppedCIImageData =
+                resizedCroppedCIImage.getGrayscalePixelData() else{
+                fatalError("Failed to get (grayscale) pixel data from image")
+            }
+            
+            // Scale the pixel data (dividing by 255.0)
+            let scaledImageData = resizedCroppedCIImageData.map({ (pixel) -> Double in
+                return Double(pixel)/255.0
             })
-            request.imageCropAndScaleOption = .centerCrop
             
+            // Create a MLMultiArray which we'll use to feed into our model
+            guard let array = try? MLMultiArray(shape: [1, 48, 48], dataType: .double) else {
+                fatalError("Unable to create MLMultiArray")
+            }
+            
+            // Copy our pixel data across to the MLMultiArray we've just created
+            for (index, element) in scaledImageData.enumerated() {
+                array[index] = NSNumber(value: element)
+            }
+            
+            // Perform inference
             DispatchQueue.global(qos: .background).async {
-                if let pixelBuffer = images[faceIdx].toPixelBuffer(){
-                    let imageOrientation = images[faceIdx].imageOrientation
-                    
-                    let handler = VNImageRequestHandler(
-                        cvPixelBuffer: pixelBuffer,
-                        orientation: CGImagePropertyOrientation(imageOrientation),
-                        options: [:])
-                    
-                    try? handler.perform([request])
-                    
-                } else{
-                    fatalError("Unable to get the pixel buffer from the image")
+                let prediction = try? model.prediction(
+                    image: array)
+                
+                if let classPredictions = prediction?.classLabelProbs{
+                    DispatchQueue.main.sync {
+                        for (k, v) in classPredictions{
+                            print("\(k) \(v)")
+                        }
+                    }
                 }
             }
         }

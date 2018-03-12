@@ -11,12 +11,14 @@
 		84366390204B4AF8007815A7 /* VideoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8436638F204B4AF8007815A7 /* VideoCapture.swift */; };
 		84366392204B4B50007815A7 /* EmotionVisualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84366391204B4B50007815A7 /* EmotionVisualizerView.swift */; };
 		84366394204B514B007815A7 /* ImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84366393204B514B007815A7 /* ImageProcessor.swift */; };
+		848C94862052802E0017BC85 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848C94852052802E0017BC85 /* UIColorExtension.swift */; };
+		84B4A79E2054383A00C0371B /* ExpressionRecognitionModelRaw.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 84B4A79D2054383A00C0371B /* ExpressionRecognitionModelRaw.mlmodel */; };
+		84B4A7A020543B2100C0371B /* CIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B4A79F20543B2100C0371B /* CIImageExtension.swift */; };
 		84F792E72044B54900DB4402 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F792E62044B54900DB4402 /* AppDelegate.swift */; };
 		84F792E92044B54900DB4402 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F792E82044B54900DB4402 /* ViewController.swift */; };
 		84F792EC2044B54900DB4402 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84F792EA2044B54900DB4402 /* Main.storyboard */; };
 		84F792EE2044B54900DB4402 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84F792ED2044B54900DB4402 /* Assets.xcassets */; };
 		84F792F12044B54900DB4402 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84F792EF2044B54900DB4402 /* LaunchScreen.storyboard */; };
-		84F792F92044B57500DB4402 /* ExpressionRecognitionModel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 84F792F82044B57500DB4402 /* ExpressionRecognitionModel.mlmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,9 @@
 		8436638F204B4AF8007815A7 /* VideoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCapture.swift; sourceTree = "<group>"; };
 		84366391204B4B50007815A7 /* EmotionVisualizerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionVisualizerView.swift; sourceTree = "<group>"; };
 		84366393204B514B007815A7 /* ImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessor.swift; sourceTree = "<group>"; };
+		848C94852052802E0017BC85 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UIColorExtension.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter6/Completed/FacialEmotionDetection/FacialEmotionDetection/UIColorExtension.swift"; sourceTree = "<group>"; };
+		84B4A79D2054383A00C0371B /* ExpressionRecognitionModelRaw.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = ExpressionRecognitionModelRaw.mlmodel; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/CoreMLModels/Chapter6/ExpressionRecognitionModelRaw.mlmodel"; sourceTree = "<group>"; };
+		84B4A79F20543B2100C0371B /* CIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIImageExtension.swift; sourceTree = "<group>"; };
 		84F792E32044B54900DB4402 /* FacialEmotionDetection.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FacialEmotionDetection.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84F792E62044B54900DB4402 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84F792E82044B54900DB4402 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -31,7 +36,6 @@
 		84F792ED2044B54900DB4402 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		84F792F02044B54900DB4402 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84F792F22044B54900DB4402 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		84F792F82044B57500DB4402 /* ExpressionRecognitionModel.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = ExpressionRecognitionModel.mlmodel; path = ../../../../CoreMLModels/ExpressionRecognitionModel.mlmodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,7 +68,7 @@
 		84F792E52044B54900DB4402 /* FacialEmotionDetection */ = {
 			isa = PBXGroup;
 			children = (
-				84F792F82044B57500DB4402 /* ExpressionRecognitionModel.mlmodel */,
+				84B4A79D2054383A00C0371B /* ExpressionRecognitionModelRaw.mlmodel */,
 				84F792E62044B54900DB4402 /* AppDelegate.swift */,
 				84F792E82044B54900DB4402 /* ViewController.swift */,
 				84F792EA2044B54900DB4402 /* Main.storyboard */,
@@ -75,6 +79,8 @@
 				8436638F204B4AF8007815A7 /* VideoCapture.swift */,
 				84366391204B4B50007815A7 /* EmotionVisualizerView.swift */,
 				84366393204B514B007815A7 /* ImageProcessor.swift */,
+				848C94852052802E0017BC85 /* UIColorExtension.swift */,
+				84B4A79F20543B2100C0371B /* CIImageExtension.swift */,
 			);
 			path = FacialEmotionDetection;
 			sourceTree = "<group>";
@@ -152,12 +158,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				84366392204B4B50007815A7 /* EmotionVisualizerView.swift in Sources */,
+				84B4A79E2054383A00C0371B /* ExpressionRecognitionModelRaw.mlmodel in Sources */,
 				8436638E204B4A7C007815A7 /* CaptureVideoPreviewView.swift in Sources */,
 				84366390204B4AF8007815A7 /* VideoCapture.swift in Sources */,
+				848C94862052802E0017BC85 /* UIColorExtension.swift in Sources */,
+				84B4A7A020543B2100C0371B /* CIImageExtension.swift in Sources */,
 				84F792E92044B54900DB4402 /* ViewController.swift in Sources */,
 				84366394204B514B007815A7 /* ImageProcessor.swift in Sources */,
 				84F792E72044B54900DB4402 /* AppDelegate.swift in Sources */,
-				84F792F92044B57500DB4402 /* ExpressionRecognitionModel.mlmodel in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
