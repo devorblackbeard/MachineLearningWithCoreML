@@ -30,7 +30,7 @@ if let emotientImage = UIImage(named:"images/emotient.jpg"){
     images.append(emotientImage)
 }
 
-let faceIdx = 5 // image index of our images array
+let faceIdx = 4 // image index of our images array
 let imageView = UIImageView(image: images[faceIdx])
 imageView.contentMode = .scaleAspectFit
 
@@ -336,30 +336,30 @@ if let faceDetectionResults = faceDetection.results as? [VNFaceObservation]{
              Along with inverting the face bounds we want to pad it out
              (to include the top of the head and some surplus padding around
              the face/head).
+             NB; 'Magic' numbers were used for the padding values i.e.
+             the values were identified through 'iterative experimentation'.
              */
-            let paddingHeight = faceRect.height * 0.15
-            let paddingWidth = faceRect.width * 0.1
-            
             let invertedY = imageSize.height - (faceRect.origin.y + faceRect.height)
             
-            let croppingRect = CGRect(x: max(x - paddingWidth, 0),
-                                          y: max(invertedY - paddingHeight, 0),
-                                          width: min(w + paddingWidth*2, imageSize.width),
-                                          height: min(h + (paddingHeight * 2), imageSize.height))
+            let croppingRect = CGRect(
+                x: max(x - (faceRect.width * 0.1), 0),
+                y: max(invertedY - (faceRect.height * 0.2), 0),
+                width: min(w + (faceRect.width * 0.2), imageSize.width),
+                height: min(h + (faceRect.height * 0.2), imageSize.height))
             
             // visualisation of the face
             imageView.drawRect(rect: croppingRect)
-            
             
             // Create a CIImage from the referenced CGImage
             let ciImage = CIImage(cgImage:images[faceIdx].cgImage!)
             
             // Crop out the face
             // NB here we don't need to invert the cropping rect (Core Graphics)
-            let cropRect = CGRect(x: max(x - paddingWidth, 0),
-                                      y: max(y - paddingHeight, 0),
-                                      width: min(w + paddingWidth*2, imageSize.width),
-                                      height: min(h + (paddingHeight*2), imageSize.height))
+            let cropRect = CGRect(
+                x: max(x - (faceRect.width * 0.15), 0),
+                y: max(y - (faceRect.height * 0.05), 0),
+                width: min(w + (faceRect.width * 0.3), imageSize.width),
+                height: min(h + (faceRect.height * 0.7), imageSize.height))
             guard let croppedCIImage = ciImage.crop(rect: cropRect) else{
                 fatalError("Failed to cropped image")
             }
