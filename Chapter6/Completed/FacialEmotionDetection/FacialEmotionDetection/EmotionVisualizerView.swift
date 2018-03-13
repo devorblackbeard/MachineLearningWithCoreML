@@ -14,6 +14,8 @@ class EmotionVisualizerView: UIView {
     
     var targetEmotions : [String:Double]?
     
+    var barColors : [String:UIColor]?
+    
     /** spacing between bars */
     var barSpacing : CGFloat = 1.0{
         didSet{
@@ -129,9 +131,11 @@ class EmotionVisualizerView: UIView {
     private func initEmotions(initialValues:[String:Double]){
         self.currentEmotions = [String:Double]()
         self.targetEmotions = initialValues
+        self.barColors = [String:UIColor]()
         
         self.targetEmotions?.keys.forEach({ (emotionLabel) in
             self.currentEmotions![emotionLabel] = 0.0
+            self.barColors![emotionLabel] = self.barColorLow
         })
     }
 }
@@ -193,7 +197,7 @@ extension EmotionVisualizerView{
             ctx.rotate(by: -CGFloat.pi/2)
             
             k.draw(
-                with:CGRect(x: -(y + h - 5), y: x+w/2, width: 100, height: w),
+                with:CGRect(x: -(y + h - 5), y: x+w/3, width: 100, height: w),
                 options: .usesLineFragmentOrigin,
                 attributes: labelAttrs,
                 context: nil)
@@ -201,8 +205,10 @@ extension EmotionVisualizerView{
             ctx.restoreGState()
             
             // bar color
-            let c = self.getBarColor(label:k, value:v)
-            ctx.setFillColor(c.cgColor)
+            let currentC = self.barColors![k]!
+            let targetC = self.getBarColor(label:k, value:v)
+            self.barColors![k] = UIColor.lerp(src: currentC, target: targetC, t: 0.1)
+            ctx.setFillColor(self.barColors![k]!.cgColor)
             
             // draw rect
             ctx.fill(CGRect(x: x, y: y, width: w, height: h))
@@ -219,11 +225,11 @@ extension EmotionVisualizerView{
         if value >= 0.5{
             return self.barColorHigh
         }
-        
+
         if value >= 0.3{
             return self.barColorMedium
         }
-        
+
         return self.barColorLow
     }
 }

@@ -20,4 +20,41 @@ extension UIColor {
                   blue: CGFloat(blue)/255,
                   alpha: alpha)
     }
+    
+    /*
+     func getRGBAComponents() -> (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)?
+     {
+     var (red, green, blue, alpha) = (CGFloat(0.0), CGFloat(0.0), CGFloat(0.0), CGFloat(0.0))
+     if self.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+     {
+     return (red, green, blue, alpha)
+     }
+     else
+     {
+     return nil
+     }
+     }
+ */
+    
+    func getRGBA() -> [CGFloat]{
+        var red : CGFloat = 0.0, green : CGFloat = 0.0, blue : CGFloat = 0.0, alpha : CGFloat = 0.0
+        self.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        return [red, green, blue, alpha]
+    }
+    
+    /**
+     Linear interpolation between two colors 
+    */
+    static func lerp(src:UIColor, target:UIColor, t:CGFloat) -> UIColor{
+        let srcComponents = src.getRGBA()
+        let targetComponents = target.getRGBA()
+        
+        let color = UIColor(
+            red: srcComponents[0] + (targetComponents[0]-srcComponents[0]) * t,
+            green: srcComponents[1] + (targetComponents[1]-srcComponents[1]) * t,
+            blue: srcComponents[2] + (targetComponents[2]-srcComponents[2]) * t,
+            alpha: srcComponents[3] + (targetComponents[3]-srcComponents[3]) * t)
+        
+        return color
+    }
 }
