@@ -40,6 +40,8 @@ class ViewController: UIViewController {
     
     let model = ExpressionRecognitionModelRaw()
     
+    var tmpImageView : UIImageView?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -60,6 +62,19 @@ class ViewController: UIViewController {
         }
         
         imageProcessor.delegate = self
+        
+        tmpImageView = UIImageView(frame: UIScreen.main.bounds)
+        tmpImageView?.contentMode = .scaleAspectFit
+        self.view.addSubview(tmpImageView!)
+        tmpImageView?.translatesAutoresizingMaskIntoConstraints = false
+        tmpImageView?.trailingAnchor.constraint(
+            equalTo: view.layoutMarginsGuide.trailingAnchor).isActive = true
+        tmpImageView?.leadingAnchor.constraint(
+            equalTo: view.layoutMarginsGuide.leadingAnchor).isActive = true
+        tmpImageView?.leftAnchor.constraint(
+            equalTo: view.layoutMarginsGuide.leftAnchor).isActive = true
+        tmpImageView?.rightAnchor.constraint(
+            equalTo: view.layoutMarginsGuide.rightAnchor).isActive = true
     }
 }
 
@@ -131,12 +146,13 @@ extension ViewController : ImageProcessorDelegate{
             return
         }
         
+        self.tmpImageView?.image = UIImage(ciImage: self.imageProcessor.tmpImage!)
         
         DispatchQueue.global(qos: .background).async {
             for faceData in faces{
-                
+
                 let prediction = try? self.model.prediction(image: faceData)
-                
+
                 if let classPredictions = prediction?.classLabelProbs{
                     DispatchQueue.main.sync {
                         self.viewVisualizer.update(labelConference: classPredictions)

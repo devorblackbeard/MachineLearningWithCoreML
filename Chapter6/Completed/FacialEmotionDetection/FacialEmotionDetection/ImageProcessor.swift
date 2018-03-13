@@ -32,6 +32,8 @@ class ImageProcessor{
      */
     let faceDetectionRequest = VNSequenceRequestHandler()
     
+    public var tmpImage : CIImage?
+    
     init(){
         
     }
@@ -84,14 +86,19 @@ class ImageProcessor{
                      (to include the top of the head and some surplus padding around
                      the face/head).
                      */
-                    let paddingTop = h * 0.55
-                    let paddingBottom = h * 0.15
+                    let paddingTop = h * 0.2
+                    let paddingBottom = h * 0.55
                     let paddingWidth = w * 0.15
                     
                     let faceRect = CGRect(x: max(x - paddingWidth, 0),
                                           y: max(0, y - paddingTop),
                                           width: min(w + (paddingWidth * 2), imageSize.width),
-                                          height: min(h + (paddingTop + paddingBottom), imageSize.height))
+                                          height: min(h + paddingBottom, imageSize.height))
+                    
+                    // 1. Crop, 2. Resize, 3. Obtain and rescale the pixel data
+                    if let croppedImage = ciImage.crop(rect: faceRect){
+                        self.tmpImage = croppedImage
+                    }
                     
                     // 1. Crop, 2. Resize, 3. Obtain and rescale the pixel data
                     if let pixelData = ciImage.crop(rect: faceRect)?

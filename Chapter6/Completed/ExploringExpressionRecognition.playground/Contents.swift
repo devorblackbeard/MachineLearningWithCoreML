@@ -30,6 +30,10 @@ if let emotientImage = UIImage(named:"images/emotient.jpg"){
     images.append(emotientImage)
 }
 
+if let meImage = UIImage(named:"images/me.png"){
+    images.append(meImage)
+}
+
 let faceIdx = 4 // image index of our images array
 let imageView = UIImageView(image: images[faceIdx])
 imageView.contentMode = .scaleAspectFit
@@ -357,9 +361,9 @@ if let faceDetectionResults = faceDetection.results as? [VNFaceObservation]{
             // NB here we don't need to invert the cropping rect (Core Graphics)
             let cropRect = CGRect(
                 x: max(x - (faceRect.width * 0.15), 0),
-                y: max(y - (faceRect.height * 0.05), 0),
+                y: max(y - (faceRect.height * 0.1), 0),
                 width: min(w + (faceRect.width * 0.3), imageSize.width),
-                height: min(h + (faceRect.height * 0.7), imageSize.height))
+                height: min(h + (faceRect.height * 0.6), imageSize.height))
             guard let croppedCIImage = ciImage.crop(rect: cropRect) else{
                 fatalError("Failed to cropped image")
             }
