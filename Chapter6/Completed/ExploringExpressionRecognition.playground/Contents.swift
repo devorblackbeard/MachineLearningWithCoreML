@@ -18,23 +18,7 @@ for i in 1...3{
     images.append(image)
 }
 
-if let happyImage = UIImage(named:"images/happy.png"){
-    images.append(happyImage)
-}
-
-if let angryImage = UIImage(named:"images/angry.png"){
-    images.append(angryImage)
-}
-
-if let emotientImage = UIImage(named:"images/emotient.jpg"){
-    images.append(emotientImage)
-}
-
-if let meImage = UIImage(named:"images/me.png"){
-    images.append(meImage)
-}
-
-let faceIdx = 4 // image index of our images array
+let faceIdx = 0 // image index of our images array
 let imageView = UIImageView(image: images[faceIdx])
 imageView.contentMode = .scaleAspectFit
 

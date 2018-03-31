@@ -21,21 +21,6 @@ extension UIColor {
                   alpha: alpha)
     }
     
-    /*
-     func getRGBAComponents() -> (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)?
-     {
-     var (red, green, blue, alpha) = (CGFloat(0.0), CGFloat(0.0), CGFloat(0.0), CGFloat(0.0))
-     if self.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-     {
-     return (red, green, blue, alpha)
-     }
-     else
-     {
-     return nil
-     }
-     }
- */
-    
     func getRGBA() -> [CGFloat]{
         var red : CGFloat = 0.0, green : CGFloat = 0.0, blue : CGFloat = 0.0, alpha : CGFloat = 0.0
         self.getRed(&red, green: &green, blue: &blue, alpha: &alpha)

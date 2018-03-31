@@ -56,33 +56,38 @@ extension CIImage{
         
         // Create a pixel buffer at the size our model needs
         var nullablePixelBuffer: CVPixelBuffer? = nil
-        let status = CVPixelBufferCreate(kCFAllocatorDefault,
-                                         Int(self.extent.size.width),
-                                         Int(self.extent.size.height),
-                                         kCVPixelFormatType_OneComponent8,
-                                         attributes,
-                                         &nullablePixelBuffer)
+        let status = CVPixelBufferCreate(
+            kCFAllocatorDefault,
+            Int(self.extent.size.width),
+            Int(self.extent.size.height),
+            kCVPixelFormatType_OneComponent8,
+            attributes,
+            &nullablePixelBuffer)
         
         // Evaluate staus and unwrap nullablePixelBuffer
         guard status == kCVReturnSuccess, let pixelBuffer = nullablePixelBuffer
             else { return nil }
         
         // Render the CIImage to our CVPixelBuffer and return it
-        CVPixelBufferLockBaseAddress(pixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
+        CVPixelBufferLockBaseAddress(
+            pixelBuffer,
+            CVPixelBufferLockFlags(rawValue: 0))
         
-        context.render(self,
-                       to: pixelBuffer,
-                       bounds: CGRect(x: 0,
-                                      y: 0,
-                                      width: self.extent.size.width,
-                                      height: self.extent.size.height),
-                       colorSpace:CGColorSpaceCreateDeviceGray())
+        context.render(
+            self,
+            to: pixelBuffer,
+            bounds: CGRect(x: 0,
+                           y: 0,
+                           width: self.extent.size.width,
+                           height: self.extent.size.height),
+            colorSpace:CGColorSpaceCreateDeviceGray())
         
         
         // Get the number of bytes per row for the pixel buffer
         // Get the pixel buffer width and height
         let width = CVPixelBufferGetWidth(pixelBuffer)
         let height = CVPixelBufferGetHeight(pixelBuffer);
+        
         if let baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer) {
             pixelData = Array<UInt8>(repeating: 0, count: width * height)
             let buf = baseAddress.assumingMemoryBound(to: UInt8.self)
@@ -91,7 +96,9 @@ extension CIImage{
             }
         }
         
-        CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
+        CVPixelBufferUnlockBaseAddress(
+            pixelBuffer,
+            CVPixelBufferLockFlags(rawValue: 0))
         
         return pixelData
     }

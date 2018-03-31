@@ -23,7 +23,7 @@ class ImageProcessor{
      An image analysis request that finds faces within an image.
      */
     let faceDetection = VNDetectFaceRectanglesRequest()
-    
+
     /*
      VNSequenceRequestHandler:
      https://developer.apple.com/documentation/vision/VNSequenceRequestHandler
@@ -31,8 +31,6 @@ class ImageProcessor{
      sequence of multiple images.
      */
     let faceDetectionRequest = VNSequenceRequestHandler()
-    
-    public var tmpImage : CIImage?
     
     init(){
         
@@ -44,18 +42,12 @@ class ImageProcessor{
             let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
             let width = ciImage.extent.width
             let height = ciImage.extent.height
-            
+
             // Perform face detection
             try? self.faceDetectionRequest.perform(
                 [self.faceDetection],
                 on: ciImage)
-            
-            // Grayscale filter
-            guard let grayscaleFilter = CIFilter(name: "CIColorControls") else{
-                fatalError("Unable to init CIFilter 'CIColorControls'")
-            }
-            grayscaleFilter.setValue(0, forKey: kCIInputSaturationKey)
-            
+
             var facesData = [MLMultiArray]()
             
             /*
@@ -66,10 +58,10 @@ class ImageProcessor{
             if let faceDetectionResults = self.faceDetection.results as? [VNFaceObservation]{
                 for face in faceDetectionResults{
                     let bbox = face.boundingBox
-                    
+
                     let imageSize = CGSize(width:width,
                                            height:height)
-                    
+
                     /*
                      The face's bounding box is normalised in respect to the
                      size of the image i.e. is in a range of 0.0 - 1.0 where
@@ -80,7 +72,7 @@ class ImageProcessor{
                     let h = bbox.height * imageSize.height
                     let x = bbox.origin.x * imageSize.width
                     let y = bbox.origin.y * imageSize.height
-                    
+
                     /*
                      Along with inverting the face bounds we want to pad it out
                      (to include the top of the head and some surplus padding around
@@ -89,18 +81,13 @@ class ImageProcessor{
                     let paddingTop = h * 0.2
                     let paddingBottom = h * 0.55
                     let paddingWidth = w * 0.15
-                    
+
                     let faceRect = CGRect(x: max(x - paddingWidth, 0),
                                           y: max(0, y - paddingTop),
                                           width: min(w + (paddingWidth * 2), imageSize.width),
                                           height: min(h + paddingBottom, imageSize.height))
                     
-                    // 1. Crop, 2. Resize, 3. Obtain and rescale the pixel data
-                    if let croppedImage = ciImage.crop(rect: faceRect){
-                        self.tmpImage = croppedImage
-                    }
-                    
-                    // 1. Crop, 2. Resize, 3. Obtain and rescale the pixel data
+                    // 1. Crop, 2. Resize, 3. Obtain and rescaled pixel data
                     if let pixelData = ciImage.crop(rect: faceRect)?
                         .resize(size: CGSize(width:48, height:48))
                         .getGrayscalePixelData()?.map({ (pixel) -> Double in
@@ -128,4 +115,3 @@ class ImageProcessor{
         }
     }
 }
-
