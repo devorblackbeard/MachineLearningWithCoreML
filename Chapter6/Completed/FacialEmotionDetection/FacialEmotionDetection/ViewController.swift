@@ -83,7 +83,7 @@ extension ViewController : VideoCaptureDelegate{
     }
 }
 
-// MARK: - VideoCaptureDelegate
+// MARK: - ImageProcessorDelegate
 
 extension ViewController : ImageProcessorDelegate{
     

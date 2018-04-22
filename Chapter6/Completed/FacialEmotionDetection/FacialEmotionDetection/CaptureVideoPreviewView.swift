@@ -6,8 +6,8 @@
 //  Copyright © 2018 PacktPub. All rights reserved.
 //
 
-import AVFoundation
 import UIKit
+import AVFoundation
 
 class CapturePreviewView: UIView {
     
