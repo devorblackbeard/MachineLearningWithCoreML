@@ -22,7 +22,13 @@ class StyleTransferViewController: UIViewController {
     */
     weak var imageView : UIImageView?
     
+    weak var activityIndicatorView : UIActivityIndicatorView?
+    
     weak var delegate : StyleTransferViewControllerDelegate?
+    
+    var styleImages  = [UIImage]()
+    
+    var styleImageButtonSize : CGSize?
     
     /**
      Content image that we will use as the input for our model
@@ -33,6 +39,16 @@ class StyleTransferViewController: UIViewController {
                 let contentImage = self.contentImage{
                 imageView.image = UIImage(ciImage: contentImage)
             }
+        }
+    }
+    
+    var isProgressingImage : Bool{
+        get{
+            guard let activityIndicatorView = self.activityIndicatorView else{
+                return false
+            }
+            
+            return !activityIndicatorView.isAnimating
         }
     }
     
@@ -48,6 +64,27 @@ class StyleTransferViewController: UIViewController {
         
         imageProcessor.delegate = self
     }
+    
+    private func stylizeContentImage(){
+        guard let contentImage = self.contentImage else{
+            return
+        }
+        
+        // create and add a blur effect
+        let effect = UIBlurEffect(style: .regular)
+        let visualEffectsView = UIVisualEffectView(effect: effect)
+        visualEffectsView.tag = 99
+        visualEffectsView.frame = self.view.bounds
+        visualEffectsView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.view.addSubview(visualEffectsView)
+        
+        if let activityIndicatorView = self.activityIndicatorView{
+            self.view.bringSubview(toFront: activityIndicatorView)
+            activityIndicatorView.startAnimating()
+        }
+        
+        self.imageProcessor.processImage(ciImage: contentImage)
+    }
 }
 
 // MARK: - ImageProcessorDelegate
@@ -59,9 +96,15 @@ extension StyleTransferViewController : ImageProcessorDelegate{
             return
         }
         
-        let imageView = UIImageView(frame:CGRect(x: 0, y: 0, width: 320, height: 320))
-        imageView.image = UIImage(cgImage: stylizedImage)
-        self.view.addSubview(imageView)
+        // Stop animating activity indiactor
+        self.activityIndicatorView?.stopAnimating()
+        
+        // Remove blur
+        guard let effectView = self.view.viewWithTag(99) else { return }
+        effectView.removeFromSuperview()
+        
+        // Update image
+        self.imageView?.image = UIImage(cgImage: stylizedImage)
     }
 }
 
@@ -70,6 +113,7 @@ extension StyleTransferViewController : ImageProcessorDelegate{
 extension StyleTransferViewController{
     
     func initUI(){
+        // load style images
         let imagesNames = [
             "van_cogh", "van_cogh_selected",
             "hokusai", "hokusai_selected",
@@ -77,26 +121,57 @@ extension StyleTransferViewController{
             "picasso", "picasso_selected"]
         
         for i in stride(from: 0, to: imagesNames.count, by: 2){
-            let image = imagesNames[i]
-            let imageSelected = imagesNames[i+1]
+            let imageSrc = imagesNames[i]
+            let imageSelectedSrc = imagesNames[i+1]
             
+            guard let image = UIImage(named: imageSrc),
+                let imageSelected = UIImage(named: imageSelectedSrc) else{
+                    fatalError("\(imageSrc) or \(imageSelectedSrc) not available")
+            }
             
+            self.styleImages.append(image)
+            self.styleImages.append(imageSelected)
+            
+            if styleImageButtonSize == nil{
+                styleImageButtonSize = CGSize(width: self.view.bounds.width * 0.3,
+                                         height: self.view.bounds.width * 0.3 * (image.size.height/image.size.width))
+            }
         }
         
-        let imageView = UIImageView(frame: self.view.bounds)
+        let collectionViewLayout = UICollectionViewFlowLayout()
+        collectionViewLayout.scrollDirection = .horizontal
+        collectionViewLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        collectionViewLayout.itemSize = CGSize(width: styleImageButtonSize!.width,
+                                               height: styleImageButtonSize!.height)
+        collectionViewLayout.minimumLineSpacing = 0
+        collectionViewLayout.minimumInteritemSpacing = 0
+        let collectionView = UICollectionView(frame: CGRect(x: 0,
+                                                            y: self.view.bounds.height-styleImageButtonSize!.height,
+                                                            width: self.view.bounds.width,
+                                                            height: styleImageButtonSize!.height),
+                                              collectionViewLayout: collectionViewLayout)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.backgroundColor = UIColor.clear
+        collectionView.register(StyleViewCell.self, forCellWithReuseIdentifier: "StyleViewCell")
+        self.view.addSubview(collectionView)
+        collectionView.reloadData()
+        
+        let imageView = UIImageView(frame: CGRect(
+            origin: self.view.bounds.origin,
+            size: CGSize(width: self.view.bounds.width,
+                         height: self.view.bounds.height - (styleImageButtonSize!.height))))
         self.view.addSubview(imageView)
         
         imageView.topAnchor.constraint(equalTo: self.view.topAnchor,
                                          constant: 0).isActive = true
-        imageView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor,
-                                            constant: 0).isActive = true
         imageView.leftAnchor.constraint(equalTo: self.view.leftAnchor,
                                           constant: 0).isActive = true
         imageView.rightAnchor.constraint(equalTo: self.view.rightAnchor,
                                            constant: 0).isActive = true
         
         self.imageView = imageView
-        self.imageView?.contentMode = .scaleAspectFit
+        self.imageView?.contentMode = .scaleAspectFill
         
         // Close button
         let closeButtonImage = UIImage(named: "close_button")
@@ -112,6 +187,12 @@ extension StyleTransferViewController{
         closeButton.addTarget(self,
                              action: #selector(StyleTransferViewController.onCloseButtonTapped(_:)), for: .touchUpInside)
         
+        let activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        activityIndicatorView.center = self.view.center
+        activityIndicatorView.hidesWhenStopped = true
+        view.addSubview(activityIndicatorView)
+        self.activityIndicatorView = activityIndicatorView
+        
         if let contentImage = self.contentImage{
             imageView.image = UIImage(ciImage:contentImage) 
         }
@@ -121,7 +202,42 @@ extension StyleTransferViewController{
         self.dismiss(animated: false) {
             self.delegate?.onStyleTransferViewDismissed(sender: self)
         }
-    }    
+    }
+}
+
+// MARK: - UICollectionViewDataSource & UICollectionViewDelegate
+
+extension StyleTransferViewController : UICollectionViewDataSource, UICollectionViewDelegate{
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.styleImages.count / 2
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StyleViewCell", for: indexPath) as! StyleViewCell
+        let imageIndex = indexPath.row * 2
+        cell.image = styleImages[imageIndex]
+        cell.selectedImage = styleImages[imageIndex+1]
+        cell.imageStyle = ImageProcessor.ImageStyle(rawValue: indexPath.row+1)!
+        cell.isSelected = imageProcessor.style == cell.imageStyle
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool{
+        let cell = collectionView.cellForItem(at: indexPath) as! StyleViewCell
+        return !cell.isSelected
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath){
+        imageProcessor.style = (collectionView.cellForItem(at: indexPath) as! StyleViewCell).imageStyle
+        self.stylizeContentImage()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath){
+        // Restore image to it's original state
+        imageProcessor.style = .None
+        imageView?.image = UIImage(ciImage: contentImage!)
+    }
 }
 
 

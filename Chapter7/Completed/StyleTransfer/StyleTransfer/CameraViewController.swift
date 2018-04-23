@@ -15,7 +15,7 @@ class CameraViewController: UIViewController {
     /**
      Reference to our views CapturePreviewView (Camera stream)
      */
-    weak var previewView: CapturePreviewView?
+    weak var previewView: CapturePreviewView?        
    
     /**
      Utility class that encapsulates setting up and tearing down the video capture; we'll start recording
@@ -159,7 +159,7 @@ extension CameraViewController{
         self.view.addSubview(flipButton)
         flipButton.setImage(flipButtonImage, for: .normal)
         flipButton.addTarget(self,
-                             action: #selector(CameraViewController.onFlipCameraButtonTapped(_:)), for: .touchUpInside)
+                             action: #selector(CameraViewController.onFlipCameraButtonTapped(_:)), for: .touchUpInside)                
     }
     
     @objc func onActionButtonTapped(_ sender:UIButton){

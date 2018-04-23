@@ -15,8 +15,9 @@ protocol ImageProcessorDelegate : class{
 
 class ImageProcessor{
     
-    enum Style : Int{
-        case AndyWarhol = 0,
+    enum ImageStyle : Int{
+        case None = 0,
+        AndyWarhol,
         Hokusai,
         Picasso,
         VanCogh
@@ -24,16 +25,27 @@ class ImageProcessor{
     
     weak var delegate : ImageProcessorDelegate?
     
-    lazy var model : VNCoreMLModel = {
+    lazy var vanCoghModel : VNCoreMLModel = {
         do{
             let model = try VNCoreMLModel(for: FastStyleTransferVanGoghStarryNight().model)
             return model
         } catch{
-            fatalError("Failed to obtain model")
+            fatalError("Failed to obtain VanCoghModel")
         }
     }()
     
-    var style : Style = Style.VanCogh
+    var model : VNCoreMLModel{
+        get{
+            if self.style == .VanCogh{
+                return self.vanCoghModel
+            }
+            
+            // default
+            return self.vanCoghModel
+        }
+    }
+    
+    var style : ImageStyle = ImageStyle.None
     
     lazy var request : VNCoreMLRequest = {
         let request = VNCoreMLRequest(model: self.model, completionHandler: { [weak self] request, error in

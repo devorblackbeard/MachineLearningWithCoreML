@@ -21,6 +21,7 @@
 		845FBC63208883A500255A80 /* ImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845FBC62208883A500255A80 /* ImageProcessor.swift */; };
 		845FBC6720888E3200255A80 /* ResCropBlockLambda.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845FBC6620888E3200255A80 /* ResCropBlockLambda.swift */; };
 		845FBC6920888E3C00255A80 /* RescaleOutputLambda.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845FBC6820888E3C00255A80 /* RescaleOutputLambda.swift */; };
+		848C8ED9208DE6EB00153870 /* StyleViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848C8ED8208DE6EB00153870 /* StyleViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		845FBC62208883A500255A80 /* ImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessor.swift; sourceTree = "<group>"; };
 		845FBC6620888E3200255A80 /* ResCropBlockLambda.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResCropBlockLambda.swift; sourceTree = "<group>"; };
 		845FBC6820888E3C00255A80 /* RescaleOutputLambda.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RescaleOutputLambda.swift; sourceTree = "<group>"; };
+		848C8ED8208DE6EB00153870 /* StyleViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +78,7 @@
 				845FBC4A20887D0900255A80 /* AppDelegate.swift */,
 				845FBC4C20887D0900255A80 /* CameraViewController.swift */,
 				845F9482208CD5C700866A1A /* StyleTransferViewController.swift */,
+				848C8ED8208DE6EB00153870 /* StyleViewCell.swift */,
 				845FBC5120887D0C00255A80 /* Assets.xcassets */,
 				845FBC5320887D0C00255A80 /* LaunchScreen.storyboard */,
 				845FBC5620887D0C00255A80 /* Info.plist */,
@@ -165,6 +168,7 @@
 				845F9481208CA43200866A1A /* CVPixelBuffer+Extension.swift in Sources */,
 				845FBC5D2088832A00255A80 /* CapturePreviewView.swift in Sources */,
 				845F9483208CD5C700866A1A /* StyleTransferViewController.swift in Sources */,
+				848C8ED9208DE6EB00153870 /* StyleViewCell.swift in Sources */,
 				845FBC6920888E3C00255A80 /* RescaleOutputLambda.swift in Sources */,
 				845FBC612088836D00255A80 /* CIImage+Extension.swift in Sources */,
 				845FBC4D20887D0900255A80 /* CameraViewController.swift in Sources */,

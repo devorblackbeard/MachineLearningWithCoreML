@@ -42,8 +42,8 @@ import Accelerate
             
             let shape = input.shape // expecting [1, 1, Channels, Kernel Width, Kernel Height]
             for c in 0..<shape[2].intValue{
-                for w in 2..<(shape[3].intValue-4){
-                    for h in 2..<(shape[4].intValue-4){
+                for w in 2...(shape[3].intValue-4){
+                    for h in 2...(shape[4].intValue-4){
                         let inputIndex = [NSNumber(value: 0),
                                           NSNumber(value: 0),
                                           NSNumber(value: c),
