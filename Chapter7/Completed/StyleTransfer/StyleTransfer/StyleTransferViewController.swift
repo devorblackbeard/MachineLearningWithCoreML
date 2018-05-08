@@ -37,7 +37,7 @@ class StyleTransferViewController: UIViewController {
         didSet{
             if let imageView = self.imageView,
                 let contentImage = self.contentImage{
-                imageView.image = UIImage(ciImage: contentImage)
+                imageView.image = contentImage.toUIImage()
             }
         }
     }
@@ -171,7 +171,7 @@ extension StyleTransferViewController{
                                            constant: 0).isActive = true
         
         self.imageView = imageView
-        self.imageView?.contentMode = .scaleAspectFill
+        self.imageView?.contentMode = .scaleAspectFit
         
         // Close button
         let closeButtonImage = UIImage(named: "close_button")

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8404AC0220A0EF7500E1DAEA /* rescale.metal in Sources */ = {isa = PBXBuildFile; fileRef = 8404AC0120A0EF7500E1DAEA /* rescale.metal */; };
 		845F947D208C972200866A1A /* CGImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F947C208C972200866A1A /* CGImage+Extension.swift */; };
 		845F947F208CA19C00866A1A /* FastStyleTransferVanGoghStarryNight.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 845F947E208CA19C00866A1A /* FastStyleTransferVanGoghStarryNight.mlmodel */; };
 		845F9481208CA43200866A1A /* CVPixelBuffer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F9480208CA43200866A1A /* CVPixelBuffer+Extension.swift */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8404AC0120A0EF7500E1DAEA /* rescale.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; name = rescale.metal; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter7/Completed/StyleTransfer/StyleTransfer/rescale.metal"; sourceTree = "<group>"; };
 		845F947C208C972200866A1A /* CGImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CGImage+Extension.swift"; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter7/Completed/StyleTransfer/StyleTransfer/CGImage+Extension.swift"; sourceTree = "<group>"; };
 		845F947E208CA19C00866A1A /* FastStyleTransferVanGoghStarryNight.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = FastStyleTransferVanGoghStarryNight.mlmodel; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/CoreMLModels/Chapter7/FastStyleTransferVanGoghStarryNight.mlmodel"; sourceTree = "<group>"; };
 		845F9480208CA43200866A1A /* CVPixelBuffer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CVPixelBuffer+Extension.swift"; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 				845FBC6820888E3C00255A80 /* RescaleOutputLambda.swift */,
 				845F947C208C972200866A1A /* CGImage+Extension.swift */,
 				845F9480208CA43200866A1A /* CVPixelBuffer+Extension.swift */,
+				8404AC0120A0EF7500E1DAEA /* rescale.metal */,
 			);
 			path = StyleTransfer;
 			sourceTree = "<group>";
@@ -167,6 +170,7 @@
 				845FBC5F2088834800255A80 /* VideoCapture.swift in Sources */,
 				845F9481208CA43200866A1A /* CVPixelBuffer+Extension.swift in Sources */,
 				845FBC5D2088832A00255A80 /* CapturePreviewView.swift in Sources */,
+				8404AC0220A0EF7500E1DAEA /* rescale.metal in Sources */,
 				845F9483208CD5C700866A1A /* StyleTransferViewController.swift in Sources */,
 				848C8ED9208DE6EB00153870 /* StyleViewCell.swift in Sources */,
 				845FBC6920888E3C00255A80 /* RescaleOutputLambda.swift in Sources */,
