@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8404AC0920A248A600E1DAEA /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8404AC0820A248A600E1DAEA /* CoreVideo.framework */; };
+		8404AC0B20A248AE00E1DAEA /* CoreML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8404AC0A20A248AE00E1DAEA /* CoreML.framework */; };
+		8404AC0D20A248B400E1DAEA /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8404AC0C20A248B400E1DAEA /* AVFoundation.framework */; };
 		84CD690A1FE5472200C5B7EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CD69091FE5472200C5B7EC /* AppDelegate.swift */; };
 		84CD690C1FE5472200C5B7EC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CD690B1FE5472200C5B7EC /* ViewController.swift */; };
 		84CD690F1FE5472200C5B7EC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84CD690D1FE5472200C5B7EC /* Main.storyboard */; };
@@ -18,6 +21,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8404AC0820A248A600E1DAEA /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		8404AC0A20A248AE00E1DAEA /* CoreML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreML.framework; path = System/Library/Frameworks/CoreML.framework; sourceTree = SDKROOT; };
+		8404AC0C20A248B400E1DAEA /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		84CD69061FE5472200C5B7EC /* ObjectRecognition.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ObjectRecognition.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84CD69091FE5472200C5B7EC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84CD690B1FE5472200C5B7EC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -35,17 +41,31 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8404AC0D20A248B400E1DAEA /* AVFoundation.framework in Frameworks */,
+				8404AC0B20A248AE00E1DAEA /* CoreML.framework in Frameworks */,
+				8404AC0920A248A600E1DAEA /* CoreVideo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8404AC0720A248A600E1DAEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8404AC0C20A248B400E1DAEA /* AVFoundation.framework */,
+				8404AC0A20A248AE00E1DAEA /* CoreML.framework */,
+				8404AC0820A248A600E1DAEA /* CoreVideo.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		84CD68FD1FE5472200C5B7EC = {
 			isa = PBXGroup;
 			children = (
 				84CD69081FE5472200C5B7EC /* ObjectRecognition */,
 				84CD69071FE5472200C5B7EC /* Products */,
+				8404AC0720A248A600E1DAEA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
