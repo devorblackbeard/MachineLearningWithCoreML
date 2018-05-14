@@ -14,6 +14,25 @@ class SearchInputView : UIControl{
     
     var searchBoxes = [ObjectBounds]()
     
+    var normalisedSearchBoxes : [ObjectBounds]{
+        get{
+            return searchBoxes.map({ (ob) -> ObjectBounds in
+                let nsize = CGSize(
+                    width: ob.size.width / self.frame.width,
+                    height: ob.size.height / self.frame.height)
+                
+                let norigin = CGPoint(
+                    x: ob.origin.x / self.frame.width,
+                    y: ob.origin.y / self.frame.height)
+                
+                return ObjectBounds(
+                    object: ob.object,
+                    origin: norigin,
+                    size: nsize)
+            })
+        }
+    }
+    
     // Color used to fill (clear) the canvas
     var clearColor : UIColor = UIColor.white
     // Color used to draw the borders of the view
@@ -37,6 +56,7 @@ extension SearchInputView{
         guard searchBoxes.count > 0 else { return }
         
         searchBoxes.removeLast()
+        self.setNeedsDisplay()
     }
     
 }

@@ -60,4 +60,16 @@ struct ObjectBounds {
     }
 }
 
+struct SearchResult{
+    
+    /* Associated image **/
+    public var image : UIImage
+    
+    /* Detected objects */
+    public var detectedObjects : [ObjectBounds]
+    
+    /* Distance/Score from search critiera */
+    public var score : Float
+}
+
 

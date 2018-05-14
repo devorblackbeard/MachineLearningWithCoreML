@@ -67,19 +67,17 @@ class ImageProcessor{
     
     public func processImage(ciImage:CIImage){
         DispatchQueue.global(qos: .background).sync {
+            let handler = VNImageRequestHandler(ciImage: ciImage)
             
-            DispatchQueue.global(qos: .userInitiated).async {
-                let handler = VNImageRequestHandler(ciImage: ciImage)
-                do {
-                    try handler.perform([self.getRequest()])
-                } catch {
-                    /*
-                     This handler catches general image processing errors. The `classificationRequest`'s
-                     completion handler `processClassifications(_:error:)` catches errors specific
-                     to processing that request.
-                     */
-                    print("Failed to perform classification.\n\(error.localizedDescription)")
-                }
+            do {
+                try handler.perform([self.getRequest()])
+            } catch {
+                /*
+                 This handler catches general image processing errors. The `classificationRequest`'s
+                 completion handler `processClassifications(_:error:)` catches errors specific
+                 to processing that request.
+                 */
+                print("Failed to perform classification.\n\(error.localizedDescription)")
             }
         }
     }
