@@ -1,8 +1,8 @@
 //
 //  AppDelegate.swift
-//  StyleTransfer
+//  ObjectDetection
 //
-//  Created by Joshua Newnham on 19/04/2018.
+//  Created by Joshua Newnham on 13/05/2018.
 //  Copyright © 2018 Joshua Newnham. All rights reserved.
 //
 
@@ -13,16 +13,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
         window = UIWindow.init(frame:UIScreen.main.bounds)
         window?.backgroundColor = UIColor.white
         
-        let cameraVC = CameraViewController()
-        window?.rootViewController = cameraVC
+        let searchVC = SearchViewController()
+        window?.rootViewController = searchVC
         
         window?.makeKeyAndVisible()
+        
         return true
     }
 
