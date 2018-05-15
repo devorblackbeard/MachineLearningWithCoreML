@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - DetectableObject
+
 struct DetectableObject{
     public var classIndex : Int
     public var label : String
@@ -27,7 +29,7 @@ struct DetectableObject{
     ]
 }
 
-// MARK: - UI Extension to DetectableObject
+// MARK: UI Extension to DetectableObject
 
 extension DetectableObject{
     
@@ -50,6 +52,8 @@ extension DetectableObject{
     }
 }
 
+// MARK: - ObjectBounds
+
 struct ObjectBounds {
     public var object : DetectableObject
     public var origin : CGPoint
@@ -59,6 +63,72 @@ struct ObjectBounds {
         return CGRect(origin: self.origin, size: self.size)
     }
 }
+
+extension ObjectBounds{
+    
+    /**
+     Considered normalised iff origin and size are in the range of 0.0 - 1.0
+    **/
+    var isNormalised : Bool{
+        get{
+            return self.origin.x >= 0.0 && self.origin.x <= 1.0
+                && self.origin.y >= 0.0 && self.origin.y <= 1.0
+                && self.size.width >= 0.0 && self.size.width <= 1.0
+                && self.size.height >= 0.0 && self.size.height <= 1.0
+        }
+    }
+    
+    /**
+     
+    */
+    func transformFromCenteredCropping(from:CGSize, to:CGSize, normalise:Bool=true) -> ObjectBounds{
+        var ox : CGFloat = 0.0
+        var oy : CGFloat = 0.0
+        var cropSize = from
+        
+        // Cropped image size
+        if from.width > from.height{
+            ox = (from.width - from.height)/2
+            oy = 0.0
+            cropSize = CGSize(width:from.height, height:from.height)
+        }
+        else if from.height > from.width{
+            ox = 0.0
+            oy = (from.height - from.width)/2
+            cropSize = CGSize(width:from.width, height:from.width)
+        }
+        
+        var origin = self.origin
+        var size = self.size
+        
+        if !self.isNormalised{
+            origin.x /= to.width
+            origin.y /= to.height
+            size.width /= to.width
+            size.height /= to.height
+        }
+        
+        // Calcualte bounds size
+        let w = size.width * cropSize.width
+        let h = size.height * cropSize.height
+        let x = ox + origin.x * cropSize.width
+        let y = oy + origin.y * cropSize.height
+        
+//        if normalise{
+//            return ObjectBounds(object: self.object,
+//                                origin: CGPoint(x: x/from.width, y: y/from.height),
+//                                size: CGSize(width:w/from.width, height:h/from.height))
+//        } else{
+//            return ObjectBounds(object: self.object,
+//                                origin: CGPoint(x: x, y: y),
+//                                size: CGSize(width:w, height:h))
+//        }
+        
+        return self
+    }
+}
+
+// MARK: - SearchResult
 
 struct SearchResult{
     

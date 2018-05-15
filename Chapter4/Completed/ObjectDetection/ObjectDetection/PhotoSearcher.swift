@@ -35,26 +35,14 @@ class PhotoSearcher{
     
     public func search(searchCriteria : [ObjectBounds]?){
         DispatchQueue.global(qos: .background).sync {
-            
-            var results = [SearchResult]()
-            
             let photos = getPhotos()
             
-            let detectedObjects = self.detectObjects(photos: photos)
-            
-            for photo in photos{
-                let searchResult = SearchResult(
-                    image: photo,
-                    detectedObjects: [],
-                    score: 0.0)
-                
-                results.append(searchResult)
-            }
+            let unscoredSearchResults = self.detectObjects(photos: photos)
             
             DispatchQueue.main.async {
                 self.delegate?.onPhotoSearcherCompleted(
                     status: 1,
-                    result: results)
+                    result: unscoredSearchResults)
             }
         }
     }
@@ -82,7 +70,7 @@ extension PhotoSearcher{
                 targetSize: targetSize,
                 contentMode: .aspectFill,
                 options: requestOptions,
-                resultHandler: { (image, error) in
+                resultHandler: { (image, bundle) in
                     if let image = image{
                         photos.append(image)
                     }
@@ -131,17 +119,22 @@ extension PhotoSearcher{
             return nil
         }
         
+        var detectedObjects = [ObjectBounds]()
+        
         for observation in observations{
             guard let multiArray = observation.featureValue.multiArrayValue else{
                 continue
             }
             
-            if let detectedObjectBounds = self.detectObjectsBounds(array: multiArray){
-                
+            if let observationDetectedObjects = self.detectObjectsBounds(array: multiArray){
+                for detectedObject in observationDetectedObjects.map(
+                    {$0.transformFromCenteredCropping(from: photo.size, to: self.targetSize)}){
+                    detectedObjects.append(detectedObject)
+                }
             }
         }
         
-        return nil
+        return SearchResult(image: photo, detectedObjects: detectedObjects, score: 0.0)
     }
     
     /**
@@ -213,12 +206,16 @@ extension PhotoSearcher{
                     let tw = Float(arrayPointer[(boxOffset + 2) * boxStride + gridOffset])
                     let th = Float(arrayPointer[(boxOffset + 3) * boxStride + gridOffset])
                     
-                    let cx = Int(Float(col) + sigmoid(x: tx)) / Int(gridSize.width) // center position, unit: image width
-                    let cy = Int(Float(row) + sigmoid(x: ty)) / Int(gridSize.height) // center position, unit: image height
-                    let w = Int(anchors[2 * b + 0] * exp(tw) / Float(gridSize.width)) // unit: image width
-                    let h = Int(anchors[2 * b + 1] * exp(th) / Float(gridSize.height)) // unit: image height
+                    let cx = CGFloat((Float(col) + sigmoid(x: tx)) / Float(gridSize.width)) // center position, unit: image width
+                    let cy = CGFloat((Float(row) + sigmoid(x: ty)) / Float(gridSize.height)) // center position, unit: image height
+                    let w = CGFloat(anchors[2 * b + 0] * exp(tw) / Float(gridSize.width)) // unit: image width
+                    let h = CGFloat(anchors[2 * b + 1] * exp(th) / Float(gridSize.height)) // unit: image height
                     
-                    let objectBounds = ObjectBounds(object: DetectableObject.objects[classIdx],
+                    guard let detectableObject = DetectableObject.objects.filter({$0.classIndex == classIdx}).first else{
+                        continue
+                    }
+                    
+                    let objectBounds = ObjectBounds(object: detectableObject,
                                                     origin: CGPoint(x: cx - w/2, y: cy - h/2),
                                                     size: CGSize(width: w, height: h))
                     
@@ -233,7 +230,8 @@ extension PhotoSearcher{
     }
     
     /**
-     Non-Max Supression
+     Non-Max Supression; Filter out 'significantly' overlapping objects which have a lower
+     confidence (than the object overlapping it) 
      @param objectsBounds: detected object bounds
      @param objectsConfidence: objectsBounds associated confidence score
      @param nmsThreshold: Non-Max Supression threshold (threshold based on the intersection / union ratio between two boxes)
@@ -254,7 +252,7 @@ extension PhotoSearcher{
         
         // Sort the indices of the bounding boxes by detection confidence value in descending order.
         // Do an argsort on the confidence scores, from high to low.
-        let sortedIndices = detectionConfidence.indices.sorted { $0 > $1 }
+        let sortedIndices = detectionConfidence.indices.sorted { detectionConfidence[$0] > detectionConfidence[$1] }
 
         // Create an empty list to hold the best bounding boxes after
         // Non-Maximal Suppression (NMS) is performed
@@ -278,62 +276,15 @@ extension PhotoSearcher{
             for j in (i+1)..<sortedIndices.count{
                 let otherObjectBounds = objectsBounds[sortedIndices[j]]
                 
-                // If the IOU of box_i and box_j is higher than the given IOU threshold set
-                // box_j's detection confidence to zero.
-                if computeIOU(objectBounds, otherBounds:otherObjectBounds) > nmsThreshold{
+                // If the IOU of objectBounds and otherObjectBounds is higher than the given IOU threshold set
+                // otherObjectBounds's detection confidence to zero.
+                if Float(objectBounds.bounds.computeIOU(other: otherObjectBounds.bounds)) > nmsThreshold{
                     detectionConfidence[sortedIndices[j]] = 0.0
                 }
             }
         }
         
         return bestObjectsBounds
-    }
-    
-    func computeIOU(_ bounds:ObjectBounds, otherBounds:ObjectBounds) -> Float{
-        // Get the Width and Height of each bounding box
-        let bb1Width = bounds.size.width
-        let bb1Height = bounds.size.height
-        let bb2Width = otherBounds.size.width
-        let bb2Height = otherBounds.size.height
-        
-        // Calculate the area of the each bounding box
-        let area1 = bb1Width * bb1Height
-        let area2 = bb2Width * bb2Height
-        
-        // Find the vertical edges of the union of the two bounding boxes
-        let minX = min(bounds.origin.x, otherBounds.origin.x)
-        let maxX = max(bounds.origin.x, otherBounds.origin.x)
-        
-        // Calculate the width of the union of the two bounding boxes
-        let unionWidth = maxX - minX
-        
-        // Find the horizontal edges of the union of the two bounding boxes
-        let minY = min(bounds.origin.y, otherBounds.origin.y)
-        let maxY = max(bounds.origin.y, otherBounds.origin.y)
-        
-        // Calculate the height of the union of the two bounding boxes
-        let unionHeight = maxY - minY
-        
-        // Calculate the width and height of the area of intersection of the two bounding boxes
-        let intersectionWidth = bb1Width + bb2Width - unionWidth
-        let intersectionHeight = bb1Height + bb2Height - unionHeight
-        
-        // If the the boxes don't overlap then their IOU is zero
-        if intersectionWidth <= 0 || intersectionHeight <= 0{
-            return 0.0
-        }
-        
-        // Calculate the area of intersection of the two bounding boxes
-        let intersectionArea = intersectionWidth * intersectionHeight
-        
-        // Calculate the area of the union of the two bounding boxes
-        let unionArea = area1 + area2 - intersectionArea
-        
-        // Calculate the IOU
-        let iou = intersectionArea/unionArea
-        
-        return Float(iou)
-        
-    }
+    }    
 }
 
