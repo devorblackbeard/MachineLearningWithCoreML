@@ -147,7 +147,7 @@ extension SearchResultsViewController{
         collectionView.reloadData()
         
         let objectDetectionImageView = ObjectDetectionImageView(frame: collectionView.frame)
-        objectDetectionImageView.contentMode = .scaleAspectFill
+        objectDetectionImageView.contentMode = .scaleAspectFit 
         objectDetectionImageView.clipsToBounds = true
         objectDetectionImageView.delegate = self
         self.view.addSubview(objectDetectionImageView)

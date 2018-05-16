@@ -67,18 +67,6 @@ struct ObjectBounds {
 extension ObjectBounds{
     
     /**
-     Considered normalised iff origin and size are in the range of 0.0 - 1.0
-    **/
-    var isNormalised : Bool{
-        get{
-            return self.origin.x >= 0.0 && self.origin.x <= 1.0
-                && self.origin.y >= 0.0 && self.origin.y <= 1.0
-                && self.size.width >= 0.0 && self.size.width <= 1.0
-                && self.size.height >= 0.0 && self.size.height <= 1.0
-        }
-    }
-    
-    /**
      
     */
     func transformFromCenteredCropping(from:CGSize, to:CGSize, normalise:Bool=true) -> ObjectBounds{
@@ -98,15 +86,8 @@ extension ObjectBounds{
             cropSize = CGSize(width:from.width, height:from.width)
         }
         
-        var origin = self.origin
-        var size = self.size
-        
-        if !self.isNormalised{
-            origin.x /= to.width
-            origin.y /= to.height
-            size.width /= to.width
-            size.height /= to.height
-        }
+        let origin = self.origin
+        let size = self.size
         
         // Calcualte bounds size
         let w = size.width * cropSize.width
@@ -114,15 +95,15 @@ extension ObjectBounds{
         let x = ox + origin.x * cropSize.width
         let y = oy + origin.y * cropSize.height
         
-//        if normalise{
-//            return ObjectBounds(object: self.object,
-//                                origin: CGPoint(x: x/from.width, y: y/from.height),
-//                                size: CGSize(width:w/from.width, height:h/from.height))
-//        } else{
-//            return ObjectBounds(object: self.object,
-//                                origin: CGPoint(x: x, y: y),
-//                                size: CGSize(width:w, height:h))
-//        }
+        if normalise{
+            return ObjectBounds(object: self.object,
+                                origin: CGPoint(x: x/from.width, y: y/from.height),
+                                size: CGSize(width:w/from.width, height:h/from.height))
+        } else{
+            return ObjectBounds(object: self.object,
+                                origin: CGPoint(x: x, y: y),
+                                size: CGSize(width:w, height:h))
+        }
         
         return self
     }

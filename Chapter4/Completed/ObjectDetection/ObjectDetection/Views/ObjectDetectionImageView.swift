@@ -12,13 +12,17 @@ protocol ObjectDetectionImageViewDelegate : class {
     func onObjectDetectionImageViewDismissed(view:ObjectDetectionImageView)
 }
 
-class ObjectDetectionImageView : UIControl{
+class ObjectDetectionImageView : UIImageView{
     
     weak var delegate : ObjectDetectionImageViewDelegate?
     
     var searchResult : SearchResult?{
         didSet{
-            self.setNeedsDisplay()
+            if let searchResult = self.searchResult{
+                self.image = searchResult.image.annoatedImage(detectedObjects: searchResult.detectedObjects)
+            } else{
+                self.image = nil
+            }
         }
     }
     
@@ -53,29 +57,29 @@ class ObjectDetectionImageView : UIControl{
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         
-        guard let context = UIGraphicsGetCurrentContext() else {
-            return
-        }
-        
-        context.setFillColor(UIColor.white.cgColor)
-        context.addRect(self.bounds)
-        context.drawPath(using: .fill)
-        
-        guard let searchResult = self.searchResult else {
-            return
-        }
-        
-        self.drawImage(context: context, targetRect: rect, image: searchResult.image)
-        
-        let tmp = CGRect(x: 0, y: 0, width: 416, height: 416)
-        searchResult.image.draw(in: tmp)
-        
-        for detectedObject in searchResult.detectedObjects{
-            self.drawDetectedObject(context:context,
-                                    rect:rect,
-                                    detectedObject:detectedObject,
-                                    imageSize:tmp.size) // searchResult.image.size)
-        }
+//        guard let context = UIGraphicsGetCurrentContext() else {
+//            return
+//        }
+//
+//        context.setFillColor(UIColor.white.cgColor)
+//        context.addRect(self.bounds)
+//        context.drawPath(using: .fill)
+//
+//        guard let searchResult = self.searchResult else {
+//            return
+//        }
+//
+//        self.drawImage(context: context, targetRect: rect, image: searchResult.image)
+//
+//        let tmp = CGRect(x: 0, y: 0, width: 416, height: 416)
+//        searchResult.image.draw(in: tmp)
+//
+//        for detectedObject in searchResult.detectedObjects{
+//            self.drawDetectedObject(context:context,
+//                                    rect:rect,
+//                                    detectedObject:detectedObject,
+//                                    imageSize:tmp.size) // searchResult.image.size)
+//        }
     }
     
     /**

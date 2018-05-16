@@ -76,7 +76,7 @@ extension PhotoSearcher{
                     }
                 }
             )
-        }
+        }                
         
         return photos
     }
@@ -127,6 +127,12 @@ extension PhotoSearcher{
             }
             
             if let observationDetectedObjects = self.detectObjectsBounds(array: multiArray){
+                
+                print("*** observationDetectedObjects ***")
+                for obj in observationDetectedObjects{
+                    print("\(obj.object.label) Rect: \(obj.bounds)")
+                }
+                
                 for detectedObject in observationDetectedObjects.map(
                     {$0.transformFromCenteredCropping(from: photo.size, to: self.targetSize)}){
                     detectedObjects.append(detectedObject)
@@ -163,7 +169,7 @@ extension PhotoSearcher{
         // Number of boxes for each cell
         let numberOfAnchorBoxes = 5
         // Box shapes
-        let anchors : [Float] = [1.08, 1.19, 3.42, 4.41, 6.63, 11.38, 9.42, 5.11, 16.62, 10.52]
+        let anchors : [Float] = [1.08, 1.19, 3.42, 4.41, 6.63, 11.38, 9.42, 5.11, 16.62, 10.52]        
         
         let arrayPointer = UnsafeMutablePointer<Double>(OpaquePointer(array.dataPointer))
         let boxStride = array.strides[0].intValue
@@ -201,15 +207,15 @@ extension PhotoSearcher{
                     }
                     
                     // Get the first 4 elements; which are x, y, w, and h (bounds of the detected object)
-                    let tx = Float(arrayPointer[boxOffset * boxStride + gridOffset])
-                    let ty = Float(arrayPointer[(boxOffset + 1) * boxStride + gridOffset])
-                    let tw = Float(arrayPointer[(boxOffset + 2) * boxStride + gridOffset])
-                    let th = Float(arrayPointer[(boxOffset + 3) * boxStride + gridOffset])
-                    
-                    let cx = CGFloat((Float(col) + sigmoid(x: tx)) / Float(gridSize.width)) // center position, unit: image width
-                    let cy = CGFloat((Float(row) + sigmoid(x: ty)) / Float(gridSize.height)) // center position, unit: image height
-                    let w = CGFloat(anchors[2 * b + 0] * exp(tw) / Float(gridSize.width)) // unit: image width
-                    let h = CGFloat(anchors[2 * b + 1] * exp(th) / Float(gridSize.height)) // unit: image height
+                    let tx = CGFloat(arrayPointer[boxOffset * boxStride + gridOffset])
+                    let ty = CGFloat(arrayPointer[(boxOffset + 1) * boxStride + gridOffset])
+                    let tw = CGFloat(arrayPointer[(boxOffset + 2) * boxStride + gridOffset])
+                    let th = CGFloat(arrayPointer[(boxOffset + 3) * boxStride + gridOffset])
+
+                    let cx = (CGFloat(col) + sigmoid(x: tx)) / gridSize.width // center position, unit: image width
+                    let cy = (CGFloat(row) + sigmoid(x: ty)) / gridSize.height // center position, unit: image height
+                    let w = CGFloat(anchors[2 * b + 0]) * exp(tw) / gridSize.width // unit: image width
+                    let h = CGFloat(anchors[2 * b + 1]) * exp(th) / gridSize.height // unit: image height
                     
                     guard let detectableObject = DetectableObject.objects.filter({$0.classIndex == classIdx}).first else{
                         continue
@@ -274,6 +280,9 @@ extension PhotoSearcher{
             // Go through the rest of the bounding boxes in the list and calculate their IOU with
             // respect to the previous selected objectBounds
             for j in (i+1)..<sortedIndices.count{
+                guard detectionConfidence[sortedIndices[j]] > 0 else {
+                    continue 
+                }
                 let otherObjectBounds = objectsBounds[sortedIndices[j]]
                 
                 // If the IOU of objectBounds and otherObjectBounds is higher than the given IOU threshold set

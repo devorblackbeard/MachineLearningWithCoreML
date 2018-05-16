@@ -12,6 +12,15 @@ import CoreML
 
 
 /**
+ Clamp between min and max
+ @param floor minimum value val can be
+ @param ceiling maximum value val can be
+ */
+public func clamp(_ val:CGFloat, _ floor:CGFloat, _ ceiling:CGFloat) -> CGFloat{
+    return min(max(val, floor), ceiling)
+}
+
+/**
  A sigmoid function is a mathematical function having a characteristic "S"-shaped curve or sigmoid curv
  https://en.wikipedia.org/wiki/Sigmoid_function
  @param x Scalar
@@ -21,17 +30,20 @@ public func sigmoid(x: Float) -> Float {
     return 1 / (1 + exp(-x))
 }
 
+public func sigmoid(x: CGFloat) -> CGFloat {
+    return 1 / (1 + exp(-x))
+}
+
 /**
- Softmax function;
+ Softmax function; https://en.wikipedia.org/wiki/Softmax_function
  Source: https://github.com/jordenhill/Birdbrain/blob/master/Birdbrain/Math.swift
- https://en.wikipedia.org/wiki/Softmax_function
  @param z A vector z.
  @return A vector y = (e^z / sum(e^z))
  */
 func softmax(z: [Float]) -> [Float] {
-    let x = exp(x:sub(x: z, c: z.maxValue))
+    let x = exp(x:sub(x:z, c: z.maxValue))
     
-    return div(x: x, c: sum(x: x))
+    return div(x:x, c: sum(x:x))
 }
 
 /**
@@ -59,6 +71,21 @@ public func sub(x: [Float], c: Float) -> [Float] {
     var result = (1...x.count).map{_ in c}
     
     catlas_saxpby(Int32(x.count), 1.0, x, 1, -1.0, &result, 1)
+    
+    return result
+}
+
+/**
+ Multipliy a vector x by a scalar y
+ Source: https://github.com/jordenhill/Birdbrain/blob/master/Birdbrain/Math.swift
+ @param x Vector x.
+ @parame c Scalar c.
+ @return A vector containing x multiplied elementwise by vector c.
+ */
+public func mul(x: [Float], c: Float) -> [Float] {
+    var result = [Float](x)
+    
+    cblas_sscal(Int32(x.count), c, &result, 1)
     
     return result
 }
