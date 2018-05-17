@@ -119,8 +119,8 @@ struct SearchResult{
     /* Detected objects */
     public var detectedObjects : [ObjectBounds]
     
-    /* Distance/Score from search critiera */
-    public var score : Float
+    /* Distance/cost from search critiera */
+    public var cost : Float
 }
 
 

@@ -47,7 +47,7 @@ extension SearchResultsViewController{
             activityIndicatorView.startAnimating()
         }
         
-        photoSearcher.search(searchCriteria: self.searchCriteria)
+        photoSearcher.asyncSearch(searchCriteria: self.searchCriteria)
         
     }
 }
