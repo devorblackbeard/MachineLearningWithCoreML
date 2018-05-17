@@ -24,14 +24,14 @@ class PhotoSearcher{
     
     public func asyncSearch(searchCriteria : [ObjectBounds]?){
         DispatchQueue.global(qos: .background).sync {
-            let photos = getPhotos()
+            let photos = getPhotosFromPhotosLibrary()
             
             let unscoredSearchResults = self.detectObjects(photos: photos)
             
             var sortedSearchResults : [SearchResult]?
             
             if let unscoredSearchResults = unscoredSearchResults{
-                sortedSearchResults = self.scoreObjects(
+                sortedSearchResults = self.calculateCostForObjects(
                     detectedObjects:unscoredSearchResults ,
                     searchCriteria: searchCriteria).sorted(by: { (a, b) -> Bool in
                         return a.cost < b.cost
@@ -51,7 +51,7 @@ class PhotoSearcher{
 
 extension PhotoSearcher{
     
-    func getPhotos() -> [UIImage]{
+    func getPhotosFromPhotosLibrary() -> [UIImage]{
         var photos = [UIImage]()
         
         let requestOptions = PHImageRequestOptions()
@@ -75,7 +75,10 @@ extension PhotoSearcher{
                     }
                 }
             )
-        }                
+        }
+        
+//        photos.removeAll()
+//        photos.append(UIImage(named:"test_image")!)
         
         return photos
     }
@@ -105,7 +108,7 @@ extension PhotoSearcher{
 
 extension PhotoSearcher{
     
-    private func scoreObjects(detectedObjects:[SearchResult], searchCriteria:[ObjectBounds]?) -> [SearchResult]{
+    private func calculateCostForObjects(detectedObjects:[SearchResult], searchCriteria:[ObjectBounds]?) -> [SearchResult]{
         guard let searchCriteria = searchCriteria else{
             return detectedObjects
         }
@@ -114,7 +117,7 @@ extension PhotoSearcher{
         
         for searchResult in detectedObjects{
             let cost = self.costForObjectPresences(detectedObject: searchResult, searchCriteria: searchCriteria) +
-                self.costForObjectRelativePositions(detectedObject: searchResult, searchCriteria: searchCriteria) +
+                self.costForObjectRelativePositioning(detectedObject: searchResult, searchCriteria: searchCriteria) +
                 self.costForObjectSizeRelativeToImageSize(detectedObject: searchResult, searchCriteria: searchCriteria) +
                 self.costForObjectSizeRelativeToOtherObjects(detectedObject: searchResult, searchCriteria: searchCriteria)
             
@@ -153,7 +156,7 @@ extension PhotoSearcher{
             let searchCount = searchObjectCounts[label] ?? 0
             let detectedCount = detectedObjectCounts[label] ?? 0
             
-            cost += (searchCount - detectedCount)
+            cost += abs(searchCount - detectedCount)
         }
         return cost * weight
     }
@@ -162,26 +165,81 @@ extension PhotoSearcher{
                                                   searchCriteria:[ObjectBounds],
                                                   weight:Float=1.5) -> Float{
         
-        func findClosestObject(objects:[ObjectBounds], forObjectAtIndex i:Int) -> ObjectBounds?{
+        func indexOfClosestObject(objects:[ObjectBounds], forObjectAtIndex i:Int) -> Int{
             let searchACenter = objects[i].bounds.center
             
-            var closestDistance = FLT_MAX
-            var closestObjectBounds : ObjectBounds?
+            var closestDistance = Float.greatestFiniteMagnitude
+            var closestObjectIndex : Int = -1
             
-            for j in i+1..<objects.count{
-                // TODO
+            for j in 0..<objects.count{
+                guard i != j else{
+                    continue
+                }
+                
+                let searchBCenter = objects[j].bounds.center
+                let distance = Float(searchACenter.distance(other: searchBCenter))
+                if distance < closestDistance{
+                    closestObjectIndex = j
+                    closestDistance = distance
+                }
             }
             
-            return closestObjectBounds
+            return closestObjectIndex
         }
+        
+        var cost : Float = 0.0
         
         for si in 0..<searchCriteria.count{
-            let searchACenter = searchCriteria[si].bounds.center
+            let closestObjectIndex = indexOfClosestObject(objects: searchCriteria,
+                                                          forObjectAtIndex: si)
+            if closestObjectIndex < 0{
+                continue
+            }
             
-            for j in i+1
+            // Get object types
+            let searchAClassIndex = searchCriteria[si].object.classIndex
+            let searchBClassIndex = searchCriteria[closestObjectIndex].object.classIndex
+            
+            // Get centers of objects
+            let searchACenter = searchCriteria[si].bounds.center
+            let searchBCenter = searchCriteria[closestObjectIndex].bounds.center
+            
+            // Calcualte the normalised vector from A -> B
+            let searchDirection = (searchACenter - searchBCenter).normalised
+            
+            // Find comparable objects in detected objects
+            let detectedA = detectedObject.detectedObjects.filter { (objectBounds) -> Bool in
+                objectBounds.object.classIndex == searchAClassIndex
+                }
+            
+            let detectedB = detectedObject.detectedObjects.filter { (objectBounds) -> Bool in
+                objectBounds.object.classIndex == searchBClassIndex
+            }
+            
+            // Check that we have matching pairs
+            guard detectedA.count > 0, detectedB.count > 0 else{
+                continue
+            }
+            
+            // Give the 'benefit of doubt' and find the closest dot product
+            // between similar products
+            var closestDotProduct : Float = 0
+            for i in 0..<detectedA.count{
+                for j in 0..<detectedB.count{
+                    // Find the direction between detected object i and detected object j
+                    let detectedDirection = (detectedA[i].bounds.center - detectedB[j].bounds.center).normalised
+                    let dotProduct = Float(searchDirection.dot(other: detectedDirection))
+                    if (i == 0 && j == 0) || dotProduct < closestDotProduct{
+                        closestDotProduct = dotProduct
+                    }
+                }
+            }
+            
+            // Calcualte cost based on dot product
+            cost += abs((1.0-closestDotProduct))
         }
         
-        return 0.0
+        return cost * weight
     }
     
     private func costForObjectSizeRelativeToImageSize(detectedObject:SearchResult,
