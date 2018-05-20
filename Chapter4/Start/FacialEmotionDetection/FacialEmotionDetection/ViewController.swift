@@ -50,9 +50,7 @@ class ViewController: UIViewController {
             } else{
                 fatalError("Failed to init VideoCapture")
             }
-        }
-        
-        imageProcessor.delegate = self
+        }        
     }
 }
 

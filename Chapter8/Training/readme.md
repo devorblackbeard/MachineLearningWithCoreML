@@ -1,18 +1,10 @@
-## CNN for Sketch Classification
+# QuickDraw 
 
-### FloydHub
-**Getting started with Jupyter notebooks**
-https://docs.floydhub.com/getstarted/get_started_jupyter/
+## References 
 
-*floyd init cnn-sketch-classifier*
+### Data
+https://github.com/googlecreativelab/quickdraw-dataset
 
-**Creating and uploading data**
-https://docs.floydhub.com/guides/create_and_upload_dataset/
-*floyd data init sketches*
-*floyd data upload*
-
-#### Running FloydHub
-*floyd run --env keras --data joshnewnham/datasets/sketches/2:sketches_training_data --gpu --mode jupyter*
-
-#### Stop running Job on FloydHub
-*floyd stop joshnewnham/projects/cnn-sketch-classifier/2*
+### Architecture 
+https://www.tensorflow.org/tutorials/recurrent_quickdraw
+https://github.com/tensorflow/models/tree/master/tutorials/rnn/quickdraw

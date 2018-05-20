@@ -16,15 +16,15 @@
 		844931D720A8E17D00EB254C /* DataObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844931D620A8E17D00EB254C /* DataObjects.swift */; };
 		844931D920A8E35800EB254C /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844931D820A8E35800EB254C /* UIColor+Extension.swift */; };
 		8473FC5320AB7434009F12A8 /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8473FC5220AB7434009F12A8 /* CGRect+Extension.swift */; };
-		8473FC5820AC102C009F12A8 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8473FC5720AC102C009F12A8 /* UIImage+Extension.swift */; };
-		8499002F20AD610B000FADC9 /* YOLOFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8499002E20AD610B000FADC9 /* YOLOFacade.swift */; };
-		84DFCC6220AD9E7F008A015E /* CGPoint+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DFCC6120AD9E7F008A015E /* CGPoint+Extension.swift */; };
+		84DFCC6520B21DD0008A015E /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DFCC6320B21DD0008A015E /* UIImage+Extension.swift */; };
+		84DFCC6620B21DD0008A015E /* CGPoint+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DFCC6420B21DD0008A015E /* CGPoint+Extension.swift */; };
+		84DFCC6920B21DDF008A015E /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DFCC6720B21DDF008A015E /* Math.swift */; };
+		84DFCC6A20B21DDF008A015E /* YOLOFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DFCC6820B21DDF008A015E /* YOLOFacade.swift */; };
 		84E29D6320A9B3A6001A6784 /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E29D6220A9B3A6001A6784 /* SearchResultsViewController.swift */; };
 		84E29D6520AA1C35001A6784 /* PhotoViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E29D6420AA1C35001A6784 /* PhotoViewCell.swift */; };
 		84E29D6720AA202E001A6784 /* PhotoSearcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E29D6620AA202E001A6784 /* PhotoSearcher.swift */; };
 		84E29D6920AA2FB3001A6784 /* ObjectDetectionImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E29D6820AA2FB3001A6784 /* ObjectDetectionImageView.swift */; };
 		84E29D6B20AA3A36001A6784 /* tinyyolo_voc2007.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 84E29D6A20AA3A36001A6784 /* tinyyolo_voc2007.mlmodel */; };
-		84E29D6D20AACA37001A6784 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E29D6C20AACA37001A6784 /* Math.swift */; };
 		84E29D6F20AACD5E001A6784 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E29D6E20AACD5E001A6784 /* Array+Extension.swift */; };
 /* End PBXBuildFile section */
 
@@ -40,15 +40,15 @@
 		844931D620A8E17D00EB254C /* DataObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataObjects.swift; sourceTree = "<group>"; };
 		844931D820A8E35800EB254C /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		8473FC5220AB7434009F12A8 /* CGRect+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Extension.swift"; sourceTree = "<group>"; };
-		8473FC5720AC102C009F12A8 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIImage+Extension.swift"; path = "../../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter4/Completed/ObjectDetection/ObjectDetection/Extensions/UIImage+Extension.swift"; sourceTree = "<group>"; };
-		8499002E20AD610B000FADC9 /* YOLOFacade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = YOLOFacade.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter4/Completed/ObjectDetection/ObjectDetection/YOLOFacade.swift"; sourceTree = "<group>"; };
-		84DFCC6120AD9E7F008A015E /* CGPoint+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CGPoint+Extension.swift"; path = "../../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter4/Completed/ObjectDetection/ObjectDetection/Extensions/CGPoint+Extension.swift"; sourceTree = "<group>"; };
+		84DFCC6320B21DD0008A015E /* UIImage+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImage+Extension.swift"; path = "../../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter5/Completed/ObjectDetection/ObjectDetection/Extensions/UIImage+Extension.swift"; sourceTree = "<group>"; };
+		84DFCC6420B21DD0008A015E /* CGPoint+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CGPoint+Extension.swift"; path = "../../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter5/Completed/ObjectDetection/ObjectDetection/Extensions/CGPoint+Extension.swift"; sourceTree = "<group>"; };
+		84DFCC6720B21DDF008A015E /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Math.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter5/Completed/ObjectDetection/ObjectDetection/Math.swift"; sourceTree = "<group>"; };
+		84DFCC6820B21DDF008A015E /* YOLOFacade.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = YOLOFacade.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter5/Completed/ObjectDetection/ObjectDetection/YOLOFacade.swift"; sourceTree = "<group>"; };
 		84E29D6220A9B3A6001A6784 /* SearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
 		84E29D6420AA1C35001A6784 /* PhotoViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewCell.swift; sourceTree = "<group>"; };
 		84E29D6620AA202E001A6784 /* PhotoSearcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSearcher.swift; sourceTree = "<group>"; };
 		84E29D6820AA2FB3001A6784 /* ObjectDetectionImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectDetectionImageView.swift; sourceTree = "<group>"; };
 		84E29D6A20AA3A36001A6784 /* tinyyolo_voc2007.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = tinyyolo_voc2007.mlmodel; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/CoreMLModels/Chapter4/tinyyolo_voc2007.mlmodel"; sourceTree = "<group>"; };
-		84E29D6C20AACA37001A6784 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Math.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter4/Completed/ObjectDetection/ObjectDetection/Math.swift"; sourceTree = "<group>"; };
 		84E29D6E20AACD5E001A6784 /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -82,6 +82,8 @@
 		844931BF20A8D1F500EB254C /* ObjectDetection */ = {
 			isa = PBXGroup;
 			children = (
+				84DFCC6720B21DDF008A015E /* Math.swift */,
+				84DFCC6820B21DDF008A015E /* YOLOFacade.swift */,
 				8473FC5620AB77F2009F12A8 /* ViewControllers */,
 				8473FC5520AB77D2009F12A8 /* Views */,
 				8473FC5420AB77CC009F12A8 /* Extensions */,
@@ -91,9 +93,7 @@
 				844931C920A8D1F600EB254C /* LaunchScreen.storyboard */,
 				844931CC20A8D1F600EB254C /* Info.plist */,
 				844931D620A8E17D00EB254C /* DataObjects.swift */,
-				84E29D6C20AACA37001A6784 /* Math.swift */,
 				84E29D6620AA202E001A6784 /* PhotoSearcher.swift */,
-				8499002E20AD610B000FADC9 /* YOLOFacade.swift */,
 			);
 			path = ObjectDetection;
 			sourceTree = "<group>";
@@ -101,11 +101,11 @@
 		8473FC5420AB77CC009F12A8 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				84DFCC6420B21DD0008A015E /* CGPoint+Extension.swift */,
+				84DFCC6320B21DD0008A015E /* UIImage+Extension.swift */,
 				84E29D6E20AACD5E001A6784 /* Array+Extension.swift */,
 				8473FC5220AB7434009F12A8 /* CGRect+Extension.swift */,
 				844931D820A8E35800EB254C /* UIColor+Extension.swift */,
-				8473FC5720AC102C009F12A8 /* UIImage+Extension.swift */,
-				84DFCC6120AD9E7F008A015E /* CGPoint+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -202,21 +202,21 @@
 			files = (
 				844931C320A8D1F500EB254C /* SearchViewController.swift in Sources */,
 				844931D520A8D88500EB254C /* IconViewCell.swift in Sources */,
-				8499002F20AD610B000FADC9 /* YOLOFacade.swift in Sources */,
+				84DFCC6620B21DD0008A015E /* CGPoint+Extension.swift in Sources */,
+				84DFCC6520B21DD0008A015E /* UIImage+Extension.swift in Sources */,
 				84E29D6720AA202E001A6784 /* PhotoSearcher.swift in Sources */,
 				84E29D6920AA2FB3001A6784 /* ObjectDetectionImageView.swift in Sources */,
 				84E29D6B20AA3A36001A6784 /* tinyyolo_voc2007.mlmodel in Sources */,
 				844931C120A8D1F500EB254C /* AppDelegate.swift in Sources */,
 				84E29D6520AA1C35001A6784 /* PhotoViewCell.swift in Sources */,
-				84DFCC6220AD9E7F008A015E /* CGPoint+Extension.swift in Sources */,
 				844931D320A8D2DE00EB254C /* SearchInputView.swift in Sources */,
+				84DFCC6920B21DDF008A015E /* Math.swift in Sources */,
 				844931D720A8E17D00EB254C /* DataObjects.swift in Sources */,
+				84DFCC6A20B21DDF008A015E /* YOLOFacade.swift in Sources */,
 				8473FC5320AB7434009F12A8 /* CGRect+Extension.swift in Sources */,
 				84E29D6320A9B3A6001A6784 /* SearchResultsViewController.swift in Sources */,
 				844931D920A8E35800EB254C /* UIColor+Extension.swift in Sources */,
-				8473FC5820AC102C009F12A8 /* UIImage+Extension.swift in Sources */,
 				84E29D6F20AACD5E001A6784 /* Array+Extension.swift in Sources */,
-				84E29D6D20AACA37001A6784 /* Math.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

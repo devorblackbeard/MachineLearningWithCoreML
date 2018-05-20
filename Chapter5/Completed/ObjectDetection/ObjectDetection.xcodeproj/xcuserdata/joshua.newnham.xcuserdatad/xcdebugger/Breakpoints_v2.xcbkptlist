@@ -106,7 +106,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ObjectDetection/PhotoSearcher.swift"
-            timestampString = "548253485.5183361"
+            timestampString = "548544086.641605"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "34"
@@ -118,59 +118,11 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ObjectDetection/PhotoSearcher.swift"
-            timestampString = "548253485.518697"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
-            landmarkName = "asyncSearch(searchCriteria:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in ObjectDetection.PhotoSearcher.asyncSearch(searchCriteria: Swift.Optional&lt;Swift.Array&lt;ObjectDetection.ObjectBounds&gt;&gt;) -&gt; ()"
-                  moduleName = "ObjectDetection"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/joshua.newnham/Dropbox/Method%20-%20Personal/Machine%20Learning%20with%20CoreML/Projects/Chapter4/Completed/ObjectDetection/ObjectDetection/PhotoSearcher.swift"
-                  timestampString = "548253485.64465"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "41"
-                  endingLineNumber = "41"
-                  offsetFromSymbolStart = "538">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "function signature specialization &lt;Arg[1] = Value Promoted from Box&gt; of closure #2 () -&gt; () in closure #1 () -&gt; () in ObjectDetection.PhotoSearcher.asyncSearch(searchCriteria: Swift.Optional&lt;Swift.Array&lt;ObjectDetection.ObjectBounds&gt;&gt;) -&gt; ()"
-                  moduleName = "ObjectDetection"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/joshua.newnham/Dropbox/Method%20-%20Personal/Machine%20Learning%20with%20CoreML/Projects/Chapter4/Completed/ObjectDetection/ObjectDetection/PhotoSearcher.swift"
-                  timestampString = "548253485.647357"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "42"
-                  endingLineNumber = "42"
-                  offsetFromSymbolStart = "18">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ObjectDetection/PhotoSearcher.swift"
-            timestampString = "548253485.518945"
+            timestampString = "548544086.6419899"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "112"
@@ -186,7 +138,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ObjectDetection/PhotoSearcher.swift"
-            timestampString = "548253485.519189"
+            timestampString = "548544086.642149"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "190"
@@ -202,7 +154,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ObjectDetection/PhotoSearcher.swift"
-            timestampString = "548253485.5194139"
+            timestampString = "548544086.6423"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "153"
@@ -218,7 +170,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ObjectDetection/PhotoSearcher.swift"
-            timestampString = "548253485.519636"
+            timestampString = "548544086.6424381"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "161"
@@ -234,28 +186,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ObjectDetection/PhotoSearcher.swift"
-            timestampString = "548253485.51984"
+            timestampString = "548544086.642525"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "227"
             endingLineNumber = "227"
             landmarkName = "costForObjectRelativePositioning(detectedObject:searchCriteria:weight:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ObjectDetection/PhotoSearcher.swift"
-            timestampString = "548253485.5200469"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "129"
-            endingLineNumber = "129"
-            landmarkName = "calculateCostForObjects(detectedObjects:searchCriteria:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
