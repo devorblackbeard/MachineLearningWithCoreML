@@ -262,7 +262,7 @@ extension QueryFacade{
     */
     private func downloadModel() -> URL?{
         guard let modelUrl = URL(
-            string:"https://github.com/joshnewnham/MachineLearningWithCoreML/blob/master/CoreMLModels/Chapter9/quickdraw.mlmodel?raw=true") else{
+            string:"https://github.com/joshnewnham/MachineLearningWithCoreML/blob/master/CoreMLModels/Chapter8/quickdraw.mlmodel?raw=true") else{
                 fatalError("Invalid URL")
         }
         

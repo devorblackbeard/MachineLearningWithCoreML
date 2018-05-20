@@ -1,205 +1,205 @@
-0,airplane
-1,alarm clock
-2,angel
-3,ant
-4,apple
-5,arm
-6,armchair
-7,ashtray
-8,axe
-9,backpack
-10,banana
-11,barn
-12,baseball bat
-13,basket
-14,bathtub
-15,bear (animal)
-16,bed
-17,bee
-18,beer-mug
-19,bell
-20,bench
-21,bicycle
-22,blimp
-23,bookshelf
-24,bowl
-25,bridge
-26,bulldozer
-27,bus
-28,butterfly
-29,cactus
-30,cake
-31,calculator
-32,camel
-33,camera
-34,candle
-35,cannon
-36,car (sedan)
-37,castle
-38,cat
+0,rabbit
+1,ashtray
+2,eyeglasses
+3,mouth
+4,pig
+5,bulldozer
+6,teddy-bear
+7,eye
+8,house
+9,cigarette
+10,calculator
+11,crown
+12,lion
+13,banana
+14,arm
+15,blimp
+16,ship
+17,skyscraper
+18,present
+19,church
+20,suv
+21,mouse (animal)
+22,piano
+23,basket
+24,penguin
+25,chair
+26,dolphin
+27,dragon
+28,person walking
+29,saxophone
+30,rifle
+31,human-skeleton
+32,mailbox
+33,computer-mouse
+34,cannon
+35,guitar
+36,lobster
+37,screwdriver
+38,teacup
 39,cell phone
-40,chair
-41,church
-42,cigarette
-43,cloud
-44,computer monitor
-45,computer-mouse
-46,cow
-47,crab
-48,crane (machine)
-49,crocodile
-50,crown
-51,cup
-52,dog
-53,dolphin
-54,dragon
-55,duck
-56,elephant
-57,envelope
-58,eye
-59,eyeglasses
-60,face
-61,fan
-62,fire hydrant
-63,fish
-64,flashlight
-65,floor lamp
-66,flower with stem
-67,flying bird
-68,flying saucer
-69,foot
-70,frog
-71,giraffe
-72,guitar
-73,hammer
-74,hand
-75,hat
-76,head
-77,hedgehog
-78,helicopter
-79,horse
-80,hot air balloon
-81,hot-dog
-82,hourglass
-83,house
-84,human-skeleton
-85,ice-cream-cone
-86,ipod
-87,kangaroo
-88,key
-89,keyboard
-90,knife
-91,ladder
-92,laptop
-93,leaf
-94,lightbulb
-95,lion
-96,lobster
-97,loudspeaker
-98,mailbox
-99,megaphone
-100,mermaid
-101,microphone
-102,microscope
-103,monkey
-104,moon
-105,mosquito
-106,motorbike
-107,mouse (animal)
-108,mouth
-109,mug
-110,mushroom
-111,nose
-112,octopus
-113,owl
-114,palm tree
-115,panda
-116,paper clip
-117,parachute
-118,parking meter
-119,parrot
-120,pear
-121,pen
-122,penguin
-123,person sitting
-124,person walking
-125,piano
-126,pickup truck
-127,pig
-128,pigeon
-129,pipe (for smoking)
-130,pizza
-131,potted plant
-132,power outlet
-133,present
-134,pumpkin
-135,rabbit
-136,race car
-137,radio
-138,rainbow
-139,revolver
-140,rifle
-141,rollerblades
-142,rooster
-143,sailboat
-144,santa claus
-145,satellite
-146,saxophone
-147,scissors
-148,scorpion
-149,screwdriver
-150,sea turtle
-151,seagull
-152,shark
-153,sheep
-154,ship
-155,shoe
-156,shovel
-157,skull
-158,skyscraper
-159,snail
-160,snake
-161,snowman
-162,space shuttle
-163,speed-boat
-164,spider
-165,squirrel
-166,standing bird
-167,strawberry
-168,streetlight
-169,submarine
-170,suitcase
-171,sun
-172,suv
-173,swan
-174,sword
-175,syringe
-176,t-shirt
-177,table
-178,tablelamp
-179,teacup
-180,teapot
-181,teddy-bear
-182,telephone
-183,tennis-racket
-184,tent
-185,tiger
-186,tomato
-187,tractor
-188,traffic light
-189,train
-190,tree
-191,trousers
-192,truck
-193,trumpet
-194,tv
-195,umbrella
-196,van
-197,vase
-198,violin
-199,wheel
-200,windmill
-201,wine-bottle
-202,wineglass
-203,wrist-watch
-204,zebra
+40,umbrella
+41,scissors
+42,bookshelf
+43,shoe
+44,windmill
+45,rooster
+46,train
+47,bell
+48,wineglass
+49,laptop
+50,power outlet
+51,table
+52,santa claus
+53,flower with stem
+54,sailboat
+55,envelope
+56,camel
+57,flying bird
+58,squirrel
+59,sheep
+60,tomato
+61,pen
+62,elephant
+63,sword
+64,key
+65,head
+66,hand
+67,van
+68,crocodile
+69,sea turtle
+70,rollerblades
+71,monkey
+72,mosquito
+73,paper clip
+74,hat
+75,standing bird
+76,pipe (for smoking)
+77,suitcase
+78,trumpet
+79,person sitting
+80,speed-boat
+81,pickup truck
+82,candle
+83,bathtub
+84,flashlight
+85,palm tree
+86,wheel
+87,seagull
+88,mermaid
+89,cake
+90,shovel
+91,helicopter
+92,t-shirt
+93,pear
+94,camera
+95,knife
+96,submarine
+97,rainbow
+98,horse
+99,bee
+100,hourglass
+101,mushroom
+102,ladder
+103,dog
+104,snail
+105,face
+106,beer-mug
+107,tent
+108,violin
+109,wine-bottle
+110,pumpkin
+111,fish
+112,vase
+113,bed
+114,shark
+115,owl
+116,pizza
+117,hot air balloon
+118,fan
+119,duck
+120,tv
+121,bridge
+122,car (sedan)
+123,foot
+124,kangaroo
+125,telephone
+126,parking meter
+127,scorpion
+128,nose
+129,ipod
+130,strawberry
+131,radio
+132,hedgehog
+133,bear (animal)
+134,leaf
+135,floor lamp
+136,giraffe
+137,potted plant
+138,tennis-racket
+139,ice-cream-cone
+140,computer monitor
+141,bicycle
+142,bench
+143,tractor
+144,armchair
+145,bus
+146,truck
+147,tiger
+148,swan
+149,panda
+150,crab
+151,baseball bat
+152,backpack
+153,megaphone
+154,alarm clock
+155,cow
+156,snake
+157,pigeon
+158,race car
+159,apple
+160,traffic light
+161,microscope
+162,moon
+163,castle
+164,flying saucer
+165,skull
+166,cloud
+167,wrist-watch
+168,syringe
+169,microphone
+170,snowman
+171,octopus
+172,cup
+173,angel
+174,cat
+175,hot-dog
+176,satellite
+177,parachute
+178,streetlight
+179,mug
+180,barn
+181,zebra
+182,tablelamp
+183,loudspeaker
+184,frog
+185,keyboard
+186,crane (machine)
+187,airplane
+188,butterfly
+189,spider
+190,teapot
+191,fire hydrant
+192,space shuttle
+193,tree
+194,bowl
+195,trousers
+196,sun
+197,parrot
+198,motorbike
+199,lightbulb
+200,ant
+201,hammer
+202,cactus
+203,axe
+204,revolver
