@@ -314,7 +314,7 @@
 				DEVELOPMENT_TEAM = 9FMGJU3F2A;
 				INFOPLIST_FILE = QuickDrawRNN/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = mlwithcoreml.chapter9.QuickDrawRNN;
+				PRODUCT_BUNDLE_IDENTIFIER = mlwithcoreml.chapter8.QuickDrawRNN;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -329,7 +329,7 @@
 				DEVELOPMENT_TEAM = 9FMGJU3F2A;
 				INFOPLIST_FILE = QuickDrawRNN/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = mlwithcoreml.chapter9.QuickDrawRNN;
+				PRODUCT_BUNDLE_IDENTIFIER = mlwithcoreml.chapter8.QuickDrawRNN;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

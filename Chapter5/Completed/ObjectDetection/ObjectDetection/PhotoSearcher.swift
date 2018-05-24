@@ -22,7 +22,7 @@ class PhotoSearcher{
     
     let yolo = YOLOFacade()
     
-    public func asyncSearch(searchCriteria : [ObjectBounds]?){
+    public func asyncSearch(searchCriteria : [ObjectBounds]?, costThreshold : Float = 5.0){
         DispatchQueue.global(qos: .background).sync {
             let photos = getPhotosFromPhotosLibrary()
             
@@ -33,7 +33,10 @@ class PhotoSearcher{
             if let unscoredSearchResults = unscoredSearchResults{
                 sortedSearchResults = self.calculateCostForObjects(
                     detectedObjects:unscoredSearchResults ,
-                    searchCriteria: searchCriteria).sorted(by: { (a, b) -> Bool in
+                    searchCriteria: searchCriteria).filter({ (searchResult) -> Bool in
+                        print(searchResult.cost)
+                        return searchResult.cost < costThreshold
+                    }).sorted(by: { (a, b) -> Bool in
                         return a.cost < b.cost
                     })
             }
@@ -78,7 +81,7 @@ extension PhotoSearcher{
         }
         
 //        photos.removeAll()
-//        photos.append(UIImage(named:"test_image")!)
+//        photos.append(UIImage(named:"test_image_2")!)
         
         return photos
     }
@@ -209,11 +212,11 @@ extension PhotoSearcher{
             
             // Find comparable objects in detected objects
             let detectedA = detectedObject.detectedObjects.filter { (objectBounds) -> Bool in
-                objectBounds.object.classIndex == searchAClassIndex
-                }
+                return objectBounds.object.classIndex == searchAClassIndex
+            }
             
             let detectedB = detectedObject.detectedObjects.filter { (objectBounds) -> Bool in
-                objectBounds.object.classIndex == searchBClassIndex
+                return objectBounds.object.classIndex == searchBClassIndex
             }
             
             // Check that we have matching pairs
@@ -223,13 +226,19 @@ extension PhotoSearcher{
             
             // Give the 'benefit of doubt' and find the closest dot product
             // between similar products
-            var closestDotProduct : Float = 0
+            var closestDotProduct : Float = Float.greatestFiniteMagnitude
             for i in 0..<detectedA.count{
                 for j in 0..<detectedB.count{
+                    if detectedA[i] == detectedB[j]{
+                        continue
+                    }
+                    
                     // Find the direction between detected object i and detected object j
                     let detectedDirection = (detectedA[i].bounds.center - detectedB[j].bounds.center).normalised
                     let dotProduct = Float(searchDirection.dot(other: detectedDirection))
-                    if (i == 0 && j == 0) || dotProduct < closestDotProduct{
+                    if closestDotProduct > 10 ||
+                        (dotProduct < closestDotProduct &&
+                            dotProduct >= 0) {
                         closestDotProduct = dotProduct
                     }
                 }

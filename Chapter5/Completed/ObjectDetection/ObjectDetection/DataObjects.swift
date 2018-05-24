@@ -64,6 +64,16 @@ struct ObjectBounds {
     }
 }
 
+extension ObjectBounds : Equatable{
+    
+    static func ==(lhs: ObjectBounds, rhs: ObjectBounds) -> Bool {
+        return lhs.object.classIndex == rhs.object.classIndex &&
+            abs((lhs.origin - rhs.origin).length) < 0.01 &&
+            abs(lhs.size.width - rhs.size.width) < 0.01 &&
+            abs(lhs.size.height - rhs.size.height) < 0.01
+    }
+}
+
 extension ObjectBounds{
     
     /**
@@ -104,8 +114,6 @@ extension ObjectBounds{
                                 origin: CGPoint(x: x, y: y),
                                 size: CGSize(width:w, height:h))
         }
-        
-        return self
     }
 }
 

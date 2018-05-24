@@ -41,54 +41,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ObjectDetection/DataObjects.swift"
-            timestampString = "548253485.5182149"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
-            landmarkName = "transformFromCenteredCropping(from:to:normalise:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ObjectDetection/Views/ObjectDetectionImageView.swift"
-            timestampString = "548149802.756456"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
-            landmarkName = "drawDetectedObject(context:rect:detectedObject:imageSize:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ObjectDetection/Views/ObjectDetectionImageView.swift"
-            timestampString = "548149802.756528"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "112"
-            endingLineNumber = "112"
-            landmarkName = "drawDetectedObject(context:rect:detectedObject:imageSize:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "ObjectDetection/Extensions/UIImage+Extension.swift"
             timestampString = "548202340.50299"
             startingColumnNumber = "9223372036854775807"
@@ -106,12 +58,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ObjectDetection/PhotoSearcher.swift"
-            timestampString = "548544086.641605"
+            timestampString = "548888116.001606"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "34"
             endingLineNumber = "34"
-            landmarkName = "asyncSearch(searchCriteria:)"
+            landmarkName = "asyncSearch(searchCriteria:costThreshold:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -122,43 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ObjectDetection/PhotoSearcher.swift"
-            timestampString = "548544086.6419899"
+            timestampString = "548888116.001942"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "112"
-            endingLineNumber = "112"
-            landmarkName = "calculateCostForObjects(detectedObjects:searchCriteria:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ObjectDetection/PhotoSearcher.swift"
-            timestampString = "548544086.642149"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "190"
-            endingLineNumber = "190"
-            landmarkName = "costForObjectRelativePositioning(detectedObject:searchCriteria:weight:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ObjectDetection/PhotoSearcher.swift"
-            timestampString = "548544086.6423"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "153"
-            endingLineNumber = "153"
+            startingLineNumber = "156"
+            endingLineNumber = "156"
             landmarkName = "costForObjectPresences(detectedObject:searchCriteria:weight:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -170,28 +90,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ObjectDetection/PhotoSearcher.swift"
-            timestampString = "548544086.6424381"
+            timestampString = "548888116.002188"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "161"
-            endingLineNumber = "161"
+            startingLineNumber = "164"
+            endingLineNumber = "164"
             landmarkName = "costForObjectPresences(detectedObject:searchCriteria:weight:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ObjectDetection/PhotoSearcher.swift"
-            timestampString = "548544086.642525"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "227"
-            endingLineNumber = "227"
-            landmarkName = "costForObjectRelativePositioning(detectedObject:searchCriteria:weight:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

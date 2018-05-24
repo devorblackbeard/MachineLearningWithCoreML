@@ -45,6 +45,12 @@ class YOLOFacade{
         }
     }
     
+}
+
+// MARK: - Core ML (related)
+
+extension YOLOFacade{
+    
     func detectObjects(photo:UIImage, completionHandler:(_ result:[ObjectBounds]?) -> Void){
         guard let cgImage = photo.cgImage else{
             completionHandler(nil)
@@ -68,9 +74,9 @@ class YOLOFacade{
             completionHandler(nil)
             return
         }
-        
+
         var detectedObjects = [ObjectBounds]()
-        
+
         for observation in observations{
             guard let multiArray = observation.featureValue.multiArrayValue else{
                 continue
@@ -84,7 +90,7 @@ class YOLOFacade{
                 }
             }
         }
-        
+
         completionHandler(detectedObjects)
     }
     /**
@@ -107,7 +113,7 @@ class YOLOFacade{
          */
         
         let arrayPointer = UnsafeMutablePointer<Double>(OpaquePointer(array.dataPointer))
-        let boxStride = array.strides[0].intValue
+        let gridStride = array.strides[0].intValue
         let rowStride = array.strides[1].intValue
         let colStride = array.strides[2].intValue
         
@@ -118,16 +124,16 @@ class YOLOFacade{
             for col in 0..<Int(gridSize.width) {
                 for b in 0..<numberOfAnchorBoxes {
                     
-                    let boxOffset = b * (numberOfClasses + numberOfAnchorBoxes)
                     let gridOffset = row * rowStride + col * colStride
+                    let anchorBoxOffset = b * (numberOfClasses + numberOfAnchorBoxes)
                     
                     // The 4th element is the confidence of a object being present
-                    let confidence = sigmoid(x: Float(arrayPointer[(boxOffset + 4) * boxStride + gridOffset]))
+                    let confidence = sigmoid(x: Float(arrayPointer[(anchorBoxOffset + 4) * gridStride + gridOffset]))
                     
                     // From 5th element onwards are the classes
                     var classes = Array<Float>(repeating: 0.0, count: numberOfClasses)
                     for c in 0..<numberOfClasses{
-                        classes[c] = Float(arrayPointer[(boxOffset + 5 + c) * boxStride + gridOffset])
+                        classes[c] = Float(arrayPointer[(anchorBoxOffset + 5 + c) * gridStride + gridOffset])
                     }
                     classes = softmax(z: classes)
                     
@@ -142,10 +148,10 @@ class YOLOFacade{
                     }
                     
                     // Get the first 4 elements; which are x, y, w, and h (bounds of the detected object)
-                    let tx = CGFloat(arrayPointer[boxOffset * boxStride + gridOffset])
-                    let ty = CGFloat(arrayPointer[(boxOffset + 1) * boxStride + gridOffset])
-                    let tw = CGFloat(arrayPointer[(boxOffset + 2) * boxStride + gridOffset])
-                    let th = CGFloat(arrayPointer[(boxOffset + 3) * boxStride + gridOffset])
+                    let tx = CGFloat(arrayPointer[anchorBoxOffset * gridStride + gridOffset])
+                    let ty = CGFloat(arrayPointer[(anchorBoxOffset + 1) * gridStride + gridOffset])
+                    let tw = CGFloat(arrayPointer[(anchorBoxOffset + 2) * gridStride + gridOffset])
+                    let th = CGFloat(arrayPointer[(anchorBoxOffset + 3) * gridStride + gridOffset])
                     
                     let cx = (CGFloat(col) + sigmoid(x: tx)) / gridSize.width // center position, unit: image width
                     let cy = (CGFloat(row) + sigmoid(x: ty)) / gridSize.height // center position, unit: image height
@@ -166,26 +172,25 @@ class YOLOFacade{
             }
         }
         
-        return self.filteredDetectedObjects(objectsBounds: objectsBounds,
+        return self.filterDetectedObjects(objectsBounds: objectsBounds,
                                             objectsConfidence: objectConfidences)
     }
-    
 }
 
-// MARK: - Non-Max Supression
+// MARK: - Non-Max Suppression
 
 extension YOLOFacade{
     
     /**
-     Non-Max Supression; Filter out 'significantly' overlapping objects which have a lower
+     Non-Max Suppression; Filter out 'significantly' overlapping objects which have a lower
      confidence (than the object overlapping it)
      @param objectsBounds: detected object bounds
      @param objectsConfidence: objectsBounds associated confidence score
      @param nmsThreshold: Non-Max Supression threshold (threshold based on the intersection / union ratio between two boxes)
      **/
-    func filteredDetectedObjects(objectsBounds:[ObjectBounds],
-                                 objectsConfidence:[Float],
-                                 nmsThreshold : Float = 0.3) -> [ObjectBounds]?{
+    func filterDetectedObjects(objectsBounds:[ObjectBounds],
+                               objectsConfidence:[Float],
+                               nmsThreshold : Float = 0.3) -> [ObjectBounds]?{
         // If there are no bounding boxes do nothing
         guard objectsBounds.count > 0 else{
             return []

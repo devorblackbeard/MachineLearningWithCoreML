@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		845EDCDB203A31CD00B27EF6 /* quickdraw.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 845EDCDA203A31CD00B27EF6 /* quickdraw.mlmodel */; };
 		848DA025203A258500A4590A /* CGPointRNNExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DA024203A258500A4590A /* CGPointRNNExtension.swift */; };
 		848DA027203A25C000A4590A /* StrokeRNNExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DA026203A25C000A4590A /* StrokeRNNExtension.swift */; };
 		848DA029203A271000A4590A /* StrokeSketchExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DA028203A271000A4590A /* StrokeSketchExtension.swift */; };
@@ -25,10 +24,10 @@
 		84DFCC9A20B22429008A015E /* SketchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DFCC9120B22428008A015E /* SketchViewController.swift */; };
 		84DFCC9B20B22429008A015E /* CIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DFCC9220B22428008A015E /* CIImage.swift */; };
 		84DFCC9C20B22429008A015E /* QueryFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DFCC9320B22428008A015E /* QueryFacade.swift */; };
+		84DFCCC420B36B27008A015E /* quickdraw.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 84DFCCC320B36B27008A015E /* quickdraw.mlmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		845EDCDA203A31CD00B27EF6 /* quickdraw.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = quickdraw.mlmodel; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/CoreMLModels/Chapter9/quickdraw.mlmodel"; sourceTree = "<group>"; };
 		848DA024203A258500A4590A /* CGPointRNNExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPointRNNExtension.swift; sourceTree = "<group>"; };
 		848DA026203A25C000A4590A /* StrokeRNNExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrokeRNNExtension.swift; sourceTree = "<group>"; };
 		848DA028203A271000A4590A /* StrokeSketchExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrokeSketchExtension.swift; sourceTree = "<group>"; };
@@ -48,6 +47,7 @@
 		84DFCC9120B22428008A015E /* SketchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SketchViewController.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter8/Completed/QuickDrawRNN/QuickDrawRNN/SketchViewController.swift"; sourceTree = "<group>"; };
 		84DFCC9220B22428008A015E /* CIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CIImage.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter8/Completed/QuickDrawRNN/QuickDrawRNN/CIImage.swift"; sourceTree = "<group>"; };
 		84DFCC9320B22428008A015E /* QueryFacade.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = QueryFacade.swift; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/Chapter8/Completed/QuickDrawRNN/QuickDrawRNN/QueryFacade.swift"; sourceTree = "<group>"; };
+		84DFCCC320B36B27008A015E /* quickdraw.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = quickdraw.mlmodel; path = "../../../../../../../../../Joshua.Newnham/Dropbox/Method - Personal/Machine Learning with CoreML/Projects/CoreMLModels/Chapter8/quickdraw.mlmodel"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +80,7 @@
 		84DCB8EA202915A200612D25 /* QuickDrawRNN */ = {
 			isa = PBXGroup;
 			children = (
+				84DFCCC320B36B27008A015E /* quickdraw.mlmodel */,
 				84DFCC8E20B22428008A015E /* BingService.swift */,
 				84DFCC9220B22428008A015E /* CIImage.swift */,
 				84DFCC8C20B22428008A015E /* DateExtension.swift */,
@@ -89,7 +90,6 @@
 				84DFCC8D20B22428008A015E /* SketchView.swift */,
 				84DFCC9120B22428008A015E /* SketchViewController.swift */,
 				84DFCC8F20B22428008A015E /* Stroke.swift */,
-				845EDCDA203A31CD00B27EF6 /* quickdraw.mlmodel */,
 				84DCB8EB202915A200612D25 /* AppDelegate.swift */,
 				84DCB8ED202915A200612D25 /* ViewController.swift */,
 				84DCB8EF202915A200612D25 /* Main.storyboard */,
@@ -179,6 +179,7 @@
 				84DFCC9520B22429008A015E /* DateExtension.swift in Sources */,
 				84DFCC9720B22429008A015E /* BingService.swift in Sources */,
 				84DCB8EE202915A200612D25 /* ViewController.swift in Sources */,
+				84DFCCC420B36B27008A015E /* quickdraw.mlmodel in Sources */,
 				84DFCC9820B22429008A015E /* Stroke.swift in Sources */,
 				84DFCC9A20B22429008A015E /* SketchViewController.swift in Sources */,
 				84DCB8EC202915A200612D25 /* AppDelegate.swift in Sources */,
@@ -187,7 +188,6 @@
 				84DFCC9620B22429008A015E /* SketchView.swift in Sources */,
 				848DA027203A25C000A4590A /* StrokeRNNExtension.swift in Sources */,
 				848DA029203A271000A4590A /* StrokeSketchExtension.swift in Sources */,
-				845EDCDB203A31CD00B27EF6 /* quickdraw.mlmodel in Sources */,
 				84DFCC9C20B22429008A015E /* QueryFacade.swift in Sources */,
 				848DA025203A258500A4590A /* CGPointRNNExtension.swift in Sources */,
 			);
@@ -330,7 +330,7 @@
 				DEVELOPMENT_TEAM = 9FMGJU3F2A;
 				INFOPLIST_FILE = QuickDrawRNN/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = mlwithcoreml.chapter9.QuickDrawRNN;
+				PRODUCT_BUNDLE_IDENTIFIER = mlwithcoreml.chapter8.QuickDrawRNN;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -345,7 +345,7 @@
 				DEVELOPMENT_TEAM = 9FMGJU3F2A;
 				INFOPLIST_FILE = QuickDrawRNN/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = mlwithcoreml.chapter9.QuickDrawRNN;
+				PRODUCT_BUNDLE_IDENTIFIER = mlwithcoreml.chapter8.QuickDrawRNN;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
