@@ -26,7 +26,7 @@ class EffectsViewController: UIViewController {
     
     weak var delegate : EffectsViewControllerDelegate?
     
-    var frames  = [CIImage]()
+    var imageProcessor : ImageProcessor!
     
     var isProgressingImage : Bool{
         get{
@@ -38,22 +38,20 @@ class EffectsViewController: UIViewController {
         }
     }
     
-    /**
-     Utility class encapsulating methods for data pre-processing
-     */
-    //let imageProcessor : ImageProcessor = ImageProcessor()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.initUI()
         
-        //imageProcessor.delegate = self
+        self.imageProcessor.delegate = self
         
-        self.processFrames()
+        self.showEffectAndActivityIndicator()
+        
+        self.imageProcessor.processFrames()                
     }
     
-    private func processFrames(){
+    /** Look busy **/
+    private func showEffectAndActivityIndicator(){
         // create and add a blur effect
         let effect = UIBlurEffect(style: .regular)
         let visualEffectsView = UIVisualEffectView(effect: effect)
@@ -62,35 +60,48 @@ class EffectsViewController: UIViewController {
         visualEffectsView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.view.addSubview(visualEffectsView)
         
+        // Start animating the activity indicator 
         if let activityIndicatorView = self.activityIndicatorView{
             self.view.bringSubview(toFront: activityIndicatorView)
             activityIndicatorView.startAnimating()
         }
-        
-        //self.imageProcessor.processImage(ciImage: contentImage)
     }
 }
 
 // MARK: - ImageProcessorDelegate
 
-//extension EffectsViewController : ImageProcessorDelegate{
-//
-//    func onImageProcessorCompleted(status: Int, stylizedImage:CGImage?){
-//        guard status > 0, let stylizedImage = stylizedImage else{
-//            return
-//        }
-//
-//        // Stop animating activity indiactor
-//        self.activityIndicatorView?.stopAnimating()
-//
-//        // Remove blur
-//        guard let effectView = self.view.viewWithTag(99) else { return }
-//        effectView.removeFromSuperview()
-//
-//        // Update image
-//        self.imageView?.image = UIImage(cgImage: stylizedImage)
-//    }
-//}
+extension EffectsViewController : ImageProcessorDelegate{
+
+    /* Called when a frame has finished being processed */
+    func onImageProcessorFinishedProcessingFrame(
+        status:Int,
+        processedFrames:Int,
+        framesRemaining:Int){
+        
+        print("\(#function) \(processedFrames) \(framesRemaining)")
+        
+        if framesRemaining == 0 && !self.imageProcessor.isProcessingImage{
+            self.imageProcessor.compositeFrames()
+        }
+    }
+    
+    /* Called when composition is complete */
+    func onImageProcessorFinishedComposition(status:Int, image:CIImage?){
+        // Stop animating activity indiactor
+        self.activityIndicatorView?.stopAnimating()
+        
+        // Remove blur
+        guard let effectView = self.view.viewWithTag(99) else { return }
+        effectView.removeFromSuperview()
+        
+        // Update image
+        if let image = image{
+            self.imageView?.image = UIImage(ciImage: image)
+        } else{
+            self.imageView?.image = nil 
+        }
+    }
+}
 
 // MARK: - UI
 
@@ -110,8 +121,8 @@ extension EffectsViewController{
         imageView.rightAnchor.constraint(equalTo: self.view.rightAnchor,
                                          constant: 0).isActive = true
         
+        imageView.contentMode = .scaleAspectFit
         self.imageView = imageView
-        self.imageView?.contentMode = .scaleAspectFit
         
         // Close button
         let closeButtonImage = UIImage(named: "close_button")

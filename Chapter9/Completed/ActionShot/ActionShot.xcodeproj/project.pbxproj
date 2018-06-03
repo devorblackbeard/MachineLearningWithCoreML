@@ -11,12 +11,16 @@
 		84F566BB20C099590002720C /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F566BA20C099590002720C /* CameraViewController.swift */; };
 		84F566C020C0995A0002720C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84F566BF20C0995A0002720C /* Assets.xcassets */; };
 		84F566C320C0995A0002720C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84F566C120C0995A0002720C /* LaunchScreen.storyboard */; };
-		84F566CB20C0998E0002720C /* small_unet.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 84F566CA20C0998E0002720C /* small_unet.mlmodel */; };
 		84F566CD20C09AFB0002720C /* VideoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F566CC20C09AFB0002720C /* VideoCapture.swift */; };
 		84F566CF20C09B460002720C /* CapturePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F566CE20C09B460002720C /* CapturePreviewView.swift */; };
 		84F566D120C09D340002720C /* EffectsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F566D020C09D340002720C /* EffectsViewController.swift */; };
 		84F566D320C09FAF0002720C /* CGImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F566D220C09FAF0002720C /* CGImage+Extension.swift */; };
 		84F566D620C0A76D0002720C /* ImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F566D520C0A76D0002720C /* ImageProcessor.swift */; };
+		84F566D820C16CC00002720C /* CVPixelBuffer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F566D720C16CC00002720C /* CVPixelBuffer+Extension.swift */; };
+		84F566DA20C2621A0002720C /* small_unet.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 84F566D920C2621A0002720C /* small_unet.mlmodel */; };
+		84F566DC20C2C7D60002720C /* CIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F566DB20C2C7D60002720C /* CIImage+Extension.swift */; };
+		84F566DE20C347420002720C /* CGPoint+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F566DD20C347420002720C /* CGPoint+Extension.swift */; };
+		84F566E020C347920002720C /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F566DF20C347920002720C /* CGRect+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,12 +30,16 @@
 		84F566BF20C0995A0002720C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		84F566C220C0995A0002720C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84F566C420C0995A0002720C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		84F566CA20C0998E0002720C /* small_unet.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = small_unet.mlmodel; path = ../../../../CoreMLModels/Chapter9/small_unet.mlmodel; sourceTree = "<group>"; };
 		84F566CC20C09AFB0002720C /* VideoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCapture.swift; sourceTree = "<group>"; };
 		84F566CE20C09B460002720C /* CapturePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePreviewView.swift; sourceTree = "<group>"; };
 		84F566D020C09D340002720C /* EffectsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectsViewController.swift; sourceTree = "<group>"; };
 		84F566D220C09FAF0002720C /* CGImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGImage+Extension.swift"; sourceTree = "<group>"; };
 		84F566D520C0A76D0002720C /* ImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessor.swift; sourceTree = "<group>"; };
+		84F566D720C16CC00002720C /* CVPixelBuffer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CVPixelBuffer+Extension.swift"; sourceTree = "<group>"; };
+		84F566D920C2621A0002720C /* small_unet.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = small_unet.mlmodel; path = ../../../../CoreMLModels/Chapter9/small_unet.mlmodel; sourceTree = "<group>"; };
+		84F566DB20C2C7D60002720C /* CIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CIImage+Extension.swift"; sourceTree = "<group>"; };
+		84F566DD20C347420002720C /* CGPoint+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extension.swift"; sourceTree = "<group>"; };
+		84F566DF20C347920002720C /* CGRect+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,8 +72,8 @@
 		84F566B720C099590002720C /* ActionShot */ = {
 			isa = PBXGroup;
 			children = (
+				84F566D920C2621A0002720C /* small_unet.mlmodel */,
 				84F566D420C09FB40002720C /* Extensions */,
-				84F566CA20C0998E0002720C /* small_unet.mlmodel */,
 				84F566B820C099590002720C /* AppDelegate.swift */,
 				84F566BA20C099590002720C /* CameraViewController.swift */,
 				84F566D020C09D340002720C /* EffectsViewController.swift */,
@@ -83,6 +91,10 @@
 			isa = PBXGroup;
 			children = (
 				84F566D220C09FAF0002720C /* CGImage+Extension.swift */,
+				84F566D720C16CC00002720C /* CVPixelBuffer+Extension.swift */,
+				84F566DB20C2C7D60002720C /* CIImage+Extension.swift */,
+				84F566DD20C347420002720C /* CGPoint+Extension.swift */,
+				84F566DF20C347920002720C /* CGRect+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -158,11 +170,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				84F566CD20C09AFB0002720C /* VideoCapture.swift in Sources */,
+				84F566DE20C347420002720C /* CGPoint+Extension.swift in Sources */,
+				84F566D820C16CC00002720C /* CVPixelBuffer+Extension.swift in Sources */,
+				84F566DA20C2621A0002720C /* small_unet.mlmodel in Sources */,
 				84F566BB20C099590002720C /* CameraViewController.swift in Sources */,
 				84F566D620C0A76D0002720C /* ImageProcessor.swift in Sources */,
 				84F566B920C099590002720C /* AppDelegate.swift in Sources */,
 				84F566CF20C09B460002720C /* CapturePreviewView.swift in Sources */,
-				84F566CB20C0998E0002720C /* small_unet.mlmodel in Sources */,
+				84F566DC20C2C7D60002720C /* CIImage+Extension.swift in Sources */,
+				84F566E020C347920002720C /* CGRect+Extension.swift in Sources */,
 				84F566D320C09FAF0002720C /* CGImage+Extension.swift in Sources */,
 				84F566D120C09D340002720C /* EffectsViewController.swift in Sources */,
 			);

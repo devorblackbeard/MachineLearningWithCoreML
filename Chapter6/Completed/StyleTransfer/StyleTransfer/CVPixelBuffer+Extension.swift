@@ -28,6 +28,5 @@ extension CVPixelBuffer{
         CVPixelBufferUnlockBaseAddress(self, .readOnly)
         
         return outImage
-    }
-    
+    }    
 }

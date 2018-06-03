@@ -42,9 +42,10 @@ class CameraViewController: UIViewController {
     var captureTimestamp : Date?
     
     /**
-     Store the frames
+     Instantiate an instance of ImageProcessor; the class which encapsulates the
+     functionality for performing the 'action shot' effect
     **/
-    var frames = [CIImage]()
+    let imageProcessor = ImageProcessor()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,20 +78,22 @@ class CameraViewController: UIViewController {
     }
     
     func showEffect(){
-        guard self.frames.count > 0 else{ return }
+        //guard self.imageProcessor.frames.count > 0 else{ return }
         
-        // untoggle requestCapture variable
+        // START: DEVELOPMENT CODE
+        // add images (if running in simulator)
+        if self.imageProcessor.frames.count == 0 {
+            for frame in self.getTestImages(){
+                self.imageProcessor.addFrame(frame: frame)
+            }
+        }
+        // END: DEVELOPMENT CODE
+        
+        // Untoggle requestCapture variable
         capturingFrames = false
         
         // stop capturing frames
         self.stopCamera()
-        
-        // START: DEVELOPMENT CODE
-        // add images (if running in simulator)
-        if self.frames.count == 0 {
-            
-        }
-        // END: DEVELOPMENT CODE
         
         // create and add a blur effect
         let effect = UIBlurEffect(style: .regular)
@@ -104,13 +107,24 @@ class CameraViewController: UIViewController {
         let effectCV = EffectsViewController()
         
         effectCV.delegate = self
-        effectCV.frames = self.frames
+        effectCV.imageProcessor = self.imageProcessor
         effectCV.modalPresentationStyle = .overCurrentContext
         
         present(effectCV, animated: false) {
-            // remove reference to frames
-            self.frames.removeAll()
+            
         }
+    }
+    
+    func getTestImages() -> [CIImage]{
+        var frames = [CIImage]()
+        
+        for i in stride(from: 1, to: 49, by: 2){
+            let uiImage = UIImage(named: "run_test_\(i)")
+            let frame = CIImage(cgImage: (uiImage?.cgImage)!)
+            frames.append(frame)
+        }
+        
+        return frames
     }
 }
 
@@ -122,14 +136,20 @@ extension CameraViewController : VideoCaptureDelegate{
         videoCapture: VideoCapture,
         pixelBuffer:CVPixelBuffer?,
         timestamp:CMTime){
-        // Unwrap the parameter pixxelBuffer; exit early if nil
+        
+        // Unwrap the parameter pixxelBuffer and cast to image; exit early if either are null
         guard capturingFrames, let pixelBuffer = pixelBuffer else{
             print("WARNING: onFrameCaptured; null pixelBuffer")
             return
         }
         
-        self.frames.append(CIImage(cvPixelBuffer: pixelBuffer))
+        // Create CIImage from pixel buffer 
+        let frame = CIImage(cvPixelBuffer:pixelBuffer)
         
+        self.imageProcessor.addFrame(frame: frame)
+        
+        // Test elapsed time; we have added a limit - force stopping
+        // if we have exceeded this limit 
         let et = Date().timeIntervalSince(self.captureTimestamp!)
         
         if et >= self.captureMaxTime{
@@ -192,6 +212,10 @@ extension CameraViewController{
     @objc func onActionButtonTappedDown(_ sender:UIButton){
         //guard !self.capturingFrames, self.videoCapture.isCapturing else{ return }
         guard !self.capturingFrames else{ return }
+        
+        // Reset/Prepare imageProcessor; essentially removing all previous
+        // frames and setting it's current frame index to 0)
+        self.imageProcessor.reset()
         
         capturingFrames = true
     }
