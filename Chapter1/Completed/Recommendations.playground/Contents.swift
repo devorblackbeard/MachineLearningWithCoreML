@@ -12,7 +12,7 @@ func calcSimilarity(userRatingsA: [String:Float], userRatingsB:[String:Float]) -
         return diff * diff
     }).reduce(0) { (prev, curr) -> Float in
         return prev + curr
-    }
+    }.squareRoot()
     return 1 / (1 + distance)
 }
 
